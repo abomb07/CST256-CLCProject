@@ -114,20 +114,6 @@ class JobHistoryController extends Controller
         
     }
     
-    //redirectJobHistory method handles data from data validation
-    //and passes it back to the edit form
-    public function redirectJobHistory($id, $errors)
-    {
-        
-        $jhbs = new JobHistoryBusinessService();
-        
-        // calls findById method in JobHistoryBusinessService and passes JobHistory Object
-        $jobhistory = $jhbs->findById($id);
-        
-        //return to view with model and errors
-        return view('userPortfolioEditJobHistory')->with(compact('jobhistory', 'errors'));
-    }
-    
     // updateJobHistory method handles data from userPortfolioEditJobHistory
     // and pass it to updateJobHistory method in JobHistoryBusinessService
     public function updateJobHistory(Request $request)
@@ -154,7 +140,13 @@ class JobHistoryController extends Controller
         if($validator->fails())
         {
             $errors = $validator->errors();
-            return $this->redirectJobHistory($id, $errors);
+            $jhbs = new JobHistoryBusinessService();
+            
+            // calls findById method in JobHistoryBusinessService and passes JobHistory Object
+            $jobhistory = $jhbs->findById($id);
+            
+            //return to view with model and errors
+            return view('userPortfolioEditJobHistory')->with(compact('jobhistory', 'errors'));
         }
         
         //Save posted Form Data to Job History Object Model

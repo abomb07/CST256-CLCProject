@@ -111,20 +111,6 @@ class EducationController extends Controller
         
     }
     
-    //redirectEducation method handles data from data validation
-    //and passes it back to the edit form
-    public function redirectEducation($id, $errors)
-    {
-        
-        $ebs = new EducationBusinessService();
-        
-        // calls findById method in EducationBusinessService and passes Education Object
-        $education = $ebs->findById($id);
-            
-        //return to view with model and errors
-        return view('userPortfolioEditEducation')->with(compact('education', 'errors'));
-    }
-    
     // updateEducation method handles data from editEducationForm
     // and pass it to updateEducation method in EducationBusinessService
     public function updateEducation(Request $request)
@@ -152,7 +138,13 @@ class EducationController extends Controller
         if($validator->fails())
         {
             $errors = $validator->errors();
-            return $this->redirectEducation($id, $errors);
+            $ebs = new EducationBusinessService();
+            
+            // calls findById method in EducationBusinessService and passes Education Object
+            $education = $ebs->findById($id);
+            
+            //return to view with model and errors
+            return view('userPortfolioEditEducation')->with(compact('education', 'errors'));
         }
         
         //Save posted Form Data to Skill Object Model

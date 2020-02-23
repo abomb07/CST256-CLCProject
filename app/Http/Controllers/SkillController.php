@@ -100,20 +100,6 @@ class SkillController extends Controller
         }
     }
     
-    //redirectSkill method handles data from data validation
-    //and passes it back to the edit form
-    public function redirectSkill($id, $errors)
-    {
-        
-        $sbs = new SkillBusinessService();
-        
-        // calls findById method in SkillBusinessService and passes Skill Object
-        $skill = $sbs->findById($id);
-        
-        //return to view with model and errors
-        return view('userPortfolioEditSkill')->with(compact('skill', 'errors'));
-    }
-    
     // updateSkill method handles data from editSkillForm
     // and pass it to updateSkill method in SkillBusinessService
     public function updateSkill(Request $request)
@@ -134,7 +120,13 @@ class SkillController extends Controller
         if($validator->fails())
         {
             $errors = $validator->errors();
-            return $this->redirectSkill($id, $errors);
+            $sbs = new SkillBusinessService();
+            
+            // calls findById method in SkillBusinessService and passes Skill Object
+            $skill = $sbs->findById($id);
+            
+            //return to view with model and errors
+            return view('userPortfolioEditSkill')->with(compact('skill', 'errors'));
         }
         
         //Save posted Form Data to Skill Object Model

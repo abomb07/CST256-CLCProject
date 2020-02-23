@@ -46,20 +46,6 @@ class ProfileController extends Controller
         return view('userProfile')->with(compact('users'));
     }
     
-    //redirectProfile method handles data from data validation
-    //and passes it back to the edit form
-    public function redirectProfile($id, $errors)
-    {
-        
-        $ubs = new UserBusinessService();
-        
-        // calls findById method in UserBusinessService and passes User Object
-        $users = $ubs->findById($id);
-        
-        //return to view with model and errors
-        return view('userProfile')->with(compact('users', 'errors'));
-    }
-    
     /* updateProfile method handles user profile update
     request using UserBusinessService*/
     public function updateProfile(Request $request)
@@ -92,7 +78,13 @@ class ProfileController extends Controller
         if($validator->fails())
         {
             $errors = $validator->errors();
-            return $this->redirectProfile($id, $errors);
+            $ubs = new UserBusinessService();
+            
+            // calls findById method in UserBusinessService and passes User Object
+            $users = $ubs->findById($id);
+            
+            //return to view with model and errors
+            return view('userProfile')->with(compact('users', 'errors'));
         }
         
         $updatedUser = new User($id, $username, $password, $firstname, $lastname, $email, $phonenumber, $city, $role, $status);

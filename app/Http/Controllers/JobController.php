@@ -103,20 +103,6 @@ class JobController extends Controller
         
     }
     
-    //redirectJob method handles data from data validation
-    //and passes it back to the edit form
-    public function redirectJob($id, $errors)
-    {
-        
-        $jbs = new JobBusinessService();
-        
-        // calls findById method in JobHistoryBusinessService and passes JobHistory Object
-        $job = $jbs->findById($id);
-        
-        //return to view with model and errors
-        return view('adminEditJobForm')->with(compact('job', 'errors'));
-    }
-    
     // updateJob method handles data from editJobForm
     // and pass it to updateJob method in JobBusinessService
     public function updateJob(Request $request)
@@ -146,7 +132,14 @@ class JobController extends Controller
         if($validator->fails())
         {
             $errors = $validator->errors();
-            return $this->redirectJob($id, $errors);
+            
+            $jbs = new JobBusinessService();
+            
+            // calls findById method in JobBusinessService and passes Job Object
+            $job = $jbs->findById($id);
+            
+            //return to view with model and errors
+            return view('adminEditJobForm')->with(compact('job', 'errors'));
         }
         
         //Save posted Form Data to Job Object Model
