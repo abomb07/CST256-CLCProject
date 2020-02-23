@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 1.0
- * User version 1.0
+/* CLC Project version 3.0
+ * User version 3.0
  * Adam Bender and Jim Nguyen
- * January 19th, 2020
+ * February 19th, 2020
  * User class acts as a Model
  */
 namespace App\Model;
@@ -15,17 +15,24 @@ class User
     private $firstname;
     private $lastname;
     private $email;
+    private $phonenumber;
+    private $city;
     private $role;
+    private $status;
     
+
     // default constructor
-    public function __construct($id, $username, $password, $firstname, $lastname, $email, $role){
+    public function __construct($id, $username, $password, $firstname, $lastname, $email, $phonenumber, $city ,$role, $status){
         $this->id = $id;
         $this->username = $username;
         $this->password = $password;
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->email = $email;
+        $this->phonenumber = $phonenumber;
+        $this->city = $city;
         $this->role = $role;
+        $this->status = $status;
     }
     
     // default getters and setters
@@ -80,11 +87,35 @@ class User
     /**
      * @return mixed
      */
+    public function getPhonenumber()
+    {
+        return $this->phonenumber;
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+    
+    /**
+     * @return mixed
+     */
     public function getRole()
     {
         return $this->role;
     }
-
+    
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    
     /**
      * @param mixed $id
      */
@@ -134,16 +165,35 @@ class User
     }
 
     /**
+     * @param mixed $phonenumber
+     */
+    public function setPhonenumber($phonenumber)
+    {
+        $this->phonenumber = $phonenumber;
+    }
+    
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+    
+    /**
      * @param mixed $role
      */
     public function setRole($role)
     {
         $this->role = $role;
+    } 
+    
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
-
-    
-    
-    
-    
 }
 

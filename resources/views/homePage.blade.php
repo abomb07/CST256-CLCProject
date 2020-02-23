@@ -1,16 +1,44 @@
-<?php 
-/* CLC Project version 1.0
- * homePage version 1.0
+<?php
+/* CLC Project version 3.0
+ * Home Page version 2.0
  * Adam Bender and Jim Nguyen
- * January 
+ * February 23, 2020
  * Home Page Form
  */
 ?>
 @extends('layouts.appmaster')
-@section('title','Login Failed Page')
+@section('title','Home Page')
 
 @section('content')
-<h2>Home Page</h2>
-<a href="login">Login</a>
-<a href="register">Register</a>
+<h2>Featured Jobs</h2>
+
+<table id="jobs" class="table table-hover">
+	<tr>
+		<tH>JOB TITLE</tH>
+		<tH>CATEGORY</tH>
+		<tH>DESCRIPTION</tH>
+		<tH>REQUIREMENTS</tH>
+		<tH>COMPANY</tH>
+		<tH>LOCATION</tH>
+		<tH>SALARY</tH>
+	</tr>
+
+@if($jobs)
+	@foreach($jobs as $job)
+
+	<tr>
+		<td>{{$job['JOB_TITLE']}}</td>
+		<td>{{$job['CATEGORY']}}</td>
+		<td>{{$job['DESCRIPTION']}}</td>
+		<td>{{$job['REQUIREMENTS']}}</td>
+		<td>{{$job['COMPANY']}}</td>
+		<td>{{$job['LOCATION']}}</td>
+		<td>{{$job['SALARY']}}</td>
+
+	</tr>
+
+	@endforeach
+@endif
+</table>
+
 @endsection

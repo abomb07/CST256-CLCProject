@@ -1,8 +1,8 @@
 <?php 
-/* CLC Project version 1.0
- * Login version 1.0
+/* CLC Project version 3.0
+ * Login Form version 1.0
  * Adam Bender and Jim Nguyen
- * January 19th, 2020
+ * February 23, 2020
  * Login Form
  */
 ?>
@@ -10,25 +10,26 @@
 @section('title','Login Page')
 
 @section('content')
+<h2>Login</h2>
 <form action = "processLogin" method = "POST">
-	<input type = "hidden" name = "_token"
-	value = "<?php echo csrf_token()?> "/>
+	{{ csrf_field() }}
 	<table> 
 	<tr>
-		<td>User Name: </td>
-		<td><input type= "text" name = "username" /> </td>
+		<td>Username: </td>
+		<td><input type= "text" name = "username" /> {{$errors->first('username')}}</td>
 	</tr>
 	
 	<tr>
 		<td>Password: </td>
-		<td><input type= "password" name = "password" /> </td>
+		<td><input type= "password" name = "password" /> {{$errors->first('password')}}</td>
 	</tr>
 	
 	<tr>
 		<td colspan = "2" align = "center">
-			<input type = "submit" value = "Submit" />
+			<input type = "submit" value = "Login" />
 		</td>
 	</tr>
 	</table>
 </form>
+
 @endsection

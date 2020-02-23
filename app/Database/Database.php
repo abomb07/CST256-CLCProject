@@ -1,28 +1,25 @@
 <?php
 namespace App\Database;
 
-use \mysqli;
+use \PDO;
 
 class Database{
-    
-    private $servername = "localhost";
-    private $username = "root";
-    private $password = "root";
-    private $database_name = "CST256-CLCProject";
+   
     
     //getConnection() function to connect database
     function getConnection() {
+        // Externalize application database configuration
+        // Get credentials for accessing your database
+        $servername = config("database.connections.mysql.host");
+        $port = config("database.connections.mysql.port");
+        $username = config("database.connections.mysql.username");
+        $password = config("database.connections.mysql.password");
+        $dbname = config("database.connections.mysql.database");
         
-        
-        $connection = mysqli_connect($this->servername, $this->username, $this->password, $this->database_name);
-        
-        
-        if (!$connection) {
-            die("Connection failed: " . mysqli_connect_error());
-        }else{
-            //echo "Connected successfully";
-        }
-        return $connection;
+        // create connection
+        $db = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $password);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $db;
     }
 }
 
