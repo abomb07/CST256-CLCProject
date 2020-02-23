@@ -1,6 +1,6 @@
 <?php
 /* CLC Project version 3.0
- * Login Suspended Page version 2.0
+ * Login Suspended Page version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * Login Success Form

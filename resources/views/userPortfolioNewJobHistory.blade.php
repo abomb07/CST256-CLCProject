@@ -1,7 +1,7 @@
 <?php
 /*
  * CLC Project version 3.0
- * New Job History Form version 2.0
+ * New Job History Form version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * New Job History Form
@@ -21,22 +21,22 @@
 		<table>
 			<tr>
 				<td>Job Title:</td>
-				<td><input type="text" name="title" value="" /></td>
+				<td><input type="text" name="title" value="" />{{$errors->first('title')}}</td>
 			</tr>
 
 			<tr>
 				<td>Company:</td>
-				<td><input type="text" name="company" value="" /></td>
+				<td><input type="text" name="company" value="" />{{$errors->first('company')}}</td>
 			</tr>
 
 			<tr>
 				<td>Start Date:</td>
-				<td><input type="date" name="startdate" value="" /></td>
+				<td><input type="date" name="startdate" value="" />{{$errors->first('startdate')}}</td>
 			</tr>
 
 			<tr>
 				<td>End Date:</td>
-				<td><input type="date" name="enddate" value="" /></td>
+				<td><input type="date" name="enddate" value="" />{{$errors->first('enddate')}}</td>
 			</tr>
 
 			<tr>

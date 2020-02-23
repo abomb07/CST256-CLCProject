@@ -1,9 +1,10 @@
 <?php
-/* CLC Project version 2.0
- * AccountController version 2.0
+/*
+ * CLC Project version 3.0
+ * Account Controller version 3.0
  * Adam Bender and Jim Nguyen
- * February 5, 2020
- * AccountController handles login, register and logout action
+ * February 23, 2020
+ * AccountController handles register, login and logout action
  */
 namespace App\Http\Controllers;
 
@@ -20,6 +21,9 @@ use App\Services\Business\EducationBusinessService;
 class AccountController extends Controller
 {
     
+    /* register method handles data from Register Form
+     * and passes to UserBusinessService
+    */
     public function register(Request $request)
     {
         $this->validateRegisterForm($request);
@@ -88,6 +92,9 @@ class AccountController extends Controller
         
     }
     
+    /* findPortfolio method handle data from login
+    * and passes id to JobHistoryBusinessService
+    * EducationBusinessService and SkillBusinessService */
     public function findPortfolio(Request $request)
     {        
         $user_id = $request->input('user_id');
@@ -100,6 +107,7 @@ class AccountController extends Controller
         $skills = $sbs->findByUserId($user_id);
         $educations = $eds->findByUserId($user_id);
               
+        // return to userPortfolio Form with jobhistorys, skills, educations objects
         return view(('userPortfolio'),compact(['jobhistorys'],['skills'], ['educations']));
 
     }
@@ -109,19 +117,19 @@ class AccountController extends Controller
     {
         Session::flush();
         
+        // calls findAllJobs in Business Service
         $jbs = new JobBusinessService();
         $jobs = $jbs->findAllJobs();
-        // calls findAllJobs in Business Service
         
+        // return to HomePage with Form with job object
         return view(('homePage'),compact(['jobs']));
     }
     
+    /* validateRegisterForm method handles data validation in Register Form
+     */
     private function validateRegisterForm(Request $request){
-        //BEST PRATICE: centralize your rule so you have a consistent architecture
-        //and even resuse your rules
-        //BAD PRATICES: not using a defined data validation Framework, putting rules
-        //all over your coe, doing only on CLient side and database
-        //SEt up data validation for login form
+        
+        // data validation rules for Register Form
         $rules = ['username'=> 'Required|max:256',
             'password' => 'Required|max:256',
             'firstname' => 'Required|max:256',
@@ -136,12 +144,11 @@ class AccountController extends Controller
         $this->validate($request, $rules);
     }
     
+    /* validateLoginForm method handles data validation in Register Form
+     */
     private function validateLoginForm(Request $request){
-        //BEST PRATICE: centralize your rule so you have a consistent architecture
-        //and even resuse your rules
-        //BAD PRATICES: not using a defined data validation Framework, putting rules
-        //all over your coe, doing only on CLient side and database
-        //SEt up data validation for login form
+        
+        // data validation rules for Register Form
         $rules = ['username'=> 'Required|max:256',
             'password' => 'Required|max:256'
         ];

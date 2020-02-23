@@ -1,16 +1,25 @@
 <?php
-
+/*
+ * CLC Project version 3.0
+ * New Skill Form version 3.0
+ * Adam Bender and Jim Nguyen
+ * February 23, 2020
+ * Job Controller handles job functionalities
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Job;
 use App\Services\Business\JobBusinessService;
+use Validator;
 
 class JobController extends Controller
 {
-    // add a job
-    public function createJob(Request $request){
-        
+    // createJob method handles data from New Job Form
+    public function createJob(Request $request)
+    {
+        // validate form by calling validateJobForm
+        $this->validateJobForm($request);
         //Get posted form data
         $jobtitle = $request->input('jobtitle');
         $category = $request->input('category');
@@ -56,11 +65,11 @@ class JobController extends Controller
         $theJob = new Job($id, "", "", "", "", "", "", "");
         $jbs = new JobBusinessService();
         
-        // calls deleteUser method in UserBusinessService and passes User Object
+        // calls deleteUser method in JobBusinessService and passes Job Object
         $result = $jbs->deleteJob($theJob);
         
         
-        //if success, return to homePage, else return error message
+        //if success, return to adminJobs, else return error message
         if($result)
         {
             $jobs = $jbs->findAllJobs();
@@ -79,18 +88,33 @@ class JobController extends Controller
         //Get posted Form data
         $id = $request->input('id');
         
-        //Save posted Form Data to User Object Model
+        //Save posted Form Data to Job Object Model
         
         $jbs = new JobBusinessService();
         
-        // calls findById method in UserBusinessService and passes User Object
+        // calls findById method in JobBusinessService and passes Job Object
         if($job = $jbs->findById($id)){
             
+            //if success, return to adminEditJobForm, else return error message
             return view('adminEditJobForm')->with(compact('job'));
         }else{
             return "Job not found. Please try again";
         }
         
+    }
+    
+    //redirectJob method handles data from data validation
+    //and passes it back to the edit form
+    public function redirectJob($id, $errors)
+    {
+        
+        $jbs = new JobBusinessService();
+        
+        // calls findById method in JobHistoryBusinessService and passes JobHistory Object
+        $job = $jbs->findById($id);
+        
+        //return to view with model and errors
+        return view('adminEditJobForm')->with(compact('job', 'errors'));
     }
     
     // updateJob method handles data from editJobForm
@@ -107,14 +131,32 @@ class JobController extends Controller
         $location = $request->input('location');
         $salary = $request->input('salary');
         
-        //Save posted Form Data to User Object Model
+        //Make validator rules
+        $validator = Validator::make($request->all(), ['id' => 'Required',
+            'jobtitle'=> 'Required|max:256',
+            'category' => 'Required|max:256',
+            'description' => 'Required|',
+            'requirements' => 'Required|',
+            'company' => 'Required|max:256',
+            'location' => 'Required|max:256',
+            'salary' => 'Required'
+        ]);
+        
+        //if there is a validation error, reroute to form with errors and model
+        if($validator->fails())
+        {
+            $errors = $validator->errors();
+            return $this->redirectJob($id, $errors);
+        }
+        
+        //Save posted Form Data to Job Object Model
         $updatedJob = new Job($id, $jobtitle, $category, $description, $requirements, $company, $location, $salary);
         
-        // calls findById method in UserBusinessService and passes User Object
+        // calls findById method in JobBusinessService and passes Job object
         $jbs = new JobBusinessService();
         $result = $jbs->updateJob($updatedJob);
         
-        // if success returns to homePage, else returns error message
+        // if success returns to adminJobs, else returns error message
         if($result)
         {
             $jobs = $jbs->findAllJobs();
@@ -125,13 +167,15 @@ class JobController extends Controller
             return "Update user unsuccessfully. Please try again";
         }
     }
-    //find all job
-    // getUser shows all user in database
+    
+    /*findAllJobs method shows all jobs in database 
+     * and return in the adminJobs
+    */
     public function findAllJobs(){
         
         $jbs = new JobBusinessService();
         $jobs = $jbs->findAllJobs();
-        // check user session for admin, if session is admin
+        
         // calls findAllJobs in Business Service
         //else return error message
             
@@ -139,20 +183,49 @@ class JobController extends Controller
         
     } 
     
+    /* findAllFeaturedJobs method shows all job in database
+     * and return in the homePage
+     */
     public function findAllFeaturedJobs(){
         
+        // calls findAllJobs in Business Service
         $jbs = new JobBusinessService();
         $jobs = $jbs->findAllJobs();
-        // calls findAllJobs in Business Service
+        
         
         return view(('homePage'),compact(['jobs']));
         
     } 
     
+    /* validateJobForm method handles data validation in New Job Form
+     */
+    private function validateJobForm(Request $request){
+        
+        // data validation rules for Register Form
+        $rules = ['jobtitle'=> 'Required|max:256',
+            'category' => 'Required|max:256',
+            'description' => 'Required|',
+            'requirements' => 'Required|',
+            'company' => 'Required|max:256',
+            'location' => 'Required|max:256',
+            'salary' => 'Required',
+            
+        ];
+        
+        // Run Data Validation Rules
+        $this->validate($request, $rules);
+    }
     
-    // find job by title
     
-    // find job by category
+    /* find job by title
+     * ==== future developement == 
+    */
     
-    // find job by location
+    /* find job by category
+     * ==== future developement ==
+     */
+    
+    /* find job by location
+     * ==== future developement ==
+     */
 }

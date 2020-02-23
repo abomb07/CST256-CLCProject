@@ -1,4 +1,10 @@
 <?php
+/* CLC Project version 3.0
+ * EducationBusinessService version 3.0
+ * Adam Bender and Jim Nguyen
+ * February 23, 2020
+ * EducationBusinessService handles CRUD methods
+ */
 namespace App\Services\Business;
 
 use Illuminate\Support\Facades\Log;

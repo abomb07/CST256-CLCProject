@@ -2,7 +2,7 @@
 /* CLC Project version 3.0
  * UserDataService version 3.0
  * Adam Bender and Jim Nguyen
- * February 19th, 2020
+ * February 23, 2020
  * UserDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -344,91 +344,6 @@ EMAIL = :email, PHONENUMBER = :phonenumber, CITY = :city , ROLE = :role, STATUS 
             throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
         }   
     }
-    
-    //suspendUSer method set user status to "suspended" in database
-    /* function suspendUser(User $user)
-    {
-        Log::info("Entering SecurityDAO::suspendUser()");
-        
-        try{
-            // update user status to "suspended" in database
-            $statement = $this->connection->prepare("UPDATE USER SET STATUS = :status WHERE ID = :id");
-            
-            if(!$statement){
-                echo "Something wrong in the binding process.sql error?";
-                exit;
-            }
-            
-            //set $status to "suspended"
-            $id = $user->getId();
-            $user->setStatus("suspended");
-            $status = $user->getStatus();
-            
-            //bindParam id and status
-            //execute statement
-            $statement->bindParam(':id',  $id);
-            $statement->bindParam(':status',  $status);
-            $statement->execute();
-            
-            //if statement execute successfully, returns true, else returns false
-            if($statement->rowCount() > 0){
-                Log::info("Exit SecurityDAO.suspendUser with true");
-                return true;
-                
-            }else{
-                Log::info("Exit SecurityDAO.suspendUser with false");
-                return false;
-            }
-            
-        }catch(PDOException $e)
-        {
-            // catch exception and throw DatabaseException
-            Log::error("Exception: ", array("message " => $e->getMessage()));
-            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
-        }
-    } */
-    
-    /* function activateUser(User $user)
-    {
-        Log::info("Entering SecurityDAO::activateUser()");
-        
-        try{
-            // update user status to "suspended" in database
-            $statement = $this->connection->prepare("UPDATE USER SET STATUS = :status WHERE ID = :id");
-            
-            if(!$statement){
-                echo "Something wrong in the binding process.sql error?";
-                exit;
-            }
-            
-            //set $status to "active"
-            $id = $user->getId();
-            $user->setStatus("active");
-            $status = $user->getStatus();
-            
-            //bindParam id and status
-            //execute statement
-            $statement->bindParam(':id',  $id);
-            $statement->bindParam(':status',  $status);
-            $statement->execute();
-            
-            //if statement execute successfully, returns true, else returns false
-            if($statement->rowCount() > 0){
-                Log::info("Exit SecurityDAO.activateUser with true");
-                return true;
-                
-            }else{
-                Log::info("Exit SecurityDAO.activateUser with false");
-                return false;
-            }
-            
-        }catch(PDOException $e)
-        {
-            // catch exception and throw DatabaseException
-            Log::error("Exception: ", array("message " => $e->getMessage()));
-            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
-        }
-    } */
     
     //delete function connect database and delete user using MySQL statement
     function deleteUser(User $user)

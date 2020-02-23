@@ -1,7 +1,7 @@
 <?php
 /*
  * CLC Project version 3.0
- * New Skill Form version 2.0
+ * New Skill Form version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * New Skill Form
@@ -21,7 +21,7 @@
 		<table>
 			<tr>
 				<td>Skill:</td>
-				<td><input type="text" name="skill" value="" /></td>
+				<td><input type="text" name="skill" value="" />{{$errors->first('skill')}}</td>
 			</tr>
 
 			<tr>

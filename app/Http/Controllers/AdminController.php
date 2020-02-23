@@ -1,9 +1,10 @@
 <?php
-/* CLC Project version 2.0
- * AdminController version 2.0
+/*
+ * CLC Project version 3.0
+ * New Skill Form version 3.0
  * Adam Bender and Jim Nguyen
- * February 5, 2020
- * AdminController handles admin functionalities
+ * February 23, 2020
+ * Admin Controller handles admin functionalities
  */
 namespace App\Http\Controllers;
 

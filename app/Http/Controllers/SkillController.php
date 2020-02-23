@@ -7,11 +7,15 @@ use App\Model\Skill;
 use App\Services\Business\SkillBusinessService;
 use App\Services\Business\EducationBusinessService;
 use App\Services\Business\JobHistoryBusinessService;
+use Validator;
 
 class SkillController extends Controller
 {
     // add a Skill
-    public function createSkill(Request $request){
+    public function createSkill(Request $request)
+    {
+        //validate form
+        $this->validateSkillForm($request);
         
         //Get posted form data
         $skill = $request->input('skill');
@@ -96,6 +100,19 @@ class SkillController extends Controller
         }
     }
     
+    //redirectSkill method handles data from data validation
+    //and passes it back to the edit form
+    public function redirectSkill($id, $errors)
+    {
+        
+        $sbs = new SkillBusinessService();
+        
+        // calls findById method in SkillBusinessService and passes Skill Object
+        $skill = $sbs->findById($id);
+        
+        //return to view with model and errors
+        return view('userPortfolioEditSkill')->with(compact('skill', 'errors'));
+    }
     
     // updateSkill method handles data from editSkillForm
     // and pass it to updateSkill method in SkillBusinessService
@@ -105,6 +122,20 @@ class SkillController extends Controller
         $id = $request->input('id');
         $skill = $request->input('skill');
         $user_id = $request->input('user_id');
+        
+        //Make validator rules
+        $validator = Validator::make($request->all(), ['id' => 'Required',
+            'skill'=> 'Required|max:256',
+            'user_id' => 'Required'
+            
+        ]);
+        
+        //if there is a validation error, reroute to form with errors and model
+        if($validator->fails())
+        {
+            $errors = $validator->errors();
+            return $this->redirectSkill($id, $errors);
+        }
         
         //Save posted Form Data to Skill Object Model
         $updatedSkill = new Skill($id, $skill, $user_id);
@@ -125,25 +156,16 @@ class SkillController extends Controller
             return view(('userPortfolio'),compact(['jobhistorys'],['skills'], ['educations']));
         }
     }
-    //find all job
-    // findAllSkills shows all skill in database
-    public function findAllSkills(Request $request){
+
+    /* validateSkillForm method handles data validation in New Skill Form
+     */
+    private function validateSkillForm(Request $request){
         
-        $user_id = $request->input('user_id');
-        //Save posted Form Data to User Object Model
+        // data validation rules for Register Form
+        $rules = ['skill'=> 'Required|max:256',
+        ];
         
-        
-        $sbs = new SkillBusinessService();
-        $skills = $sbs->findByUserId($user_id);
-       
-        // calls findByUserId in Skill Business Service
-        //else return error message
-        if($skills != null){
-            
-            return view(('adminJobs'),compact(['jobs']));
-        }else{
-            return "Job not found. Please try again";
-        }
-        
-    } 
+        // Run Data Validation Rules
+        $this->validate($request, $rules);
+    }
 }

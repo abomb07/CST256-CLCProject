@@ -12,12 +12,10 @@
 */
 
 /*
- * this route is mapped to the '/home' URI render to
+ * this route is mapped to the '/' URI render to
  * the Home Page (an HTML Form)
  */
-Route::get('/', function () {
-    return view('homePage');
-});
+Route::get('/', 'JobController@findAllFeaturedJobs');
 
 /*
  * this route is mapped to the '/home' URI render to 

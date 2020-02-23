@@ -1,5 +1,11 @@
 <?php
-
+/*
+ * CLC Project version 3.0
+ * Job History Controller version 3.0
+ * Adam Bender and Jim Nguyen
+ * February 23, 2020
+ * Job History Controller handles job history functionalities
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,12 +13,14 @@ use App\Model\JobHistory;
 use App\Services\Business\SkillBusinessService;
 use App\Services\Business\EducationBusinessService;
 use App\Services\Business\JobHistoryBusinessService;
+use Validator;
 class JobHistoryController extends Controller
 {
-    //
-    // add a job
-    public function createJobHistory(Request $request){
-        
+    
+    // createJobHistory method handles data from New Job History Form
+    public function createJobHistory(Request $request)
+    {
+        $this->validateJobHistoryForm($request);
         //Get posted form data
         $title = $request->input('title');
         $company = $request->input('company');
@@ -106,8 +114,22 @@ class JobHistoryController extends Controller
         
     }
     
-    // updateJob method handles data from editJobForm
-    // and pass it to updateJob method in JobBusinessService
+    //redirectJobHistory method handles data from data validation
+    //and passes it back to the edit form
+    public function redirectJobHistory($id, $errors)
+    {
+        
+        $jhbs = new JobHistoryBusinessService();
+        
+        // calls findById method in JobHistoryBusinessService and passes JobHistory Object
+        $jobhistory = $jhbs->findById($id);
+        
+        //return to view with model and errors
+        return view('userPortfolioEditJobHistory')->with(compact('jobhistory', 'errors'));
+    }
+    
+    // updateJobHistory method handles data from userPortfolioEditJobHistory
+    // and pass it to updateJobHistory method in JobHistoryBusinessService
     public function updateJobHistory(Request $request)
     {
         //Get posted form data
@@ -118,17 +140,34 @@ class JobHistoryController extends Controller
         $enddate = $request->input('enddate');
         $user_id = $request->input('user_id');
         
-        //Save posted Form Data to User Object Model
+        //Make validator rules
+        $validator = Validator::make($request->all(), ['id' => 'Required',
+            'title'=> 'Required|max:256',
+            'company' => 'Required|max:256',
+            'startdate' => 'Required',
+            'enddate' => 'Required',
+            'user_id' => 'Required'
+            
+        ]);
+        
+        //if there is a validation error, reroute to form with errors and model
+        if($validator->fails())
+        {
+            $errors = $validator->errors();
+            return $this->redirectJobHistory($id, $errors);
+        }
+        
+        //Save posted Form Data to Job History Object Model
         $updatedJobHistory = new JobHistory($id, $title, $company, $startdate, $enddate, $user_id);
         
-        // calls findById method in UserBusinessService and passes User Object
+        // calls findById method in JobHistoryBusinessService and passes Job History Object
        
         $jhbs = new JobHistoryBusinessService();
         $sbs = new SkillBusinessService();
         $eds = new EducationBusinessService();
         $result = $jhbs->updateJobHistory($updatedJobHistory);
         
-        // if success returns to homePage, else returns error message
+        // if success returns to userPortfolio, else returns error message
         if($result)
         {
             $jobhistorys = $jhbs->findByUserId($user_id);
@@ -141,6 +180,22 @@ class JobHistoryController extends Controller
         {
             return "Update job history unsuccessfully. Please try again";
         }
+    }
+    
+    
+    /* validateJobHistoryForm method handles data validation in New Job History Form
+     */
+    private function validateJobHistoryForm(Request $request){
+        
+        // data validation rules for Register Form
+        $rules = ['title'=> 'Required|max:256',
+            'company' => 'Required|max:256',
+            'startdate' => 'Required',
+            'enddate' => 'Required',
+        ];
+        
+        // Run Data Validation Rules
+        $this->validate($request, $rules);
     }
     
 }

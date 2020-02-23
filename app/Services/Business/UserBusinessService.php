@@ -200,6 +200,7 @@ class UserBusinessService{
         // return the finder result
         Log::info("Exit UserBusinessService.suspendUser()");
         return $flag;
+        
     }
     
     /* suspendUser method calls and passes $user to suspendUser method in UserDataService */

@@ -1,6 +1,6 @@
 <?php
 /* CLC Project version 3.0
- * Process Job History Delete version 2.0
+ * Process Job History Delete version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * Delete Job History Confirmation Form

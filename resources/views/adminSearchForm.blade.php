@@ -1,6 +1,6 @@
 <?php
 /* CLC Project version 3.0
- * Admin Search page version 1.0
+ * Admin Search page version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * Admin Search Page

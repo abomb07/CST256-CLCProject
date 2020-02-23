@@ -1,7 +1,7 @@
 <?php
 /*
  * CLC Project version 3.0
- * Edit Skill Form version 2.0
+ * Edit Skill Form version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * Edit Skill Form
@@ -23,7 +23,7 @@
 		<table>
 			<tr>
 				<td>Skill:</td>
-				<td><input type="text" name="skill" value="{{ $skill->getSkill() }}" /></td>
+				<td><input type="text" name="skill" value="{{ $skill->getSkill() }}" />{{$errors->first('skill')}}</td>
 			</tr>
 
 			<tr>

@@ -1,6 +1,6 @@
 <?php 
 /* CLC Project version 3.0
- * Login Form version 1.0
+ * Login Form version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * Login Form

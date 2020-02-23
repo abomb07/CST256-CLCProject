@@ -1,10 +1,10 @@
 <?php
 /*
  * CLC Project version 3.0
- * Admin job page version 2.0
+ * Admin job page version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
- * Admin Job Page
+ * Admin Jobs Page
  */
 ?>
 @extends('layouts.appmaster')

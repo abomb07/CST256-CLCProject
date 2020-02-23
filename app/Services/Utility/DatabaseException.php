@@ -1,10 +1,11 @@
 <?php
-/* CLC Project version 2.0
-* DatabaseException version 2.0
-* Adam Bender and Jim Nguyen
-* February 5th, 2020
-* DatabaseException class handles data exception 
-*/
+/*
+ * CLC Project version 3.0
+ * New Skill Form version 3.0
+ * Adam Bender and Jim Nguyen
+ * February 23, 2020
+ * DatabaseException handles job handles data exception
+ */
 namespace App\Services\Utility;
 
 use Exception;

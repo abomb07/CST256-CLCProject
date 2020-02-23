@@ -1,7 +1,7 @@
 <?php
 /*
  * CLC Project version 3.0
- * Admin Edit Job Form version 2.0
+ * Admin Edit Job Form version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * Admin Edit Job Form
@@ -23,37 +23,37 @@
 		<table>
 			<tr>
 				<td>Job Title:</td>
-				<td><input type="text" name="jobtitle" value="{{$job->getJobtitle()}}" /></td>
+				<td><input type="text" name="jobtitle" value="{{$job->getJobtitle()}}" />{{$errors->first('jobtitle')}}</td>
 			</tr>
 
 			<tr>
 				<td>Category:</td>
-				<td><input type="text" name="category" value="{{$job->getCategory()}}" /></td>
+				<td><input type="text" name="category" value="{{$job->getCategory()}}" />{{$errors->first('category')}}</td>
 			</tr>
 
 			<tr>
 				<td>Description:</td>
-				<td><input type="text" name="description" value="{{$job->getDescription()}}" /></td>
+				<td><input type="text" name="description" value="{{$job->getDescription()}}" />{{$errors->first('description')}}</td>
 			</tr>
 
 			<tr>
 				<td>Requirements:</td>
-				<td><input type="text" name="requirements" value="{{$job->getRequirements()}}" /></td>
+				<td><input type="text" name="requirements" value="{{$job->getRequirements()}}" />{{$errors->first('requirements')}}</td>
 			</tr>
 
 			<tr>
 				<td>Company:</td>
-				<td><input type="text" name="company" value="{{$job->getCompany()}}" /></td>
+				<td><input type="text" name="company" value="{{$job->getCompany()}}" />{{$errors->first('company')}}</td>
 			</tr>
 
 			<tr>
 				<td>Location:</td>
-				<td><input type="text" name="location" value="{{$job->getLocation()}}" /></td>
+				<td><input type="text" name="location" value="{{$job->getLocation()}}" />{{$errors->first('location')}}</td>
 			</tr>
 
 			<tr>
 				<td>Salary:</td>
-				<td><input type="text" name="salary" value="{{$job->getSalary()}}" /></td>
+				<td><input type="text" name="salary" value="{{$job->getSalary()}}" />{{$errors->first('salary')}}</td>
 			</tr>
 
 			<tr>

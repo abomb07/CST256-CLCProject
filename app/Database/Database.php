@@ -1,4 +1,11 @@
 <?php
+/*
+ * CLC Project version 3.0
+ * New Skill Form version 3.0
+ * Adam Bender and Jim Nguyen
+ * February 23, 2020
+ * Database class return connection to the database
+ */
 namespace App\Database;
 
 use \PDO;

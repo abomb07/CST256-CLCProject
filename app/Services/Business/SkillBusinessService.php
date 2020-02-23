@@ -1,4 +1,10 @@
 <?php
+/* CLC Project version 3.0
+ * SkillBusinessService version 3.0
+ * Adam Bender and Jim Nguyen
+ * February 23, 2020
+ * SkillBusinessService handles CRUD methods
+ */
 namespace App\Services\Business;
 
 use Illuminate\Support\Facades\Log;
@@ -56,7 +62,7 @@ class SkillBusinessService
         $database = new Database();
         $db = $database->getConnection();
         
-        // Create a Skill Data Service with this connection and calls updateUser method/
+        // Create a Skill Data Service with this connection and calls updateSkill method/
         $dbService = new SkillDataService($db);
         $flag = $dbService->updateSkill($skill);
         
@@ -68,7 +74,7 @@ class SkillBusinessService
         return $flag;
     }
     
-    /* findAllSkills method calls and passes $user to updateSkill method in SkillDataService*/
+    /* findAllSkills method calls and passes $user to findById method in SkillDataService*/
     function findById($id){
         
         Log::info("Entering SkillBusinessService.findByUserId()");
@@ -88,7 +94,7 @@ class SkillBusinessService
         return $flag;
     }
     
-    /* findAllSkills method calls and passes $user to updateSkill method in SkillDataService*/
+    /* findUserId method calls and passes $user to findByUserId method in SkillDataService*/
     function findByUserId($user_id){
         
         Log::info("Entering SkillBusinessService.findByUserId()");

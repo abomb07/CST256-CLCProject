@@ -1,7 +1,7 @@
 <?php
 /*
  * CLC Project version 3.0
- * Edit Job History Form version 2.0
+ * Edit Job History Form version 3.0
  * Adam Bender and Jim Nguyen
  * February 23, 2020
  * Edit Job History Form
@@ -23,22 +23,22 @@
 		<table>
 			<tr>
 				<td>Job Title:</td>
-				<td><input type="text" name="title" value="{{ $jobhistory->getTitle() }}" /></td>
+				<td><input type="text" name="title" value="{{ $jobhistory->getTitle() }}" />{{$errors->first('title')}}</td>
 			</tr>
 
 			<tr>
 				<td>Company:</td>
-				<td><input type="text" name="company" value="{{ $jobhistory->getCompany() }}" /></td>
+				<td><input type="text" name="company" value="{{ $jobhistory->getCompany() }}" />{{$errors->first('company')}}</td>
 			</tr>
 
 			<tr>
 				<td>Start Date:</td>
-				<td><input type="text" name="startdate" value="{{ $jobhistory->getStartdate() }}" /></td>
+				<td><input type="text" name="startdate" value="{{ $jobhistory->getStartdate() }}" />{{$errors->first('startdate')}}</td>
 			</tr>
 
 			<tr>
 				<td>End Date:</td>
-				<td><input type="text" name="enddate" value="{{ $jobhistory->getEnddate() }}" /></td>
+				<td><input type="text" name="enddate" value="{{ $jobhistory->getEnddate() }}" />{{$errors->first('enddate')}}</td>
 			</tr>
 
 			<tr>

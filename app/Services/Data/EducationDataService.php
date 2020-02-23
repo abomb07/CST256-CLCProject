@@ -2,8 +2,8 @@
 /* CLC Project version 3.0
  * EducationDataService version 3.0
  * Adam Bender and Jim Nguyen
- * February 19th, 2020
- * SkillDataService handle methods through MySQL Statement
+ * February 23th, 2020
+ * EducationDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
 
@@ -42,6 +42,7 @@ class EducationDataService
             $graduationyear = $education->getGraduationyear();
             $user_id = $education->getUser_id();
             
+            //bindParam properties
             $statement->bindParam(':school', $school);
             $statement->bindParam(':degree', $degree);
             $statement->bindParam(':field', $field);
@@ -147,6 +148,7 @@ class EducationDataService
             $degree = $education->getDegree();
             $field = $education->getField();
             $graduationyear = $education->getGraduationyear();
+            
             //update user information in database
             $statement = $this->connection->prepare("UPDATE EDUCATION SET SCHOOL = :school, DEGREE = :degree, FIELD = :field, GRADUATION_YEAR = :graduationyear WHERE ID = :id");
             
@@ -160,6 +162,7 @@ class EducationDataService
             $statement->bindParam(':degree', $degree);
             $statement->bindParam(':field', $field);
             $statement->bindParam(':graduationyear', $graduationyear);
+            
             $statement->execute();
             
             //if statement executes successfully returns true, else returns false
@@ -168,7 +171,7 @@ class EducationDataService
                 return true;
                 
             }else{
-                Log::info("Exit SkillDataService.updateEducation() with false");
+                Log::info("Exit EducationDataService.updateEducation() with false");
                 return false;
             }
             

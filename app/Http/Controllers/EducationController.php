@@ -1,5 +1,11 @@
 <?php
-
+/*
+ * CLC Project version 3.0
+ * New Skill Form version 3.0
+ * Adam Bender and Jim Nguyen
+ * February 23, 2020
+ * Education Controller handles education functionalities
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,14 +13,16 @@ use App\Model\Education;
 use App\Services\Business\SkillBusinessService;
 use App\Services\Business\EducationBusinessService;
 use App\Services\Business\JobHistoryBusinessService;
+use Validator;
+
 class EducationController extends Controller
 {
-    //
-    // add a education
+    
+    // createEducation method handles data from New Education Form
     public function createEducation(Request $request)
     {
-        //validate form
-        $this->validateForm($request);
+        //validate form by calling validateCreateForm
+        $this->validateCreateForm($request);
         
         //Get posted form data
         $school = $request->input('school');
@@ -58,6 +66,7 @@ class EducationController extends Controller
     // and pass it to deleteEducation method in EducationBusinessService
     public function deleteEducation(Request $request)
     {
+        
         //Get posted Form data
         $id = $request->input('id');
         $user_id = $request->input('user_id');
@@ -102,12 +111,24 @@ class EducationController extends Controller
         
     }
     
+    //redirectEducation method handles data from data validation
+    //and passes it back to the edit form
+    public function redirectEducation($id, $errors)
+    {
+        
+        $ebs = new EducationBusinessService();
+        
+        // calls findById method in EducationBusinessService and passes Education Object
+        $education = $ebs->findById($id);
+            
+        //return to view with model and errors
+        return view('userPortfolioEditEducation')->with(compact('education', 'errors'));
+    }
+    
     // updateEducation method handles data from editEducationForm
     // and pass it to updateEducation method in EducationBusinessService
     public function updateEducation(Request $request)
     {
-        //validate form
-        $this->validateForm($request);
         
         //Get posted form data
         $id = $request->input('id');
@@ -117,6 +138,22 @@ class EducationController extends Controller
         $graduationyear = $request->input('graduationyear');
         $user_id = $request->input('user_id');
         
+        //Make validator rules
+        $validator = Validator::make($request->all(), ['id' => 'Required',
+            'school'=> 'Required|max:256',
+            'degree'=> 'Required|max:256',
+            'field'=> 'Required|max:256',
+            'graduationyear'=> 'Required|numeric|max:3000',
+            'user_id' => 'Required'
+            
+        ]);
+        
+        //if there is a validation error, reroute to form with errors and model
+        if($validator->fails())
+        {
+            $errors = $validator->errors();
+            return $this->redirectEducation($id, $errors);
+        }
         
         //Save posted Form Data to Skill Object Model
         $updatedEducation = new Education($id, $school, $degree, $field, $graduationyear, $user_id);
@@ -139,13 +176,11 @@ class EducationController extends Controller
 
     }
 
-    private function validateForm(Request $request)
+    /* validateCreateForm method handles data validation in New Education Form
+     */
+    private function validateCreateForm(Request $request)
     {
-        //BEST PRATICE: centralize your rule so you have a consistent architecture
-        //and even resuse your rules
-        //BAD PRATICES: not using a defined data validation Framework, putting rules
-        //all over your coe, doing only on CLient side and database
-        //SEt up data validation for login form
+        // data validation rules for New Education Form
         $rules = ['school'=> 'Required|max:256',
             'degree'=> 'Required|max:256',
             'field'=> 'Required|max:256',
@@ -155,4 +190,5 @@ class EducationController extends Controller
         // Run Data Validation Rules
         $this->validate($request, $rules);
     }
+    
 }
