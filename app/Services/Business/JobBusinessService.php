@@ -7,9 +7,9 @@
  */
 namespace App\Services\Business;
 
-use Illuminate\Support\Facades\Log;
 use App\Database\Database;
 use App\Services\Data\JobDataService;
+use Illuminate\Support\Facades\Log;
 
 class JobBusinessService
 {

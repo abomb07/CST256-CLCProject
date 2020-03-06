@@ -33,6 +33,9 @@
       </li>
     @else
       <li class="nav-item">
+        <a class="nav-link" href="groups">Groups</a>
+      </li>  
+      <li class="nav-item">
         <a class="nav-link" href="logout">Logout</a>
       </li>     
     @endif

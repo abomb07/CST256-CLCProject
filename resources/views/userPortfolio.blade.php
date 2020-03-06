@@ -136,6 +136,24 @@
 @endif
 </table>
 
+<h2>GROUPS</h2>
+<table id="groups" class="table table-hover">
+	<tr>
+		<tH>NAME</tH>
+	</tr>
+
+@if($groupNames)
+	@foreach($groupNames as $group)
+
+	<tr>
+		<td>{{$group->getName()}}</td>
+	</tr>
+
+	@endforeach
+@endif
+</table>
+<br>
+
 @else
 <h2>Must be logged in to view portfolio!!!</h2>
 @endif 

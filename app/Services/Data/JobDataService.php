@@ -172,7 +172,7 @@ class JobDataService
             //if statement execute successfully return $users
             if($statement->rowCount() > 0){
                 
-                Log::info("Exit SecurityDAO.findAllJob with true");
+                Log::info("Exit SecurityDAO.findAllJobs with true");
                 $jobs = $statement->fetchAll();
                 return $jobs;
             }

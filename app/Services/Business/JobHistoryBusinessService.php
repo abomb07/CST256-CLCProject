@@ -52,7 +52,7 @@ class JobHistoryBusinessService
         return $flag;
     }
     
-    /* updateJobHistory method calls and passes $job to updateJob method in UserDataService*/
+    /* updateJobHistory method calls and passes $job to updateJob method in JobHistoryDataService*/
     function updateJobHistory($job){
         
         Log::info("Entering JobHistoryBusinessService.updateJobHistory()");
@@ -72,26 +72,8 @@ class JobHistoryBusinessService
         return $flag;
     }
     
-    /* findAllJobs method calls and passes $job to findAllJobs method in UserDataService*/
-    function findAllJobs(){
-        
-        Log::info("Entering JobHistoryBusinessService.fidnAllJobHisotry()");
-        
-        $database = new Database();
-        $db = $database->getConnection();
-        
-        // Create a User Data Service with this connection and calls findAllJobs method/
-        $dbService = new JobHistoryDataService($db);
-        $flag = $dbService->findAllJobs();
-        
-        // close the connection
-        $db = null;
-        
-        // return the finder result
-        Log::info("Exit JobHistoryBusinessService.fidnAllJobHisotry() ");
-        return $flag;
-    }
-    /* findById method calls and passes $job to findById method in UserDataService*/
+    
+    /* findById method calls and passes $job to findById method in JobHistoryDataService*/
     function findById($id){
         
         Log::info("Entering JobHistoryBusinessService.findById()");
@@ -111,7 +93,7 @@ class JobHistoryBusinessService
         return $flag;
     }
     
-    /* findByUserId method calls and passes $job to findByUserId method in UserDataService*/
+    /* findByUserId method calls and passes $job to findByUserId method in JobHistoryDataService*/
     function findByUserId($user_id){
         
         Log::info("Entering JobHistoryBusinessService.findByUserId()");

@@ -340,3 +340,68 @@ Route::post('/removeSkill','SkillController@deleteSkill');
  * delete the user education in the database
  */
 Route::post('/removeEducation','EducationController@deleteEducation');
+
+/*========= Milestone 4 =======*/
+
+/*
+ * this route is mapped to the '/groupNewGroupForm' URI renders to the
+ * groupNewGroupForm Form (an HTML Form)
+ */
+Route::get('/groupNewForm', function()
+{
+    return view('groupNewForm');
+});
+
+/*
+ * this route is mapped to the '/adminJobs' URI renders to the
+ * admin jobs Form (an HTML Form)
+ */
+Route::get('/groups', 'GroupController@findAllGroups');
+
+/*
+ * this route is mapped to the '/newGroup' URI and will
+ * create a group in the database
+ */
+Route::post('/newGroup', 'GroupController@createGroup');
+
+/*
+ * this route is mapped to the '/viewGroup' URI and will
+ * open the view group form
+ */
+Route::post('/viewGroup','GroupController@viewGroup');
+
+/*
+ * this route is mapped to the '/editGroup' URI and will
+ * open the edit group form
+ */
+Route::post('/editGroup','GroupController@openUpdateGroup');
+
+/*
+ * this route is mapped to the '/updateGroup' URI and will
+ * update the group in the database
+ */
+Route::post('/updateGroup','GroupController@updateGroup');
+
+/*
+ * this route is mapped to the '/deleteGroup' URI and will
+ * open the delete group confirmation page
+ */
+Route::post('/deleteGroup','GroupController@processDelete');
+
+/*
+ * this route is mapped to the '/removeEducation' URI and will
+ * delete the user education in the database
+ */
+Route::post('/removeGroup','GroupController@deleteGroup');
+
+/*
+ * this route is mapped to the '/joinGroup' URI and will
+ * join a user to the group selected
+ */
+Route::post('/joinGroup','GroupController@joinGroup');
+
+/*
+ * this route is mapped to the '/leaveGroup' URI and will
+ * remove a user from the group selected
+ */
+Route::post('/leaveGroup','GroupController@leaveGroup');
