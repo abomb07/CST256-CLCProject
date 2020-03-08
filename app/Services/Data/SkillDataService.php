@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * UserDataService version 3.0
+/* CLC Project version 4.0
+ * SkillDataService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * SkillDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -17,11 +17,20 @@ class SkillDataService
 {
     private $connection = NULL;
     
-    
+    /**
+     * Non default constructor handles db connection
+     * @param $connection
+     */
     public function __construct($connection){
         $this->connection = $connection;
     }
-    //createSkill function connect database and add new skill using MySQL statement
+    
+    /**
+     * createSkill function connect database and add new skill using MySQL statement
+     * @param Skill $skill
+     * @throws DatabaseException
+     * @return boolean
+     */
     function createSkill(Skill $skill)
     {
         Log::info("Entering SkillDataService::createSkill()");
@@ -60,7 +69,12 @@ class SkillDataService
         }
     }
     
-    // findByUserId method find skill with matched id in database
+    /**
+     * findByUserId method find skill with matched user id in database
+     * @param $user_id
+     * @throws DatabaseException
+     * @return array
+     */
     function findByUserId($user_id){
         Log::info("Entering SkillDataService::findByUserId()");
         
@@ -94,7 +108,12 @@ class SkillDataService
         }
     }
     
-    // findById method find skill with matched id in database
+    /**
+     * findById method find skill with matched id in database
+     * @param $id
+     * @throws DatabaseException
+     * @return \App\Model\Skill
+     */
     function findById($id){
         Log::info("Entering SkillDataService::findById()");
         
@@ -128,7 +147,12 @@ class SkillDataService
         }
     }
     
-    // updateSkill method render data and update user information in database
+    /**
+     * updateSkill method render data and update skill information in database
+     * @param Skill $skill
+     * @throws DatabaseException
+     * @return boolean
+     */
     function updateSkill(Skill $skill)
     {
         Log::info("Entering SkillDataService::updateSkill()");
@@ -166,7 +190,12 @@ class SkillDataService
         }
     }
     
-    //deleteSkill function connect database and delete user using MySQL statement
+    /**
+     * deleteSkill function connect database and delete skill using MySQL statement
+     * @param Skill $skill
+     * @throws DatabaseException
+     * @return boolean
+     */
     function deleteSkill(Skill $skill)
     {
         Log::info("Entering SkillDataService::deleteSkill()");

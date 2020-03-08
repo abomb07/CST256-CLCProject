@@ -1,7 +1,7 @@
 <?php
 /*
  * CLC Project version 4.0
- * Affinity group page version 3.0
+ * Affinity group page version 4.0
  * Adam Bender and Jim Nguyen
  * March 8, 2020
  * Affinity group Page
@@ -21,7 +21,6 @@
 		<tH></tH>
 		<tH>NAME</tH>
 		<tH>DESCRIPTION</tH>
-		<tH>GROUP ID</tH>
 		<tH></tH>
 		<tH></tH>
 	</tr>
@@ -44,6 +43,7 @@
 			<form action='deleteGroup' method='POST'>
 				{{ csrf_field() }} 
 				<input type='hidden' name='group_id' value="{{ $group['ID'] }}"> 
+				<input type='hidden' name='user_id' value="{{ Session::get('id') }}">
 				<input type='submit' value='Delete'>
 			</form>
 		@endif
@@ -51,7 +51,6 @@
 
 		<td>{{$group['NAME']}}</td>
 		<td>{{$group['DESCRIPTION']}}</td>
-		<td>{{$group['OWNER_ID']}}</td>
 	
     	<td>
     	<form action='viewGroup' method='POST'>

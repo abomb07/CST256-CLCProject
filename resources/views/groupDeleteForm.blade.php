@@ -19,7 +19,7 @@
 <input type='submit' value='YES'>
 </form>
 
-<form action='groupPage'>
+<form action='groups'>
 <input type='submit' value='NO'>
 </form>
 

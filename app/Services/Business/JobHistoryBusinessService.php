@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * JobHistoryBusinessService version 3.0
+/* CLC Project version 4.0
+ * JobHistoryBusinessService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * JobHistoryBusinessService handles CRUD methods
  */
 namespace App\Services\Business;
@@ -13,6 +13,11 @@ use App\Services\Data\JobHistoryDataService;
 
 class JobHistoryBusinessService
 {
+    /**
+     * createJobHistory method calls and passes $job to createJobHistory method in JobHistoryDataService
+     * @param $job
+     * @return boolean
+     */
     function createJobHistory($job){
         
         Log::info("Entering JobHistoryBusinessService.createJobHistory()");
@@ -32,6 +37,11 @@ class JobHistoryBusinessService
         return $flag;
     }
     
+    /**
+     * deleteJobHistory method calls and passes $job to deleteJobHistory method in JobHistoryDataService
+     * @param $job
+     * @return boolean
+     */
     function deleteJobHistory($job){
         
         Log::info("Entering JobHistoryBusinessService.deleteJob()");
@@ -52,7 +62,11 @@ class JobHistoryBusinessService
         return $flag;
     }
     
-    /* updateJobHistory method calls and passes $job to updateJob method in JobHistoryDataService*/
+    /**
+     * updateJobHistory method calls and passes $job to updateJobHistory method in JobHistoryDataService
+     * @param $job
+     * @return boolean
+     */
     function updateJobHistory($job){
         
         Log::info("Entering JobHistoryBusinessService.updateJobHistory()");
@@ -73,7 +87,11 @@ class JobHistoryBusinessService
     }
     
     
-    /* findById method calls and passes $job to findById method in JobHistoryDataService*/
+    /**
+     * findById method calls and passes $id to findById method in JobHistoryDataService
+     * @param $id
+     * @return \App\Model\JobHistory
+     */
     function findById($id){
         
         Log::info("Entering JobHistoryBusinessService.findById()");
@@ -93,7 +111,11 @@ class JobHistoryBusinessService
         return $flag;
     }
     
-    /* findByUserId method calls and passes $job to findByUserId method in JobHistoryDataService*/
+    /**
+     * findByUserId method calls and passes $user_id to findByUserId method in JobHistoryDataService
+     * @param $user_id
+     * @return array
+     */
     function findByUserId($user_id){
         
         Log::info("Entering JobHistoryBusinessService.findByUserId()");
@@ -112,9 +134,5 @@ class JobHistoryBusinessService
         Log::info("Exit JobHistoryBusinessService.findByUserId() ");
         return $flag;
     }
-    
-    
-    
-    
 }
 

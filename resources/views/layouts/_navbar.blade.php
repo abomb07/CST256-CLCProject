@@ -21,7 +21,7 @@
       
       <li class="nav-item">
         <a class="nav-link" href="adminJobs">Jobs</a>
-      </li>
+      </li> 
     @endif
     
     @if(Session::get('principal')== false) 	

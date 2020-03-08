@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * User Profile version 3.0
+/* CLC Project version 4.0
+ * User Profile version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * Edit User Profile Page
  */
 ?>

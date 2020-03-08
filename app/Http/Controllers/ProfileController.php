@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 2.0
- * ProfileController version 1.0
+/* CLC Project version 4.0
+ * ProfileController version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * ProfileController handles user profile action
  */
 namespace App\Http\Controllers;
@@ -12,14 +12,19 @@ use App\Services\Business\UserBusinessService;
 use App\Services\Business\JobBusinessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Exception;
 use Validator;
 
 class ProfileController extends Controller
 {
-    /* openProfile method handle data from the home page
+    /**
+     * openProfile method handle data from the home page
      and pass to UserBusinessService and return to
-     the user profile page*/
+     the user profile page
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function openProfile(Request $request)
     {
         try{
@@ -39,19 +44,22 @@ class ProfileController extends Controller
         }
     }
     
-    /* openUpdateProfile method handle data from the home page
+    /**
+     * openUpdateProfile method handle data from the home page
      and pass to UserBusinessService and return to
-     the user profile page*/
+     the user profile page
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function openUpdateProfile(Request $request)
     {
         try{
             $id = $request->input('id');
             
-            //
             $ubs = new UserBusinessService();
             
+            //calls findById in the UserBusinessService
             $users = $ubs->findById($id);
-            
             
             return view('userProfile')->with(compact('users'));
         
@@ -62,8 +70,12 @@ class ProfileController extends Controller
         }
     }
     
-    /* updateProfile method handles user profile update
-    request using UserBusinessService*/
+    /**
+     * updateProfile method handles user profile update
+     * request using UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function updateProfile(Request $request)
     {
         try{
@@ -121,8 +133,8 @@ class ProfileController extends Controller
             {
                 return "Update profile unsuccessfully. Please try again.";
             }
-        /* }catch(ValidationException $e1){
-            throw ($e1); */
+        }catch(ValidationException $e1){
+            throw ($e1);
         }catch(Exception $e2){
             Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page

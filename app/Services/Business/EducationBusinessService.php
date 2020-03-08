@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * EducationBusinessService version 3.0
+/* CLC Project version 4.0
+ * EducationBusinessService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * EducationBusinessService handles CRUD methods
  */
 namespace App\Services\Business;
@@ -12,7 +12,11 @@ use App\Database\Database;
 use App\Services\Data\EducationDataService;
 class EducationBusinessService
 {
-    /* createEducation method calls and passes $education to createEducation method in EducationDataService*/
+    /**
+     * createEducation method calls and passes $education to createEducation method in EducationDataService
+     * @param $education
+     * @return boolean
+     */
     function createEducation($education){
         
         Log::info("Entering EducationBusinessService.createEducation()");
@@ -32,7 +36,11 @@ class EducationBusinessService
         return $flag;
     }
     
-    /* deleteEducation method calls and passes $education to call deleteEducation method in EducationDataService*/
+    /**
+     * deleteEducation method calls and passes $education to call deleteEducation method in EducationDataService
+     * @param $education
+     * @return boolean
+     */
     function deleteEducation($education){
         
         Log::info("Entering EducationBusinessService.deleteEducation()");
@@ -53,7 +61,11 @@ class EducationBusinessService
         return $flag;
     }
     
-    /* updateEducation method calls and passes $user to updateEducation method in EducationDataService*/
+    /**
+     * updateEducation method calls and passes $user to updateEducation method in EducationDataService
+     * @param $education
+     * @return boolean
+     */
     function updateEducation($education){
         
         Log::info("Entering EducationBusinessService.updateSkill()");
@@ -73,7 +85,11 @@ class EducationBusinessService
         return $flag;
     }
     
-    /* findAllEducation method calls and passes $user to findByUserId method in SkillDataService*/
+    /**
+     * findByUserId method calls and passes $user to findByUserId method in SkillDataService
+     * @param $user_id
+     * @return object
+     */
     function findByUserId($user_id){
         
         Log::info("Entering EducationBusinessService.findByUserId()");
@@ -93,7 +109,11 @@ class EducationBusinessService
         return $flag;
     }
     
-    /* findAllEducation method calls and passes $user to findById method in EducationDataService*/
+    /**
+     * findById method calls and passes $user to findById method in EducationDataService
+     * @param $id
+     * @return \App\Model\Education
+     */
     function findById($id){
         
         Log::info("Entering EducationBusinessService.findById()");

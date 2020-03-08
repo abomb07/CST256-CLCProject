@@ -2,7 +2,7 @@
 /* CLC Project version 4.0
  * UserDataService version 4.0
  * Adam Bender and Jim Nguyen
- * March 8th, 2020
+ * March 8, 2020
  * GroupDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -14,18 +14,24 @@ use PDOException;
 use Illuminate\Support\Facades\Log;
 use App\Services\Utility\DatabaseException;
 
-
-
 class GroupDataService
 {
     private $connection = NULL;
-    
-    
+
+    /**
+     * Non default constructor handles db connection
+     * @param $connection
+     */
     public function __construct($connection){
         $this->connection = $connection;
     }
     
-    //createGroup method connects to database and add new group information into SQL statement
+    /**
+     * createGroup method connects to database and add new group information into SQL statement
+     * @param Group $group
+     * @throws DatabaseException
+     * @return boolean
+     */
     function createGroup(Group $group){
         Log::info("Entering JobHistoryDataService::createGroup()");
         try{
@@ -66,7 +72,11 @@ class GroupDataService
         }
     }
     
-    // findAllGroups method find group with matched id in database
+    /**
+     * findAllGroups method finds all groups in database
+     * @throws DatabaseException
+     * @return array
+     */
     function findAllGroups(){
         Log::info("Entering GroupDataService::findAllGroups()");
         
@@ -89,6 +99,10 @@ class GroupDataService
                 
                 return $result;
             }
+            else
+            {
+                return array();
+            }
             
         }catch(PDOException $e)
         {
@@ -98,7 +112,12 @@ class GroupDataService
         }
     }
     
-    //deleteGroup method connects database and delete group using MySQL statement
+    /**
+     * deleteGroup method connects database and delete group using MySQL statement
+     * @param Group $group
+     * @throws DatabaseException
+     * @return boolean
+     */
     function deleteGroup(Group $group){
         Log::info("Entering GroupDataService::deleteGroup()");
         try{
@@ -130,7 +149,12 @@ class GroupDataService
         }
     }
     
-    // updateGroup method render data and update user information in database
+    /**
+     * updateGroup method render data and update group information in database
+     * @param Group $group
+     * @throws DatabaseException
+     * @return boolean
+     */
     function updateGroup(Group $group)
     {
         Log::info("Entering GroupDataService::updateGroup()");
@@ -173,9 +197,12 @@ class GroupDataService
         }
     }
     
-    
-    
-    // findByOwnerId method find group with matched owner id in database
+    /**
+     * findByOwnerId method find groups with matched owner id in database
+     * @param $owner_id
+     * @throws DatabaseException
+     * @return array
+     */
     function findByOwnerId($owner_id){
         Log::info("Entering GroupDataService::findByOwnerId()");
         
@@ -209,7 +236,12 @@ class GroupDataService
         }
     }
     
-    // findById method find group with matched id in database
+    /**
+     * findById method find group with matched id in database
+     * @param $id
+     * @throws DatabaseException
+     * @return \App\Model\Group
+     */
     function findById($id){
         Log::info("Entering GroupDataService::findById()");
         
@@ -243,6 +275,43 @@ class GroupDataService
         }
     }
     
+    /**
+     * findByGroupName method find group with matched name in database
+     * @param $name
+     * @throws DatabaseException
+     * @return \App\Model\Group
+     */
+    function findByGroupName($name)
+    {
+        Log::info("Entering GroupDataService::findByGroupName()");
         
+        try{
+            $statement = $this->connection->prepare("SELECT ID, NAME, DESCRIPTION, OWNER_ID FROM AFFINITY_GROUP WHERE NAME = :name ");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }
+            //bindParam $id
+            $statement->bindParam(':name', $name);
+            $statement->execute();
+            
+            if($statement->rowCount() == 1){
+                Log::info("Exit GroupDataService.findByGroupName");
+                
+                //fetches group from database and returns $result
+                $row = $statement->fetch(PDO::FETCH_ASSOC);
+                $result = new Group($row['ID'], $row['NAME'], $row['DESCRIPTION'], $row['OWNER_ID']);
+                
+                return $result;
+            }
+            
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
 }
 

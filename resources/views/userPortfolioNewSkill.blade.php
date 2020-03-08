@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 3.0
- * New Skill Form version 3.0
+ * CLC Project version 4.0
+ * New Skill Form version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * New Skill Form
  */
 ?>

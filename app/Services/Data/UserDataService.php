@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * UserDataService version 3.0
+/* CLC Project version 4.0
+ * UserDataService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * UserDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -18,12 +18,20 @@ class UserDataService{
     
     private $connection = NULL;
     
-    //BEST PRACTICE Do not create Database Connection in a Data Service
+    /**
+     * Non default constructor handles db connection
+     * @param $connection
+     */
     public function __construct($connection){
         $this->connection = $connection;
     }
     
-    //create function connect database and add new user using MySQL statement
+    /**
+     * create function connect database and add new user using MySQL statement
+     * @param User $user
+     * @throws DatabaseException
+     * @return boolean
+     */
     function createUser(User $user)
     {    
         Log::info("Entering SecurityDAO::createUser()");
@@ -79,7 +87,12 @@ class UserDataService{
         }
     }
     
-    //CheckUsername check if username exists in Database
+    /**
+     * findUsername check if username exists in Database
+     * @param User $user
+     * @throws DatabaseException
+     * @return boolean
+     */
     function findUsername(User $user){
         
         Log::info("Entering SecurityDAO::checkUsername()");
@@ -118,8 +131,12 @@ class UserDataService{
         }
     }
     
-    /* authenticate function use getConnection() to connect database
+    /**
+     * authenticate function use getConnection() to connect database
      * and authenticate user using MySQL statement
+     * @param Credential $credential
+     * @throws DatabaseException
+     * @return \App\Model\User
      */
     function findUser(Credential $credential)
     {
@@ -127,7 +144,6 @@ class UserDataService{
         Log::info("Entering SecurityDAO::findUser()");
         
         try{
-            
             // Select user with entered username and password
             $username = $credential->getUsername();
             $password = $credential->getPassword();
@@ -173,7 +189,11 @@ class UserDataService{
         }   
     }
     
-    // showAllUser method returns all users exist in database
+    /**
+     * findAllUser method returns all users exist in database
+     * @throws DatabaseException
+     * @return array
+     */
     function findAllUser(){
         Log::info("Entering SecurityDAO::showAll()");
         
@@ -206,12 +226,16 @@ class UserDataService{
         }
     }
     
-    // findById method find user with matched id in database
+    /**
+     * findById method find user with matched id in database
+     * @param $id
+     * @throws DatabaseException
+     * @return \App\Model\User
+     */
     function findById($id){
         Log::info("Entering SecurityDAO::findById()");
         
         try{
-            
             $statement = $this->connection->prepare("SELECT ID, USERNAME, PASSWORD, FIRSTNAME, LASTNAME, EMAIL, PHONENUMBER, CITY, ROLE , STATUS FROM USER WHERE ID = :id ");
             
             if(!$statement){
@@ -240,7 +264,12 @@ class UserDataService{
         }
     }
     
-    // checkStatus method checks user status in database
+    /**
+     * findStatus method checks user status in database
+     * @param User $user
+     * @throws DatabaseException
+     * @return boolean
+     */
     function findStatus(User $user){
         Log::info("Entering SecurityDAO::checkStatus()");
         
@@ -284,7 +313,12 @@ class UserDataService{
         }
     }
     
-    // updateUser method render data and update user information in database
+    /**
+     * updateUser method render data and update user information in database
+     * @param User $user
+     * @throws DatabaseException
+     * @return boolean
+     */
     function updateUser(User $user)
     {
         Log::info("Entering SecurityDAO::updateUser()");
@@ -292,13 +326,12 @@ class UserDataService{
         try{
             //update user information in database 
             $statement = $this->connection->prepare("UPDATE USER SET USERNAME = :username, PASSWORD = :password, FIRSTNAME = :firstname, LASTNAME = :lastname,
-EMAIL = :email, PHONENUMBER = :phonenumber, CITY = :city , ROLE = :role, STATUS = :status WHERE ID = :id");
+                                                    EMAIL = :email, PHONENUMBER = :phonenumber, CITY = :city , ROLE = :role, STATUS = :status WHERE ID = :id");
             
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
             }
-            
             
             $id = $user->getId();
             $un = $user->getUsername();
@@ -345,7 +378,12 @@ EMAIL = :email, PHONENUMBER = :phonenumber, CITY = :city , ROLE = :role, STATUS 
         }   
     }
     
-    //delete function connect database and delete user using MySQL statement
+    /**
+     * delete function connect database and delete user using MySQL statement
+     * @param User $user
+     * @throws DatabaseException
+     * @return boolean
+     */
     function deleteUser(User $user)
     {
         Log::info("Entering SecurityDAO::deleteUser()");
@@ -386,7 +424,12 @@ EMAIL = :email, PHONENUMBER = :phonenumber, CITY = :city , ROLE = :role, STATUS 
         }
     }
     
-    // findbyFirstName method finds for user with entered firstname
+    /**
+     * findbyFirstName method finds for user with entered firstname
+     * @param User $user
+     * @throws DatabaseException
+     * @return array
+     */
     function findByFirstName(User $user){
         Log::info("Entering SecurityDAO::findByFirstName()");
         
@@ -419,7 +462,12 @@ EMAIL = :email, PHONENUMBER = :phonenumber, CITY = :city , ROLE = :role, STATUS 
         }
     }
     
-    // findbyFirstName method finds for user with entered firstname
+    /**
+     * findbyLastName method finds for user with entered lastname
+     * @param User $user
+     * @throws DatabaseException
+     * @return array
+     */
     function findByLastName(User $user){
         Log::info("Entering SecurityDAO::findByLastName()");
         
@@ -452,5 +500,4 @@ EMAIL = :email, PHONENUMBER = :phonenumber, CITY = :city , ROLE = :role, STATUS 
             throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
         }
     }    
-    
 }

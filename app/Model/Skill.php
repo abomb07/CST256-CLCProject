@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * Skill version 3.0
+/* CLC Project version 4.0
+ * Skill version 4.0
  * Adam Bender and Jim Nguyen
- * February 19th, 2020
+ * March 8, 2020
  * Skill class acts as a Model
  */
 namespace App\Model;

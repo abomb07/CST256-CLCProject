@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * UserDataService version 3.0
+/* CLC Project version 4.0
+ * JobHistoryDataService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * JobHistoryDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -18,12 +18,20 @@ class JobHistoryDataService
 {
     private $connection = NULL;
     
-    
+    /**
+     * Non default constructor handles db connection
+     * @param $connection
+     */
     public function __construct($connection){
         $this->connection = $connection;
     }
     
-    //createJob method connects to database and add new job information into SQL statement
+    /**
+     * createJobHistory method connects to database and add new job history information into SQL statement
+     * @param JobHistory $jobhistory
+     * @throws DatabaseException
+     * @return boolean
+     */
     function createJobHistory(JobHistory $jobhistory){
         Log::info("Entering JobHistoryDataService::createJobHistory()");
         try{
@@ -67,7 +75,12 @@ class JobHistoryDataService
         }
     }
     
-    //deleteJob method connects database and delete job using MySQL statement
+    /**
+     * deleteJobHistory method connects database and delete job history using MySQL statement
+     * @param JobHistory $jobhistory
+     * @throws DatabaseException
+     * @return boolean
+     */
     function deleteJobHistory(JobHistory $jobhistory){
         Log::info("Entering JobHistoryDataService::deleteJob()");
         try{
@@ -99,7 +112,12 @@ class JobHistoryDataService
         }
     }
     
-    // updateJob method render data and update user information in database
+    /**
+     * updateJobHistory method render data and update job history information in database
+     * @param JobHistory $jobhistory
+     * @throws DatabaseException
+     * @return boolean
+     */
     function updateJobHistory(JobHistory $jobhistory)
     {
         Log::info("Entering JobHistoryDataService::updateJobHistory()");
@@ -146,7 +164,12 @@ class JobHistoryDataService
         }
     }
     
-    // findById method find user with matched id in database
+    /**
+     * findByUserId method find job history with matched user id in database
+     * @param $user_id
+     * @throws DatabaseException
+     * @return array
+     */
     function findByUserId($user_id){
         Log::info("Entering JobHistoryDataService::findByUserId()");
         
@@ -180,7 +203,12 @@ class JobHistoryDataService
         }
     }
     
-    // findById method find user with matched id in database
+    /**
+     * findById method find job history with matched id in database
+     * @param $id
+     * @throws DatabaseException
+     * @return \App\Model\JobHistory
+     */
     function findById($id){
         Log::info("Entering JobHistoryDataService::findById()");
         
@@ -212,8 +240,5 @@ class JobHistoryDataService
             Log::error("Exception: ", array("message " => $e->getMessage()));
             throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
         }
-    }
-    
-        
+    }    
 }
-

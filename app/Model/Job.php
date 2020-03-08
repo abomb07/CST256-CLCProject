@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * Job version 3.0
+/* CLC Project version 4.0
+ * Job version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * Job class acts as a Model
  */
 namespace App\Model;

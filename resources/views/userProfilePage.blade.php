@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 3.0
- * User Profile version 3.0
+ * CLC Project version 4.0
+ * User Profile version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * User Profile Page
  */
 ?>
@@ -52,11 +52,13 @@
 	</tr>
 </table>
 
+@if(Session::get('id') == $user->getId())
 <form action='editProfile' method='POST'>
 	{{ csrf_field() }} 
 	<input type='hidden' name='id' value="{{ $user->getID()}}">
 	<input type="submit" value="Edit" />
 </form>
+@endif
 
 @else
 <h2>Must be logged in to view profile!!!</h2>

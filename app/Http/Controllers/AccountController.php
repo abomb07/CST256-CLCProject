@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 3.0
- * Account Controller version 3.0
+ * CLC Project version 4.0
+ * Account Controller version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * AccountController handles register, login and logout action
  */
 namespace App\Http\Controllers;
@@ -26,9 +26,11 @@ use App\Services\Business\GroupBusinessService;
 class AccountController extends Controller
 {
     
-    /* register method handles data from Register Form
-     * and passes to UserBusinessService
-    */
+    /**
+     * register method handles data from Register Form and passes to UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function register(Request $request)
     {
         try{
@@ -68,8 +70,11 @@ class AccountController extends Controller
         }
         
     }
-    /* login method handle data from Login Form
-     and pass to UserBusinessService */
+    /**
+     * login method handle data from Login Form and pass to UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function login(Request $request)
     {
         try{
@@ -115,9 +120,13 @@ class AccountController extends Controller
         
     }
     
-    /* findPortfolio method handle data from login
-    * and passes id to JobHistoryBusinessService
-    * EducationBusinessService and SkillBusinessService */
+    /**
+     * findPortfolio method handle data from login
+     * and passes id to JobHistoryBusinessService
+     * EducationBusinessService and SkillBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function findPortfolio(Request $request)
     {      
             $user_id = $request->input('user_id');
@@ -148,7 +157,10 @@ class AccountController extends Controller
             return view(('userPortfolio'),compact(['jobhistorys'],['skills'], ['educations'], ['groupNames']));
     }
     
-    //Logout method handles logout action and flush all sessions, return to Home Page
+    /**
+     * Logout method handles logout action and flush all sessions, return to Home Page
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function logout()
     {
         Session::flush();
@@ -161,7 +173,9 @@ class AccountController extends Controller
         return view(('homePage'),compact(['jobs']));
     }
     
-    /* validateLoginForm method handles data validation in Register Form
+    /**
+     * validateLoginForm method handles data validation in login Form
+     * @param Request $request
      */
     private function validateLoginForm(Request $request){
         
@@ -174,7 +188,9 @@ class AccountController extends Controller
         $this->validate($request, $rules);
     }
     
-    /* validateRegisterForm method handles data validation in Register Form
+    /**
+     * validateRegisterForm method handles data validation in Register Form
+     * @param Request $request
      */
     private function validateRegisterForm(Request $request){
         

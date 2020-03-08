@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * User Portfolio version 3.0
+/* CLC Project version 4.0
+ * User Portfolio version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * User Portfolio Page
  */
 ?>
@@ -146,7 +146,7 @@
 	@foreach($groupNames as $group)
 
 	<tr>
-		<td>{{$group->getName()}}</td>
+		<td>{{$group->getName()}} @if($group->getOwner_id() == Session::get('id')) (Owner) @endif</td>
 	</tr>
 
 	@endforeach

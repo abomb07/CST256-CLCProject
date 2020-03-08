@@ -1,9 +1,9 @@
 <?php
 /* CLC Project version 4.0
- * UserDataService version 4.0
+ * MemberDataService version 4.0
  * Adam Bender and Jim Nguyen
- * March 8th, 2020
- * GroupDataService handle methods through MySQL Statement
+ * March 8, 2020
+ * MemberDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
 
@@ -19,12 +19,20 @@ class MemberDataService
 {
     private $connection = NULL;
     
-    
+    /**
+     * Non default constructor handles db connection
+     * @param $connection
+     */
     public function __construct($connection){
         $this->connection = $connection;
     }
     
-    //createMember method connects to database and add new member information into SQL statement
+    /**
+     * createMember method connects to database and add new member information into SQL statement
+     * @param Member $member
+     * @throws DatabaseException
+     * @return boolean
+     */
     function createMember(Member $member){
         Log::info("Entering MemberDataService::createMember()");
         try{
@@ -64,7 +72,12 @@ class MemberDataService
         }
     }
     
-    //deleteMember method connects database and delete member using MySQL statement
+    /**
+     * deleteMember method connects database and delete member using MySQL statement
+     * @param Member $member
+     * @throws DatabaseException
+     * @return boolean
+     */
     function deleteMember(Member $member){
         Log::info("Entering MemberDataService::deleteMember()");
         try{
@@ -99,7 +112,50 @@ class MemberDataService
         }
     }
     
-    // findByGroupId method find user with matched id in database
+    /**
+     * deleteByGroupId method delete member with matched id in database
+     * @param $group_id
+     * @throws DatabaseException
+     * @return boolean
+     */
+    function deleteByGroupId($group_id){
+        Log::info("Entering MemberDataService::deleteByGroupId()");
+        
+        try{
+            
+            $statement = $this->connection->prepare("DELETE FROM MEMBER WHERE AFFINITY_GROUP_ID = :group_id ");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }
+            //bindParam $id
+            $statement->bindParam(':group_id', $group_id);
+            $statement->execute();
+            
+            if($statement->rowCount() > 0){
+                
+                Log::info("Exit MemberDataService.deleteByGroupId() with true");
+                return true;
+            }else{
+                Log::info("Exit MemberDataService.deleteByGroupId() with false");
+                return false;
+            }
+            
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
+    
+    /**
+     * findByGroupId method find member with matched group id in database
+     * @param $group_id
+     * @throws DatabaseException
+     * @return \App\Model\User[]|array
+     */
     function findByGroupId($group_id){
         Log::info("Entering MemberDataService::findByGroupId()");
         
@@ -137,7 +193,12 @@ class MemberDataService
         }
     }
     
-    // findByUserId method find group with matched id in database
+    /**
+     * findByUserId method find member with matched user id in database
+     * @param $user_id
+     * @throws DatabaseException
+     * @return array|\App\Model\Group|array
+     */
     function findByUserId($user_id){
         Log::info("Entering MemberDataService::findByUserId()");
         
@@ -176,6 +237,5 @@ class MemberDataService
             throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
         }
     }
-    
 }
 

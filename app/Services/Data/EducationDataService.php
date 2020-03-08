@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * EducationDataService version 3.0
+/* CLC Project version 4.0
+ * EducationDataService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23th, 2020
+ * March 8, 2020
  * EducationDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -17,11 +17,20 @@ class EducationDataService
 {
     private $connection = NULL;
     
-    
+    /**
+     * Non default constructor handles db connection
+     * @param $connection
+     */
     public function __construct($connection){
         $this->connection = $connection;
     }
-    //createSkill function connect database and add new skill using MySQL statement
+    
+    /**
+     * createEducation function connect database and add new education using MySQL statement
+     * @param Education $education
+     * @throws DatabaseException
+     * @return boolean
+     */
     function createEducation(Education $education)
     {
         Log::info("Entering EducationDataService::createEducation()");
@@ -67,10 +76,13 @@ class EducationDataService
             throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
         }
     }
-    
-    
-    
-    // findById method find skill with matched id in database
+
+    /**
+     * findById method find education with matched id in database
+     * @param $id
+     * @throws DatabaseException
+     * @return \App\Model\Education
+     */
     function findById($id){
         Log::info("Entering EducationDataService::findById()");
         
@@ -104,7 +116,12 @@ class EducationDataService
         }
     }
     
-    // findByUserId method find skill with matched id in database
+    /**
+     * findByUserId method find education with matched id in database
+     * @param $user_id
+     * @throws DatabaseException
+     * @return array
+     */
     function findByUserId($user_id){
         Log::info("Entering EducationDataService::findByUserId()");
         
@@ -137,7 +154,12 @@ class EducationDataService
         }
     }
     
-    // updateEducation method render data and update education information in database
+    /**
+     * updateEducation method render data and update education information in database
+     * @param Education $education
+     * @throws DatabaseException
+     * @return boolean
+     */
     function updateEducation(Education $education)
     {
         Log::info("Entering EducationDataService::updateEducation()");
@@ -183,7 +205,12 @@ class EducationDataService
         }
     }
     
-    //deleteEducation function connect database and delete education using MySQL statement
+    /**
+     * deleteEducation function connect database and delete education using MySQL statement
+     * @param Education $education
+     * @throws DatabaseException
+     * @return boolean
+     */
     function deleteEducation(Education $education)
     {
         Log::info("Entering EducationDataService::deleteEducation()");

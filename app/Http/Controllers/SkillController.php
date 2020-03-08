@@ -1,5 +1,10 @@
 <?php
-
+/* CLC Project version 4.0
+ * SkillController version 4.0
+ * Adam Bender and Jim Nguyen
+ * March 8, 2020
+ * SkillController handles user profile action
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,7 +21,11 @@ use Validator;
 
 class SkillController extends Controller
 {
-    // add a Skill
+    /**
+     * add a Skill
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function createSkill(Request $request)
     {
         try{
@@ -63,8 +72,13 @@ class SkillController extends Controller
             return view('SystemException');
         }
     }
-    // processDeleteSkill method handles data from editSkillForm
-    // and pass it to processDeleteSkill method in SkillBusinessService
+    
+    /**
+     * processDelete method handles data from editSkillForm
+     * and pass it to processDeleteSkill method in SkillBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function processDelete(Request $request)
     {
         try{
@@ -87,8 +101,12 @@ class SkillController extends Controller
         
     }
     
-    // openUpdateSkill method handles data from portfolio
-    // and pass it to findById method in SkillBusinessService
+    /**
+     * openUpdateSkill method handles data from portfolio
+     * and pass it to findById method in SkillBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function openUpdateSkill(Request $request){
         try{
             //Get posted Form data
@@ -114,8 +132,12 @@ class SkillController extends Controller
         
     }
     
-    // deleteSkill method handles data
-    // and pass it to deleteJob method in SkillBusinessService
+    /**
+     * deleteSkill method handles data
+     * and pass it to deleteJob method in SkillBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function deleteSkill(Request $request)
     {
         try{
@@ -164,8 +186,12 @@ class SkillController extends Controller
         }
     }
     
-    // updateSkill method handles data from editSkillForm
-    // and pass it to updateSkill method in SkillBusinessService
+    /**
+     * updateSkill method handles data from editSkillForm
+     * and pass it to updateSkill method in SkillBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function updateSkill(Request $request)
     {
         try{
@@ -178,7 +204,6 @@ class SkillController extends Controller
             $validator = Validator::make($request->all(), ['id' => 'Required',
                 'skill'=> 'Required|max:256',
                 'user_id' => 'Required'
-                
             ]);
             
             //if there is a validation error, reroute to form with errors and model
@@ -228,8 +253,8 @@ class SkillController extends Controller
                 // return to userPortfolio Form with jobhistorys, skills, educations objects
                 return view(('userPortfolio'),compact(['jobhistorys'],['skills'], ['educations'], ['groupNames']));
             }
-        /* }catch(ValidationException $e1){
-            throw ($e1); */
+        }catch(ValidationException $e1){
+            throw ($e1); 
         }catch(Exception $e2){
             Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
@@ -237,7 +262,9 @@ class SkillController extends Controller
         }
     }
 
-    /* validateSkillForm method handles data validation in New Skill Form
+    /**
+     * validateSkillForm method handles data validation in New Skill Form
+     * @param Request $request
      */
     private function validateSkillForm(Request $request){
         

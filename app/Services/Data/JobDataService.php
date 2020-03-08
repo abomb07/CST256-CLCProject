@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * UserDataService version 3.0
+/* CLC Project version 4.0
+ * JobDataService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * JobDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -18,12 +18,20 @@ class JobDataService
 {
     private $connection = NULL;
     
-    
+    /**
+     * Non default constructor handles db connection
+     * @param $connection
+     */
     public function __construct($connection){
         $this->connection = $connection;
     }
     
-    //createJob method connects to database and add new job information into SQL statement
+    /**
+     * createJob method connects to database and add new job information into SQL statement
+     * @param Job $job
+     * @throws DatabaseException
+     * @return boolean
+     */
     function createJob(Job $job){
         Log::info("Entering JobDataService::createJob()");
         try{
@@ -70,7 +78,12 @@ class JobDataService
         }
     }
     
-    //deleteJob method connects database and delete job using MySQL statement
+    /**
+     * deleteJob method connects database and delete job using MySQL statement
+     * @param Job $job
+     * @throws DatabaseException
+     * @return boolean
+     */
     function deleteJob(Job $job){
         Log::info("Entering JobDataService::deleteJob()");
         try{
@@ -102,7 +115,12 @@ class JobDataService
         }
     }
     
-    // updateJob method render data and update user information in database
+    /**
+     * updateJob method render data and update job information in database
+     * @param Job $job
+     * @throws DatabaseException
+     * @return boolean
+     */
     function updateJob(Job $job)
     {
         Log::info("Entering SecurityDAO::updateJob()");
@@ -153,7 +171,11 @@ class JobDataService
         }
     }
     
-    // findAllJob method returns all users exist in database
+    /**
+     * findAllJobs method returns all jobs exist in database
+     * @throws DatabaseException
+     * @return array
+     */
     function findAllJobs(){
         Log::info("Entering SecurityDAO::findAllJob()");
         
@@ -186,7 +208,12 @@ class JobDataService
         }
     }
     
-    // findById method find user with matched id in database
+    /**
+     * findById method find job with matched id in database
+     * @param $id
+     * @throws DatabaseException
+     * @return \App\Model\Job
+     */
     function findById($id){
         Log::info("Entering SecurityDAO::findById()");
         
@@ -220,7 +247,12 @@ class JobDataService
         }
     }
     
-    // findbyTitle method finds for user with entered title
+    /**
+     * findbyTitle method finds for job with entered title
+     * @param Job $job
+     * @throws DatabaseException
+     * @return array
+     */
     function findByTitle(Job $job){
         Log::info("Entering SecurityDAO::findByTitle()");
         
@@ -254,7 +286,12 @@ class JobDataService
         }
     }  
     
-    // findByLocation method finds for user with entered location
+    /**
+     * findByLocation method finds for job with entered location
+     * @param Job $job
+     * @throws DatabaseException
+     * @return array
+     */
     function findByLocation(Job $job){
         Log::info("Entering SecurityDAO::findByLocation()");
         
@@ -288,7 +325,12 @@ class JobDataService
         }
     }
     
-    // findbyCategory method finds for user with entered title
+    /**
+     * findbyCategory method finds for user with entered category
+     * @param Job $job
+     * @throws DatabaseException
+     * @return array
+     */
     function findByCategory(Job $job){
         Log::info("Entering SecurityDAO::findByCategory()");
         

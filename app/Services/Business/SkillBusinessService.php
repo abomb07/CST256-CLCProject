@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * SkillBusinessService version 3.0
+/* CLC Project version 4.0
+ * SkillBusinessService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * SkillBusinessService handles CRUD methods
  */
 namespace App\Services\Business;
@@ -13,7 +13,11 @@ use App\Services\Data\SkillDataService;
 
 class SkillBusinessService
 {
-    /* createSkill method calls and passes $user to createSkill method in UserDataService*/
+    /**
+     * createSkill method calls and passes $skill to createSkill method in SkillDataService
+     * @param $skill
+     * @return boolean
+     */
     function createSkill($skill){
         
         Log::info("Entering SkillBusinessService.createSkill()");
@@ -33,7 +37,11 @@ class SkillBusinessService
         return $flag;
     }
     
-    /* deleteSkill method calls and passes $user to deleteSkill method in SkillDataService*/
+    /**
+     * deleteSkill method calls and passes $skill to deleteSkill method in SkillDataService
+     * @param $skill
+     * @return boolean
+     */
     function deleteSkill($skill){
         
         Log::info("Entering SkillBusinessService.deleteSkill()");
@@ -54,7 +62,11 @@ class SkillBusinessService
         return $flag;
     }
     
-    /* updateSkill method calls and passes $user to updateSkill method in SkillDataService*/
+    /**
+     * updateSkill method calls and passes $skill to updateSkill method in SkillDataService
+     * @param $skill
+     * @return boolean
+     */
     function updateSkill($skill){
         
         Log::info("Entering SkillBusinessService.updateSkill()");
@@ -74,7 +86,11 @@ class SkillBusinessService
         return $flag;
     }
     
-    /* findAllSkills method calls and passes $user to findById method in SkillDataService*/
+    /**
+     * findById method calls and passes $id to findById method in SkillDataService
+     * @param $id
+     * @return \App\Model\Skill
+     */
     function findById($id){
         
         Log::info("Entering SkillBusinessService.findByUserId()");
@@ -94,7 +110,11 @@ class SkillBusinessService
         return $flag;
     }
     
-    /* findUserId method calls and passes $user to findByUserId method in SkillDataService*/
+    /**
+     * findByUserId method calls and passes $user_id to findByUserId method in SkillDataService
+     * @param $user_id
+     * @return array
+     */
     function findByUserId($user_id){
         
         Log::info("Entering SkillBusinessService.findByUserId()");

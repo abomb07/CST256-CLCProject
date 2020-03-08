@@ -1,9 +1,9 @@
 <?php
-/* CLC Project version 3.0
- * JobHistoryBusinessService version 3.0
+/* CLC Project version 4.0
+ * GroupBusinessService version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
- * JobHistoryBusinessService handles CRUD methods
+ * March 8, 2020
+ * GroupBusinessService handles CRUD methods
  */
 
 namespace App\Services\Business;
@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Log;
 
 class GroupBusinessService
 {
+    /**
+     * createGroup method calls and passes $group to createGroup method in GroupDataService
+     * @param $group
+     * @return boolean
+     */
     function createGroup($group){
         Log::info("Entering GroupBusinessService.createGroup()");
         
@@ -33,7 +38,11 @@ class GroupBusinessService
         return $flag;
     }
     
-    /* updateGroup method calls and passes $group to updateGroup method in GroupDataService*/
+    /**
+     * deleteGroup method calls and passes $group to deleteGroup method in GroupDataService
+     * @param $group
+     * @return boolean
+     */
     function deleteGroup($group){
         
         Log::info("Entering GroupBusinessService.deleteGroup() ");
@@ -54,7 +63,11 @@ class GroupBusinessService
         return $flag;
     }
     
-    /* updateGroup method calls and passes $group to updateGroup method in GroupDataService*/
+    /**
+     * updateGroup method calls and passes $group to updateGroup method in GroupDataService
+     * @param $group
+     * @return boolean
+     */
     function updateGroup($group){
         
         Log::info("Entering GroupBusinessService.updateGroup() ");
@@ -74,7 +87,10 @@ class GroupBusinessService
         return $flag;
     }
     
-    /* findAllJobs method calls and passes $job to findAllJobs method in GroupDataService*/
+    /**
+     * findAllJobs method calls and passes $job to findAllJobs method in GroupDataService
+     * @return array
+     */
     function findAllGroups(){
         
         Log::info("Entering GroupBusinessService.findAllGroups() ");
@@ -93,7 +109,12 @@ class GroupBusinessService
         Log::info("Exit GroupBusinessService.findAllGroups() ");
         return $flag;
     }
-    /* findById method calls and passes $job to findById method in GroupDataService*/
+    
+    /**
+     * findById method calls and passes $job to findById method in GroupDataService
+     * @param $id
+     * @return \App\Model\Group
+     */
     function findById($id){
         
         Log::info("Entering GroupBusinessService.findById()");
@@ -110,6 +131,30 @@ class GroupBusinessService
         
         // return the finder result
         Log::info("Exit GroupBusinessService.findById() ");
+        return $flag;
+    }
+    
+    /**
+     * findByGroupName method calls and passes $job to findByGroupName method in GroupDataService
+     * @param $name
+     * @return \App\Model\Group
+     */
+    function findByGroupName($name){
+        
+        Log::info("Entering GroupBusinessService.findByGroupName()");
+        
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Group Data Service with this connection and calls findByGroupName method/
+        $dbService = new GroupDataService($db);
+        $flag = $dbService->findByGroupName($name);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit GroupBusinessService.findByGroupName() ");
         return $flag;
     }
 }

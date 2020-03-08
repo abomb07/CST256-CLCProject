@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 2.0
- * UserBusinessService version 2.0
+/* CLC Project version 4.0
+ * UserBusinessService version 4.0
  * Adam Bender and Jim Nguyen
- * February 5, 2020
+ * March 8, 2020
  * UserBusinessService handles CRUD methods
  */
 
@@ -13,7 +13,11 @@ use App\Services\Data\UserDataService;
 use Illuminate\Support\Facades\Log;
 class UserBusinessService{
     
-    /* createUser method calls createUser method in UserDataService */
+    /**
+     * createUser method calls createUser method in UserDataService
+     * @param $user
+     * @return boolean
+     */
     function createUser($user){
         
         Log::info("Entering SecurityService.createUser()");
@@ -34,7 +38,11 @@ class UserBusinessService{
         return $flag;
     }
     
-    /* checkUser passes $user object checkUSername in UserDataService*/
+    /**
+     * checkUsername passes $user object checkUsername in UserDataService
+     * @param $user
+     * @return boolean
+     */
     function checkUsername ($user){
         
         Log::info("Entering SecurityService.checkUsername()" );
@@ -56,7 +64,11 @@ class UserBusinessService{
         return $flag;
     }
     
-    /* findUser method calls findUser method in UserDataService */
+    /**
+     * findUser method calls findUser method in UserDataService
+     * @param $credential
+     * @return \App\Model\User
+     */
     function findUser($credential){
         
         Log::info("Entering SecurityService.findUser()");
@@ -76,7 +88,12 @@ class UserBusinessService{
         Log::info("Exit UserBusinessService.findUser() ");
         return $flag;
     }
-    /* checkStatus method calls and passes $user to checkStatus in UserDataService */
+    
+    /**
+     * checkStatus method calls and passes $user to checkStatus in UserDataService
+     * @param $user
+     * @return boolean
+     */
     function checkStatus ($user){
         
         Log::info("Entering SecurityService.findById()" );
@@ -98,7 +115,11 @@ class UserBusinessService{
         return $flag;
     }
     
-    /* updateUser method calls and passes $user to updateUser method in UserDataService*/
+    /**
+     * updateUser method calls and passes $user to updateUser method in UserDataService
+     * @param $user
+     * @return boolean
+     */
     function updateUser($user){
         
         Log::info("Entering SecurityService.updateUser()");
@@ -117,7 +138,12 @@ class UserBusinessService{
         Log::info("Exit UserBusinessService.updateUser() with ". $flag);
         return $flag;
     }
-    /* deleteUser method calls and passes $user to deleteUser method in UserDataService */
+    
+    /**
+     * deleteUser method calls and passes $user to deleteUser method in UserDataService
+     * @param $user
+     * @return boolean
+     */
     function deleteUser($user){
         
         Log::info("Entering SecurityService.deleteUser()");
@@ -138,7 +164,10 @@ class UserBusinessService{
         return $flag;
     }
     
-    /* showAllUser method calls showAllUsers method in UserDataService */
+    /**
+     * findAllUser method calls findAllUser method in UserDataService
+     * @return array
+     */
     function findAllUser (){
         
         Log::info("Entering SecurityService.showAllUser()");
@@ -159,7 +188,11 @@ class UserBusinessService{
         return $flag;
     }
     
-    /* findById method calls and passes $user to findById method in UserDataService */
+    /**
+     * findById method calls and passes $id to findById method in UserDataService
+     * @param $id
+     * @return \App\Model\User
+     */
     function findById ($id){
         Log::info("Entering SecurityService.findById() with " .$id);
         
@@ -179,7 +212,11 @@ class UserBusinessService{
         return $flag;
     }
     
-    /* suspendUser method calls and passes $user to suspendUser method in UserDataService */
+    /**
+     * suspendUser method calls and passes $user to suspendUser method in UserDataService
+     * @param $user
+     * @return boolean
+     */
     function suspendUser ($user){
         
         Log::info("Entering SecurityService.suspendUser() ");
@@ -203,7 +240,11 @@ class UserBusinessService{
         
     }
     
-    /* suspendUser method calls and passes $user to suspendUser method in UserDataService */
+    /**
+     * activateUser method calls and passes $user to activateUser method in UserDataService
+     * @param $user
+     * @return boolean
+     */
     function activateUser ($user){
         
         Log::info("Entering SecurityService.activateUser() ");
@@ -226,7 +267,11 @@ class UserBusinessService{
         return $flag;
     }
     
-    /* findUserByFirstName method calls and passes $user to findByFirstName method in UserDataService */
+    /**
+     * findByFirstName method calls and passes $user to findByFirstName method in UserDataService
+     * @param $user
+     * @return array
+     */
     function findByFirstName ($user){
         
         Log::info("Entering SecurityService.findUserByFirstName()");
@@ -247,7 +292,11 @@ class UserBusinessService{
         return $flag;
     }
     
-    /* findByLastName method calls and passes $user to findByLastName method in UserDataService */
+    /**
+     * findByLastName method calls and passes $user to findByLastName method in UserDataService
+     * @param $user
+     * @return array
+     */
     function findByLastName ($user){
         
         Log::info("Entering SecurityService.findUserByLastName()");

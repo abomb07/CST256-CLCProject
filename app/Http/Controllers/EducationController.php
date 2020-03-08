@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 3.0
- * New Skill Form version 3.0
+ * CLC Project version 4.0
+ * EducationController version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * Education Controller handles education functionalities
  */
 namespace App\Http\Controllers;
@@ -23,7 +23,11 @@ use App\Services\Business\MemberBusinessService;
 class EducationController extends Controller
 {
     
-    // createEducation method handles data from New Education Form
+    /**
+     * createEducation method handles data from New Education Form
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function createEducation(Request $request)
     {
         try
@@ -48,12 +52,12 @@ class EducationController extends Controller
             
             if($result = $eds->createEducation($education))
             {
-
                 $groups = $mbs->findByUserId($user_id);
                 $jobhistorys = $jhbs->findByUserId($user_id);
                 $skills = $sbs->findByUserId($user_id);
                 $educations = $eds->findByUserId($user_id);
                 
+                //pass groups user is apart of to portfolio
                 if($groups)
                 {
                     for ($i = 0; $i < count($groups); $i++) {
@@ -76,15 +80,19 @@ class EducationController extends Controller
             return view('SystemException');
         }
     }
-    // processDeleteEducation method handles data from editEducationForm
-    // and pass it to processDeleteEducation method in EducationBusinessService
+    
+    /**
+     * processDelete method handles data from userPortfolio
+     * and pass it to findById method in EducationBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function processDelete(Request $request)
     {
         try
         {
             //Get posted Form data
             $id = $request->input('id');
-            
             
             $ebs = new EducationBusinessService();
             
@@ -101,8 +109,12 @@ class EducationController extends Controller
         
     }
     
-    // deleteEducation method handles data
-    // and pass it to deleteEducation method in EducationBusinessService
+    /**
+     * deleteEducation method handles data from userPortfolioDeleteEducation
+     * and pass it to deleteEducation method in EducationBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function deleteEducation(Request $request)
     {
         try{
@@ -130,6 +142,7 @@ class EducationController extends Controller
                 $skills = $sbs->findByUserId($user_id);
                 $educations = $eds->findByUserId($user_id);
                 
+                //pass groups user is apart of to portfolio
                 if($groups)
                 {
                     for ($i = 0; $i < count($groups); $i++) {
@@ -151,8 +164,13 @@ class EducationController extends Controller
             return view('SystemException');
         }
     }
-    // openUpdateEducation method handles data from portfolio
-    // and pass it to findById method in EducationBusinessService
+    
+    /**
+     * openUpdateEducation method handles data from portfolio
+     * and pass it to findById method in EducationBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function openUpdateEducation(Request $request)
     {
         try{
@@ -178,8 +196,12 @@ class EducationController extends Controller
         }
     }
     
-    // updateEducation method handles data from editEducationForm
-    // and pass it to updateEducation method in EducationBusinessService
+    /**
+     * updateEducation method handles data from editEducationForm
+     * and pass it to updateEducation method in EducationBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function updateEducation(Request $request)
     {
         try
@@ -249,8 +271,8 @@ class EducationController extends Controller
                 // return to userPortfolio Form with jobhistorys, skills, educations objects
                 return view(('userPortfolio'),compact(['jobhistorys'],['skills'], ['educations'], ['groupNames']));
             }
-        /* }catch(ValidationException $e1){
-            throw ($e1); */
+        }catch(ValidationException $e1){
+            throw ($e1);
         }catch(Exception $e2){
             Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
@@ -259,7 +281,9 @@ class EducationController extends Controller
 
     }
 
-    /* validateCreateForm method handles data validation in New Education Form
+    /**
+     * validateCreateForm method handles data validation in New Education Form
+     * @param Request $request
      */
     private function validateCreateForm(Request $request)
     {

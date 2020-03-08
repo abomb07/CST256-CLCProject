@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * Process Skill Delete version 3.0
+/* CLC Project version 4.0
+ * Process Skill Delete version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * Delete Skill Confirmation Form
  */
 ?>

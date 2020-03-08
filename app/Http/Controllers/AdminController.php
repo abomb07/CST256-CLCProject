@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 3.0
- * New Skill Form version 3.0
+ * CLC Project version 4.0
+ * AdminController version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * Admin Controller handles admin functionalities
  */
 namespace App\Http\Controllers;
@@ -16,7 +16,11 @@ use App\Services\Business\UserBusinessService;
 class AdminController extends Controller
 {
     
-    // getUsers shows all user in database
+    /**
+     * getUsers method handles data from the database
+     * and pass it to findAllUser method in the UserBusiness Service 
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function getUsers(){
               
         $ubs = new UserBusinessService();
@@ -33,8 +37,12 @@ class AdminController extends Controller
         
     } 
     
-    // editUser method handles data from adminEditUserForm 
-    // and pass it to findById method in UserBusinessService
+    /**
+     * openUpdateUser method handles data from adminUsers 
+     * and pass it to findById method in UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function openUpdateUser(Request $request)
     {
         try{
@@ -60,8 +68,12 @@ class AdminController extends Controller
         
     }
     
-    // updateUser method handles data from adminEditUserForm
-    // and pass it to updateUser method in UserBusinessService
+    /**
+     * updateUser method handles data from adminEditUserForm 
+     * and pass it to updateUser method in UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function updateUser(Request $request)
     {
         try{
@@ -102,15 +114,17 @@ class AdminController extends Controller
         }
     }
     
-    // processDeleteUser method handles data from adminEditUserForm
-    // and pass it to processDeleteUser method in UserBusinessService
+    /**
+     * processDeleteUser method handles data from adminUsers
+     * and pass it to findById method in UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function processDeleteUser(Request $request)
     {
         try{
-            
             //Get posted Form data
             $id = $request->input('id');
-            
             
             $ubs = new UserBusinessService();
             
@@ -124,8 +138,12 @@ class AdminController extends Controller
         }
     }
     
-    // deleteUser method handles data from adminUser
-    // and pass it to deleteUser method in UserBusinessService
+    /**
+     * deleteUser method handles data from adminDeleteUserForm
+     * and pass it to deleteUser method in UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function deleteUser(Request $request)
     {
         try{
@@ -138,7 +156,6 @@ class AdminController extends Controller
             
             // calls deleteUser method in UserBusinessService and passes User Object
             $result = $ubs->deleteUser($theUser);
-            
             
             //if success, return to homePage, else return error message
             if($result)
@@ -156,20 +173,24 @@ class AdminController extends Controller
         }
     }
     
-    // suspendUser method handles data from adminUser
-    // and pass it to suspendUser method in UserBusinessService
+    /**
+     * suspendUser method handles data from adminUsers
+     * and pass it to suspendUser method in UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function suspendUser(Request $request)
     {
         try{
             //Get posted Form data
             $id = $request->input('id');
             
-            
             $ubs = new UserBusinessService();
             
             // calls suspendUser method in UserBusinessService and passes User Object
             // if success, return to adminUsers with data
-            if($result = $ubs->findById($id)){
+            if($result = $ubs->findById($id))
+            {
                 $userSuspended = $ubs->suspendUser($result);
                 $users= $ubs->findAllUser();
                 return view(('adminUsers'),compact(['users']));
@@ -184,8 +205,12 @@ class AdminController extends Controller
         }
     }
     
-    // suspendUser method handles data from adminUser
-    // and pass it to suspendUser method in UserBusinessService
+    /**
+     * activateUser method handles data from adminUsers
+     * and pass it to activateUser method in UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function activateUser(Request $request)
     {
         try{
@@ -211,8 +236,12 @@ class AdminController extends Controller
         }
     }
     
-    // findByFirstName method handles data from adminUser
-    // and pass it to findByFirstName method in UserBusinessService
+    /**
+     * findByFirstName method handles data from adminSearchForm
+     * and pass it to findByFirstName method in UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function findByFirstName(Request $request)
     {
         try{
@@ -242,8 +271,12 @@ class AdminController extends Controller
         }
     }
     
-    // findByLastName method handles data from adminUser
-    // and pass it to findByLastName method in UserBusinessService
+    /**
+     * findByLastName method handles data from adminSearchForm 
+     * and pass it to findByLastName method in UserBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function findByLastName(Request $request)
     {
         try{
@@ -273,6 +306,10 @@ class AdminController extends Controller
         }
     }
     
+    /**
+     * validateFirstNameSearchForm method handles data validation in Admin Search Form
+     * @param Request $request
+     */
     private function validateFirstNameSearchForm(Request $request)
     {
         //BEST PRATICE: centralize your rule so you have a consistent architecture
@@ -286,6 +323,10 @@ class AdminController extends Controller
         $this->validate($request, $rules);
     }
     
+    /**
+     * validateLastNameSearchForm method handles data validation in Admin Search Form
+     * @param Request $request
+     */
     private function validateLastNameSearchForm(Request $request)
     {
         $rules = ['lastname'=> 'Required|max:256'];

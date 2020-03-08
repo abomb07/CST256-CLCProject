@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * Education version 3.0
+/* CLC Project version 4.0
+ * Education version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March, 2020
  * Education class acts as a Model
  */
 namespace App\Model;

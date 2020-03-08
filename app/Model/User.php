@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * User version 3.0
+/* CLC Project version 4.0
+ * User version 4.0
  * Adam Bender and Jim Nguyen
- * February 23rd, 2020
+ * March 8, 2020
  * User class acts as a Model
  */
 namespace App\Model;

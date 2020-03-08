@@ -1,7 +1,12 @@
 <?php
-
+/*
+ * CLC Project version 4.0
+ * GroupController version 4.0
+ * Adam Bender and Jim Nguyen
+ * March 8, 2020
+ * Group Controller handles group functionalities
+ */
 namespace App\Http\Controllers;
-
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -9,14 +14,18 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use App\Model\Group;
 use App\Services\Business\GroupBusinessService;
-use App\Services\Data\GroupDataService;
 use Validator;
 use App\Services\Business\MemberBusinessService;
 use App\Services\Business\UserBusinessService;
 use App\Model\Member;
+
 class GroupController extends Controller
 {
-    // createGroup method handles data from New Group Form
+    /**
+     * createGroup method handles data from New Group Form
+     * @param Request $request
+     * @return string|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function createGroup(Request $request)
     {
         try
@@ -25,18 +34,39 @@ class GroupController extends Controller
             //Get posted form data
             $name = $request->input('name');
             $description = $request->input('description');
-            $owner_id = $request->input('owner_id');
-            
+            $owner_id = $request->input('owner_id');            
             
             $group = new Group(0, $name, $description, $owner_id);
             $gbs = new GroupBusinessService();
             $ubs = new UserBusinessService();
-            $result = $gbs->createGroup($group);
-            if($result){
-               
+            $mbs = new MemberBusinessService();
+            
+            //check for duplicate names
+            if($gbs->findByGroupName($name) == null)
+            {
+                $result = $gbs->createGroup($group);
+            }
+            else
+            {
+                return "Group name already exists. Please choose a different name.";
+            }
+            
+            
+            if($result)
+            {
+                //get id of group just created
+                $theGroup = $gbs->findByGroupName($name);
+                $group_id = $theGroup->getId();
+                
+                //create member for the owner
+                $member = new Member(0, $group_id, $owner_id);
+                $mbs->createMember($member);
+                
+                //find all groups to return to groupPage form
                 $groups = $gbs->findAllGroups();
-               
+                
                 return view(('groupPage'),compact(['groups']));
+                
             }else{
                  return "Create group unsuccessfully";
             }
@@ -50,28 +80,28 @@ class GroupController extends Controller
         
     }
     
-    // fidnAllGroups method finds all group in database
+    /**
+     * findAllGroups method finds all group in database
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function findAllGroups()
     {
         $gbs = new GroupBusinessService();
+        
+        // calls findAllGroups in Business Service
         $groups = $gbs->findAllGroups();
 
-        // calls findAllGroups in Business Service
-        if($groups != null)
-        {
-            return view(('groupPage'),compact(['groups']));
-        }
-        else
-        {
-            return view('groupPage');
-        }
-        
+        return view(('groupPage'),compact(['groups']));
     }
     
-    // viewGroup method handles data from New Group Form
+    /**
+     * viewGroup method handles data from New Group Form
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function viewGroup(Request $request)
     {   
-        
+        //Get posted form data
         $group_id = $request->input('group_id');
         $user_id = $request->input('user_id');
         
@@ -79,23 +109,36 @@ class GroupController extends Controller
         $gbs = new GroupBusinessService();
         $ubs = new UserBusinessService();
         
-        //members in the group
+        //calls findByGroupId in the MemberBusinessService to get all members in the group
         $members = $mbs->findByGroupId($group_id);
-        //group information
+        
+        //calls findById in the GroupBusinessService to get group information
         $group = $gbs->findById($group_id);
         
+        //calls findById in the UserBusinessService to get owner information
         $owner = $ubs->findById($group->getOwner_id());
+        
         if($members)
         {
-            for ($i = 0; $i < count($members); $i++) {
+            //create array of user objects in the group
+            for ($i = 0; $i < count($members); $i++) 
+            {
                 $users[$i] = $ubs->findById($members[$i]->getId());
-                
-                if($users[$i]->getId() == $user_id)
-                {
-                    $memberExists = true;
-                }
-                else {
-                    $memberExists = false;
+            }
+            
+            //loop through members to check if the session user is already in the group
+            if($users)
+            {
+                for ($i = 0; $i < count($members); $i++) 
+                {                    
+                    if($users[$i]->getId() == $user_id)
+                    {
+                        $memberExists = true;
+                        break;
+                    }
+                    else {
+                        $memberExists = false;
+                    }
                 }
             }
         }
@@ -107,21 +150,22 @@ class GroupController extends Controller
         
     }
     
-    // openUpdateGroup method renders group data
+    /**
+     * openUpdateGroup method renders group data
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function openUpdateGroup(Request $request){
         try
         {
             //Get posted Form data
             $id = $request->input('group_id');
             
-            //Save posted Form Data to Job Object Model
-            
             $gbs = new GroupBusinessService();
             
-            // calls findById method in JobBusinessService and passes Job Object
-            if($group = $gbs->findById($id)){
-                
-                //if success, return to adminEditJobForm, else return error message
+            // calls findById method in GroupBusinessService and passes id
+            if($group = $gbs->findById($id))
+            {
                 return view('groupEditForm')->with(compact('group'));
             }else{
                 return "Group not found. Please try again";
@@ -134,7 +178,11 @@ class GroupController extends Controller
         }
     }
     
-    // updateGroup method handles data from Group Edit Form
+    /**
+     * updateGroup method handles data from Group Edit Form
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function updateGroup(Request $request){
         try{
             //Get posted form data
@@ -148,7 +196,6 @@ class GroupController extends Controller
                 'name'=> 'Required|max:256',
                 'description' => 'Required',
                 'owner_id' => 'Required',
-                
             ]);
             
             //if there is a validation error, reroute to form with errors and model
@@ -165,12 +212,12 @@ class GroupController extends Controller
                 return view('groupEditForm')->with(compact('group', 'errors'));
             }
             
-            //Save posted Form Data to Job Object Model
+            //Save posted Form Data to Group Object Model
             $updatedGroup = new Group($id, $name, $description, $owner_id);
             
-            // calls findById method in JobBusinessService and passes Job object
             $gbs = new GroupBusinessService();
-            $ubs = new UserBusinessService();
+            
+            //calls updateGroup in the GroupBusinessService
             $result = $gbs->updateGroup($updatedGroup);
             
             // if success returns to adminJobs, else returns error message
@@ -192,12 +239,15 @@ class GroupController extends Controller
         }
     }
     
-    // processDeleteGroup method handles delete process 
+    /**
+     * processDeleteGroup method handles delete process 
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function processDelete(Request $request)
     {
         //Get posted Form data
         $id = $request->input('group_id');
-        
         
         $gbs = new GroupBusinessService();
         
@@ -207,7 +257,11 @@ class GroupController extends Controller
         return view('groupDeleteForm')->with(compact('group'));
     }
     
-    // deleteGroup method deletes group from database
+    /**
+     * deleteGroup method deletes group from database
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function deleteGroup(Request $request)
     {
         try
@@ -218,14 +272,17 @@ class GroupController extends Controller
             //Save posted Form Data to Group Object Model
             $theGroup = new Group($id, "", "", "");
             $gbs = new GroupBusinessService();
-            // calls deleteUser method in GroupBusinessService and passes Group Object
+            $mbs = new MemberBusinessService();  
+            
+            // calls deleteByGroupId method in the MemberBusinessService and passes group id
+            $result1 = $mbs->deleteByGroupId($id);
+            
+            // calls deleteGroup method in GroupBusinessService and passes Group Object
             $result = $gbs->deleteGroup($theGroup);
-            
-            
-            //if success, return to groupPage, else return error message
-            if($result)
+                        
+            //if both succeed, return to groupPage, else return error message
+            if($result && $result1)
             {
-                
                 $groups = $gbs->findAllGroups();
                 
                 return view(('groupPage'),compact(['groups']));
@@ -242,15 +299,23 @@ class GroupController extends Controller
         }
     }
     
-    // joinGroup method adds user to group in member data table 
+    /**
+     * joinGroup method adds user to group in member data table
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */ 
     public function joinGroup(Request $request)
     {
+        //Get posted Form data
         $group_id = $request->input('group_id');
         $user_id = $request->input('user_id');
         
+        //create new Member object
         $member = new Member(0, $group_id, $user_id);
         
         $mbs = new MemberBusinessService();
+        
+        //pass member object into createMember in the MemberBusinessService
         $result = $mbs->createMember($member);
         
         if($result)
@@ -258,23 +323,36 @@ class GroupController extends Controller
             $gbs = new GroupBusinessService();
             $ubs = new UserBusinessService();
             
-            //members in the group
+            //get all members in the group
             $members = $mbs->findByGroupId($group_id);
+            
             //group information
             $group = $gbs->findById($group_id);
             
+            //owner information
             $owner = $ubs->findById($group->getOwner_id());
+            
             if($members)
             {
-                for ($i = 0; $i < count($members); $i++) {
+                //create array of user objects in the group
+                for ($i = 0; $i < count($members); $i++)
+                {
                     $users[$i] = $ubs->findById($members[$i]->getId());
-                    
-                    if($users[$i]->getId() == $user_id)
+                }
+                
+                //loop through members to check if the session user is already in the group
+                if($users)
+                {
+                    for ($i = 0; $i < count($members); $i++)
                     {
-                        $memberExists = true;
-                    }
-                    else {
-                        $memberExists = false;
+                        if($users[$i]->getId() == $user_id)
+                        {
+                            $memberExists = true;
+                            break;
+                        }
+                        else {
+                            $memberExists = false;
+                        }
                     }
                 }
             }
@@ -287,7 +365,11 @@ class GroupController extends Controller
         
     }
     
-    // leaveGroup method deletes user to group in member data table 
+    /**
+     * leaveGroup method deletes user to group in member data table 
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function leaveGroup(Request $request)
     {
         $group_id = $request->input('group_id');
@@ -296,30 +378,49 @@ class GroupController extends Controller
         $member = new Member(0, $group_id, $user_id);
         
         $mbs = new MemberBusinessService();
+        $gbs = new GroupBusinessService();
+        $ubs = new UserBusinessService();
+       
+        //group information
+        $group = $gbs->findById($group_id);
+        //owner information
+        $owner = $ubs->findById($group->getOwner_id());
+        
+        //owner cant leave their own group
+        if($owner->getId() == $user_id)
+        {
+            $error = "Owner can not leave their own group";
+            return view(('errorPage'),compact(['error']));
+        }
+        
         $result = $mbs->deleteMember($member);
         
         if($result)
         {
-            $gbs = new GroupBusinessService();
-            $ubs = new UserBusinessService();
-            
             //members in the group
             $members = $mbs->findByGroupId($group_id);
-            //group information
-            $group = $gbs->findById($group_id);
             
-            $owner = $ubs->findById($group->getOwner_id());
             if($members)
             {
-                for ($i = 0; $i < count($members); $i++) {
+                //create array of user objects in the group
+                for ($i = 0; $i < count($members); $i++)
+                {
                     $users[$i] = $ubs->findById($members[$i]->getId());
-                    
-                    if($users[$i]->getId() == $user_id)
+                }
+                
+                //loop through members to check if the session user is already in the group
+                if($users)
+                {
+                    for ($i = 0; $i < count($members); $i++)
                     {
-                        $memberExists = true;
-                    }
-                    else {
-                        $memberExists = false;
+                        if($users[$i]->getId() == $user_id)
+                        {
+                            $memberExists = true;
+                            break;
+                        }
+                        else {
+                            $memberExists = false;
+                        }
                     }
                 }
             }
@@ -332,7 +433,9 @@ class GroupController extends Controller
         
     }
     
-    /* validateGroupForm method handles data validation in New Group Form
+    /**
+     * validateNewGroupForm method handles data validation in New Group Form
+     * @param Request $request
      */
     private function validateNewGroupForm(Request $request){
         

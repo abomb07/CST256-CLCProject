@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 3.0
- * New Skill Form version 3.0
+ * CLC Project version 4.0
+ * JobController version 4.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * Job Controller handles job functionalities
  */
 namespace App\Http\Controllers;
@@ -18,7 +18,11 @@ use Validator;
 
 class JobController extends Controller
 {
-    // createJob method handles data from New Job Form
+    /**
+     * createJob method handles data from New Job Form
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function createJob(Request $request)
     {
         try{
@@ -36,7 +40,8 @@ class JobController extends Controller
             $job = new Job(0, $jobtitle, $category, $description, $requirements, $company, $location, $salary);
             $service = new JobBusinessService();
             
-            if($result = $service->createJob($job)){
+            if($result = $service->createJob($job))
+            {
                 $jobs = $service->findAllJobs();
                 return view(('adminJobs'),compact(['jobs']));
             }
@@ -50,13 +55,16 @@ class JobController extends Controller
         }
     }
     
-    // processDeleteJob method handles data from editJobForm
-    // and pass it to processDeleteJob method in JobBusinessService
+    /**
+     * processDeleteJob method handles data from editJobForm 
+     * and pass it to processDeleteJob method in JobBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function processDeleteJob(Request $request)
     {
         //Get posted Form data
         $id = $request->input('id');
-        
         
         $jbs = new JobBusinessService();
         
@@ -64,11 +72,14 @@ class JobController extends Controller
         $job = $jbs->findById($id);
         
         return view('adminProcessJobDelete')->with(compact('job'));
-        
     }
     
-    // deleteJob method handles data from adminUser
-    // and pass it to deleteJob method in JobBusinessService
+    /**
+     * deleteJob method handles data from adminUser
+     * and pass it to deleteJob method in JobBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function deleteJob(Request $request)
     {
         try
@@ -82,7 +93,6 @@ class JobController extends Controller
             
             // calls deleteUser method in JobBusinessService and passes Job Object
             $result = $jbs->deleteJob($theJob);
-            
             
             //if success, return to adminJobs, else return error message
             if($result)
@@ -102,8 +112,12 @@ class JobController extends Controller
         }
     }
     
-    // openUpdateJob method handles data from editJobForm
-    // and pass it to findById method in JobBusinessService
+    /**
+     * openUpdateJob method handles data from editJobForm
+     * and pass it to findById method in JobBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function openUpdateJob(Request $request){
         try
         {
@@ -115,8 +129,8 @@ class JobController extends Controller
             $jbs = new JobBusinessService();
             
             // calls findById method in JobBusinessService and passes Job Object
-            if($job = $jbs->findById($id)){
-                
+            if($job = $jbs->findById($id))
+            {
                 //if success, return to adminEditJobForm, else return error message
                 return view('adminEditJobForm')->with(compact('job'));
             }else{
@@ -128,11 +142,14 @@ class JobController extends Controller
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
-        
     }
     
-    // updateJob method handles data from editJobForm
-    // and pass it to updateJob method in JobBusinessService
+    /**
+     * updateJob method handles data from editJobForm
+     * and pass it to updateJob method in JobBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function updateJob(Request $request)
     {
         try{
@@ -188,8 +205,8 @@ class JobController extends Controller
             {
                 return "Update job unsuccessfully. Please try again";
             }
-        /* }catch(ValidationException $e1){
-            throw ($e1); */
+        }catch(ValidationException $e1){
+            throw ($e1); 
         }catch(Exception $e2){
             Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
@@ -197,9 +214,11 @@ class JobController extends Controller
         }
     }
     
-    /*findAllJobs method shows all jobs in database 
+    /**
+     * findAllJobs method shows all jobs in database 
      * and return in the adminJobs
-    */
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function findAllJobs()
     {
         try{
@@ -218,8 +237,10 @@ class JobController extends Controller
         }
     } 
     
-    /* findAllFeaturedJobs method shows all job in database
+    /**
+     * findAllFeaturedJobs method shows all job in database
      * and return in the homePage
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function findAllFeaturedJobs()
     {
@@ -237,7 +258,9 @@ class JobController extends Controller
         }
     } 
     
-    /* validateJobForm method handles data validation in New Job Form
+    /**
+     * validateJobForm method handles data validation in New Job Form
+     * @param Request $request
      */
     private function validateJobForm(Request $request){
         

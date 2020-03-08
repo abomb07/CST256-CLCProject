@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Log;
 
 class JobBusinessService
 {
+    /**
+     * createJob method calls and passes $job to createJob method in JobDataService
+     * @param $job
+     * @return boolean
+     */
     function createJob($job){
         
         Log::info("Entering JobBusinessService.createUser()");
@@ -32,6 +37,11 @@ class JobBusinessService
         return $flag;
     }
     
+    /**
+     * deleteJob method calls and passes $job to deleteJob method in JobDataService
+     * @param $job
+     * @return boolean
+     */
     function deleteJob($job){
         
         Log::info("Entering JobBusinessService.deleteJob()");
@@ -52,7 +62,11 @@ class JobBusinessService
         return $flag;
     }
     
-    /* updateJob method calls and passes $job to updateJob method in UserDataService*/
+    /**
+     * updateJob method calls and passes $job to updateJob method in JobDataService
+     * @param $job
+     * @return boolean
+     */
     function updateJob($job){
         
         Log::info("Entering JobBusinessService.updateUser()");
@@ -72,7 +86,10 @@ class JobBusinessService
         return $flag;
     }
     
-    /* findAllJobs method calls and passes $job to findAllJobs method in UserDataService*/
+    /**
+     * findAllJobs method calls findAllJobs method in JobDataService
+     * @return array
+     */
     function findAllJobs(){
         
         Log::info("Entering JobBusinessService.findAllJobs()");
@@ -92,7 +109,11 @@ class JobBusinessService
         return $flag;
     }
     
-    /* findById method calls and passes $job to findByTitle method in UserDataService*/
+    /**
+     * findById method calls and passes $id to findById method in JobDataService
+     * @param $id
+     * @return \App\Model\Job
+     */
     function findById($id){
         
         Log::info("Entering JobBusinessService.findById()");
@@ -112,7 +133,11 @@ class JobBusinessService
         return $flag;
     }
     
-    /* findByTitle method calls and passes $job to findByTitle method in UserDataService*/
+    /**
+     * findByTitle method calls and passes $job to findByTitle method in JobDataService
+     * @param $job
+     * @return \App\Model\Job
+     */
     function findByTitle($job){
         
         Log::info("Entering JobBusinessService.findById()");
@@ -132,7 +157,11 @@ class JobBusinessService
         return $flag;
     }
     
-    /* findByCategory method calls and passes $job to findByCategory method in UserDataService*/
+    /**
+     * findByCategory method calls and passes $job to findByCategory method in JobDataService
+     * @param $job
+     * @return \App\Model\Job
+     */
     function findByCategory($job){
         
         Log::info("Entering JobBusinessService.findByCategory()");
@@ -152,7 +181,11 @@ class JobBusinessService
         return $flag;
     }
     
-    /* findByLocation method calls and passes $job to findByLocation method in UserDataService*/
+    /**
+     * findByLocation method calls and passes $job to findByLocation method in JobDataService
+     * @param $job
+     * @return \App\Model\Job
+     */
     function findByLocation($job){
         
         Log::info("Entering JobBusinessService.findByLocation()");

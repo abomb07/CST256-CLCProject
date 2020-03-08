@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 3.0
+ * CLC Project version 4.0
  * Job History Controller version 3.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 8, 2020
  * Job History Controller handles job history functionalities
  */
 namespace App\Http\Controllers;
@@ -22,8 +22,11 @@ use Validator;
 
 class JobHistoryController extends Controller
 {
-    
-    // createJobHistory method handles data from New Job History Form
+    /**
+     * createJobHistory method handles data from New Job History Form
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function createJobHistory(Request $request)
     {
         try
@@ -73,8 +76,13 @@ class JobHistoryController extends Controller
             return view('SystemException');
         }
     }
-    // processDeleteJobHistory method handles data
-    // and pass it to processDeleteJobHistory method in JobHistoryBusinessService
+    
+    /**
+     * processDelete method handles data
+     * and pass it to processDeleteJobHistory method in JobHistoryBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function processDelete(Request $request)
     {
         try{
@@ -96,8 +104,12 @@ class JobHistoryController extends Controller
         }
     }
     
-    // deleteJob method handles data from adminUser
-    // and pass it to deleteJob method in JobBusinessService
+    /**
+     * deleteJobHistory method handles data from adminUser
+     * and pass it to deleteJob method in JobBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function deleteJobHistory(Request $request)
     {
         try{
@@ -115,7 +127,6 @@ class JobHistoryController extends Controller
             
             // calls deleteJobHistory method in UserBusinessService and passes User Object
             $result = $jhbs->deleteJobHistory($theJob);
-            
             
             //if success, return to homePage, else return error message
             if($result)
@@ -151,15 +162,19 @@ class JobHistoryController extends Controller
         }
     }
     
-    // openUpdateJobHistory method handles data from editJobForm
-    // and pass it to findById method in JobHistoryBusinessService
-    public function openUpdateJobHistory(Request $request){
+    /**
+     * openUpdateJobHistory method handles data from editJobForm
+     * and pass it to findById method in JobHistoryBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
+    public function openUpdateJobHistory(Request $request)
+    {
         try{
             //Get posted Form data
             $id = $request->input('id');
             
             //Save posted Form Data to Job History Object Model
-            
             $jbs = new JobHistoryBusinessService();
             
             // calls findById method in JobHistoryBusinessService and passes Job History Object
@@ -178,8 +193,12 @@ class JobHistoryController extends Controller
         
     }
     
-    // updateJobHistory method handles data from userPortfolioEditJobHistory
-    // and pass it to updateJobHistory method in JobHistoryBusinessService
+    /**
+     * updateJobHistory method handles data from userPortfolioEditJobHistory
+     * and pass it to updateJobHistory method in JobHistoryBusinessService
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
+     */
     public function updateJobHistory(Request $request)
     {
         try{
@@ -217,8 +236,6 @@ class JobHistoryController extends Controller
             //Save posted Form Data to Job History Object Model
             $updatedJobHistory = new JobHistory($id, $title, $company, $startdate, $enddate, $user_id);
             
-            // calls findById method in JobHistoryBusinessService and passes Job History Object
-           
             $jhbs = new JobHistoryBusinessService();
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
@@ -253,8 +270,8 @@ class JobHistoryController extends Controller
             {
                 return "Update job history unsuccessfully. Please try again";
             }
-        /* }catch(ValidationException $e1){
-            throw ($e1); */
+        }catch(ValidationException $e1){
+            throw ($e1);
         }catch(Exception $e2){
             Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
@@ -263,10 +280,12 @@ class JobHistoryController extends Controller
     }
     
     
-    /* validateJobHistoryForm method handles data validation in New Job History Form
+    /**
+     * validateJobHistoryFormForm method handles data validation in New Job History Form
+     * @param Request $request
      */
-    private function validateJobHistoryForm(Request $request){
-        
+    private function validateJobHistoryForm(Request $request)
+    {
         // data validation rules for Register Form
         $rules = ['title'=> 'Required|max:256',
             'company' => 'Required|max:256',
