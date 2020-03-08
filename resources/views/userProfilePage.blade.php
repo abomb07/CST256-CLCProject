@@ -21,10 +21,12 @@
 		<td>{{$user->getUsername()}}</td>
 	</tr>
 
+	@if(Session::get('id') == $user->getId())
 	<tr>
 		<td>Password:</td>
 		<td>{{$user->getPassword()}}</td>
 	</tr>
+	@endif
 
 	<tr>
 		<td>First Name:</td>
@@ -41,10 +43,12 @@
 		<td>{{$user->getEmail()}}</td>
 	</tr>
 
+	@if(Session::get('id') == $user->getId())
 	<tr>
 		<td>Phone Number:</td>
 		<td>{{$user->getPhonenumber()}}</td>
 	</tr>
+	@endif
 
 	<tr>
 		<td>City:</td>

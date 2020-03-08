@@ -116,8 +116,6 @@ class AccountController extends Controller
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
-        
-        
     }
     
     /**
@@ -129,6 +127,7 @@ class AccountController extends Controller
      */
     public function findPortfolio(Request $request)
     {      
+        try{
             $user_id = $request->input('user_id');
             
             $jhbs = new JobHistoryBusinessService();
@@ -155,6 +154,11 @@ class AccountController extends Controller
                   
             // return to userPortfolio Form with jobhistorys, skills, educations objects
             return view(('userPortfolio'),compact(['jobhistorys'],['skills'], ['educations'], ['groupNames']));
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
     }
     
     /**
@@ -163,14 +167,20 @@ class AccountController extends Controller
      */
     public function logout()
     {
-        Session::flush();
-        
-        // calls findAllJobs in Business Service
-        $jbs = new JobBusinessService();
-        $jobs = $jbs->findAllJobs();
-        
-        // return to HomePage with Form with job object
-        return view(('homePage'),compact(['jobs']));
+        try{
+            Session::flush();
+            
+            // calls findAllJobs in Business Service
+            $jbs = new JobBusinessService();
+            $jobs = $jbs->findAllJobs();
+            
+            // return to HomePage with Form with job object
+            return view(('homePage'),compact(['jobs']));
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
     }
     
     /**

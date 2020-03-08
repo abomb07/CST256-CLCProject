@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Exception;
 use App\Model\User;
@@ -21,20 +22,25 @@ class AdminController extends Controller
      * and pass it to findAllUser method in the UserBusiness Service 
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
      */
-    public function getUsers(){
-              
-        $ubs = new UserBusinessService();
-        $users = $ubs->findAllUser();
-        // check user session for admin, if session is admin
-        // calls showAllUser in Business Service
-        //else return error message
-        if($users != null){
-            
-            return view(('adminUsers'),compact(['users']));
-        }else{
-            return "User not found. Please try again";
+    public function getUsers()
+    {
+        try{
+            $ubs = new UserBusinessService();
+            $users = $ubs->findAllUser();
+            // check user session for admin, if session is admin
+            // calls showAllUser in Business Service
+            //else return error message
+            if($users != null){
+                
+                return view(('adminUsers'),compact(['users']));
+            }else{
+                return "User not found. Please try again";
+            }
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
         }
-        
     } 
     
     /**
@@ -46,7 +52,6 @@ class AdminController extends Controller
     public function openUpdateUser(Request $request)
     {
         try{
-            
             //Get posted Form data
             $id = $request->input('id');
             
@@ -62,10 +67,10 @@ class AdminController extends Controller
                 return "User not found. Please try again";
             }
         }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
-        
     }
     
     /**
@@ -77,7 +82,6 @@ class AdminController extends Controller
     public function updateUser(Request $request)
     {
         try{
-            
             //Get posted Form data
             $id = $request->input('id');
             $username = $request->input('username');
@@ -109,6 +113,7 @@ class AdminController extends Controller
             }
     
         }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -133,6 +138,7 @@ class AdminController extends Controller
             
             return view('adminProcessDelete')->with(compact('user'));
         }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -168,6 +174,7 @@ class AdminController extends Controller
                 return "Unable to delete user. Please try again!";
             }
         }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -231,6 +238,7 @@ class AdminController extends Controller
                 return "Unable to activate user. Please try again!";
             }
         }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -266,6 +274,7 @@ class AdminController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -301,6 +310,7 @@ class AdminController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }

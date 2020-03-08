@@ -118,7 +118,8 @@ class JobController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
      */
-    public function openUpdateJob(Request $request){
+    public function openUpdateJob(Request $request)
+    {
         try
         {
             //Get posted Form data

@@ -118,7 +118,6 @@ class EducationController extends Controller
     public function deleteEducation(Request $request)
     {
         try{
-        
             //Get posted Form data
             $id = $request->input('id');
             $user_id = $request->input('user_id');
@@ -221,7 +220,6 @@ class EducationController extends Controller
                 'field'=> 'Required|max:256',
                 'graduationyear'=> 'Required|numeric|max:3000',
                 'user_id' => 'Required'
-                
             ]);
             
             //if there is a validation error, reroute to form with errors and model
@@ -278,7 +276,6 @@ class EducationController extends Controller
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
-
     }
 
     /**

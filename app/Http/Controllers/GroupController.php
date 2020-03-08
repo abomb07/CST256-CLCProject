@@ -77,7 +77,6 @@ class GroupController extends Controller
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
-        
     }
     
     /**
@@ -86,12 +85,18 @@ class GroupController extends Controller
      */
     public function findAllGroups()
     {
-        $gbs = new GroupBusinessService();
-        
-        // calls findAllGroups in Business Service
-        $groups = $gbs->findAllGroups();
-
-        return view(('groupPage'),compact(['groups']));
+        try{
+            $gbs = new GroupBusinessService();
+            
+            // calls findAllGroups in Business Service
+            $groups = $gbs->findAllGroups();
+    
+            return view(('groupPage'),compact(['groups']));
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
     }
     
     /**
@@ -101,53 +106,60 @@ class GroupController extends Controller
      */
     public function viewGroup(Request $request)
     {   
-        //Get posted form data
-        $group_id = $request->input('group_id');
-        $user_id = $request->input('user_id');
-        
-        $mbs = new MemberBusinessService();
-        $gbs = new GroupBusinessService();
-        $ubs = new UserBusinessService();
-        
-        //calls findByGroupId in the MemberBusinessService to get all members in the group
-        $members = $mbs->findByGroupId($group_id);
-        
-        //calls findById in the GroupBusinessService to get group information
-        $group = $gbs->findById($group_id);
-        
-        //calls findById in the UserBusinessService to get owner information
-        $owner = $ubs->findById($group->getOwner_id());
-        
-        if($members)
-        {
-            //create array of user objects in the group
-            for ($i = 0; $i < count($members); $i++) 
-            {
-                $users[$i] = $ubs->findById($members[$i]->getId());
-            }
+        try{
+            //Get posted form data
+            $group_id = $request->input('group_id');
+            $user_id = $request->input('user_id');
             
-            //loop through members to check if the session user is already in the group
-            if($users)
+            $mbs = new MemberBusinessService();
+            $gbs = new GroupBusinessService();
+            $ubs = new UserBusinessService();
+            
+            //calls findByGroupId in the MemberBusinessService to get all members in the group
+            $members = $mbs->findByGroupId($group_id);
+            
+            //calls findById in the GroupBusinessService to get group information
+            $group = $gbs->findById($group_id);
+            
+            //calls findById in the UserBusinessService to get owner information
+            $owner = $ubs->findById($group->getOwner_id());
+            
+            if($members)
             {
+                //create array of user objects in the group
                 for ($i = 0; $i < count($members); $i++) 
-                {                    
-                    if($users[$i]->getId() == $user_id)
-                    {
-                        $memberExists = true;
-                        break;
-                    }
-                    else {
-                        $memberExists = false;
+                {
+                    $users[$i] = $ubs->findById($members[$i]->getId());
+                }
+                
+                //loop through members to check if the session user is already in the group
+                if($users)
+                {
+                    for ($i = 0; $i < count($members); $i++) 
+                    {                    
+                        if($users[$i]->getId() == $user_id)
+                        {
+                            $memberExists = true;
+                            break;
+                        }
+                        else {
+                            $memberExists = false;
+                        }
                     }
                 }
             }
+            else
+            {
+                $users = array();
+            }
+            return view(('groupViewMembersPage'),compact(['group'], ['users'],['owner'], ['memberExists'])); 
+        }catch(ValidationException $e1){
+            throw ($e1);
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
         }
-        else
-        {
-            $users = array();
-        }
-        return view(('groupViewMembersPage'),compact(['group'], ['users'],['owner'], ['memberExists'])); 
-        
     }
     
     /**
@@ -155,7 +167,8 @@ class GroupController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
      */
-    public function openUpdateGroup(Request $request){
+    public function openUpdateGroup(Request $request)
+    {
         try
         {
             //Get posted Form data
@@ -183,7 +196,8 @@ class GroupController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|string
      */
-    public function updateGroup(Request $request){
+    public function updateGroup(Request $request)
+    {
         try{
             //Get posted form data
             $id = $request->input('group_id');
@@ -231,7 +245,8 @@ class GroupController extends Controller
             {
                 return "Update group information unsuccessfully. Please try again";
             }
-            
+        }catch(ValidationException $e1){
+            throw ($e1);
         }catch(Exception $e2){
             Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
@@ -246,15 +261,21 @@ class GroupController extends Controller
      */
     public function processDelete(Request $request)
     {
-        //Get posted Form data
-        $id = $request->input('group_id');
-        
-        $gbs = new GroupBusinessService();
-        
-        // calls findById method in GroupBusinessService and passes Group Object
-        $group = $gbs->findById($id);
-        
-        return view('groupDeleteForm')->with(compact('group'));
+        try{
+            //Get posted Form data
+            $id = $request->input('group_id');
+            
+            $gbs = new GroupBusinessService();
+            
+            // calls findById method in GroupBusinessService and passes Group Object
+            $group = $gbs->findById($id);
+            
+            return view('groupDeleteForm')->with(compact('group'));
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
     }
     
     /**
@@ -306,63 +327,68 @@ class GroupController extends Controller
      */ 
     public function joinGroup(Request $request)
     {
-        //Get posted Form data
-        $group_id = $request->input('group_id');
-        $user_id = $request->input('user_id');
-        
-        //create new Member object
-        $member = new Member(0, $group_id, $user_id);
-        
-        $mbs = new MemberBusinessService();
-        
-        //pass member object into createMember in the MemberBusinessService
-        $result = $mbs->createMember($member);
-        
-        if($result)
-        {
-            $gbs = new GroupBusinessService();
-            $ubs = new UserBusinessService();
+        try{
+            //Get posted Form data
+            $group_id = $request->input('group_id');
+            $user_id = $request->input('user_id');
             
-            //get all members in the group
-            $members = $mbs->findByGroupId($group_id);
+            //create new Member object
+            $member = new Member(0, $group_id, $user_id);
             
-            //group information
-            $group = $gbs->findById($group_id);
+            $mbs = new MemberBusinessService();
             
-            //owner information
-            $owner = $ubs->findById($group->getOwner_id());
+            //pass member object into createMember in the MemberBusinessService
+            $result = $mbs->createMember($member);
             
-            if($members)
+            if($result)
             {
-                //create array of user objects in the group
-                for ($i = 0; $i < count($members); $i++)
-                {
-                    $users[$i] = $ubs->findById($members[$i]->getId());
-                }
+                $gbs = new GroupBusinessService();
+                $ubs = new UserBusinessService();
                 
-                //loop through members to check if the session user is already in the group
-                if($users)
+                //get all members in the group
+                $members = $mbs->findByGroupId($group_id);
+                
+                //group information
+                $group = $gbs->findById($group_id);
+                
+                //owner information
+                $owner = $ubs->findById($group->getOwner_id());
+                
+                if($members)
                 {
+                    //create array of user objects in the group
                     for ($i = 0; $i < count($members); $i++)
                     {
-                        if($users[$i]->getId() == $user_id)
+                        $users[$i] = $ubs->findById($members[$i]->getId());
+                    }
+                    
+                    //loop through members to check if the session user is already in the group
+                    if($users)
+                    {
+                        for ($i = 0; $i < count($members); $i++)
                         {
-                            $memberExists = true;
-                            break;
-                        }
-                        else {
-                            $memberExists = false;
+                            if($users[$i]->getId() == $user_id)
+                            {
+                                $memberExists = true;
+                                break;
+                            }
+                            else {
+                                $memberExists = false;
+                            }
                         }
                     }
                 }
+                else
+                {
+                    $users = array();
+                }
+                return view(('groupViewMembersPage'),compact(['group'], ['users'],['owner'], ['memberExists'])); 
             }
-            else
-            {
-                $users = array();
-            }
-            return view(('groupViewMembersPage'),compact(['group'], ['users'],['owner'], ['memberExists'])); 
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
         }
-        
     }
     
     /**
@@ -372,65 +398,70 @@ class GroupController extends Controller
      */
     public function leaveGroup(Request $request)
     {
-        $group_id = $request->input('group_id');
-        $user_id = $request->input('user_id');
-        
-        $member = new Member(0, $group_id, $user_id);
-        
-        $mbs = new MemberBusinessService();
-        $gbs = new GroupBusinessService();
-        $ubs = new UserBusinessService();
-       
-        //group information
-        $group = $gbs->findById($group_id);
-        //owner information
-        $owner = $ubs->findById($group->getOwner_id());
-        
-        //owner cant leave their own group
-        if($owner->getId() == $user_id)
-        {
-            $error = "Owner can not leave their own group";
-            return view(('errorPage'),compact(['error']));
-        }
-        
-        $result = $mbs->deleteMember($member);
-        
-        if($result)
-        {
-            //members in the group
-            $members = $mbs->findByGroupId($group_id);
+        try{
+            $group_id = $request->input('group_id');
+            $user_id = $request->input('user_id');
             
-            if($members)
+            $member = new Member(0, $group_id, $user_id);
+            
+            $mbs = new MemberBusinessService();
+            $gbs = new GroupBusinessService();
+            $ubs = new UserBusinessService();
+           
+            //group information
+            $group = $gbs->findById($group_id);
+            //owner information
+            $owner = $ubs->findById($group->getOwner_id());
+            
+            //owner cant leave their own group
+            if($owner->getId() == $user_id)
             {
-                //create array of user objects in the group
-                for ($i = 0; $i < count($members); $i++)
-                {
-                    $users[$i] = $ubs->findById($members[$i]->getId());
-                }
+                $error = "Owner can not leave their own group";
+                return view(('errorPage'),compact(['error']));
+            }
+            
+            $result = $mbs->deleteMember($member);
+            
+            if($result)
+            {
+                //members in the group
+                $members = $mbs->findByGroupId($group_id);
                 
-                //loop through members to check if the session user is already in the group
-                if($users)
+                if($members)
                 {
+                    //create array of user objects in the group
                     for ($i = 0; $i < count($members); $i++)
                     {
-                        if($users[$i]->getId() == $user_id)
+                        $users[$i] = $ubs->findById($members[$i]->getId());
+                    }
+                    
+                    //loop through members to check if the session user is already in the group
+                    if($users)
+                    {
+                        for ($i = 0; $i < count($members); $i++)
                         {
-                            $memberExists = true;
-                            break;
-                        }
-                        else {
-                            $memberExists = false;
+                            if($users[$i]->getId() == $user_id)
+                            {
+                                $memberExists = true;
+                                break;
+                            }
+                            else {
+                                $memberExists = false;
+                            }
                         }
                     }
                 }
+                else
+                {
+                    $users = array();
+                }
+                return view(('groupViewMembersPage'),compact(['group'], ['users'],['owner'], ['memberExists']));
             }
-            else
-            {
-                $users = array();
-            }
-            return view(('groupViewMembersPage'),compact(['group'], ['users'],['owner'], ['memberExists']));
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
         }
-        
     }
     
     /**

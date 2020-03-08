@@ -35,13 +35,13 @@
 	<h5 align="center" style="display: inline-block">
 	{{ $user->getFirstname() }} {{ $user->getLastname() }} ({{ $user->getUsername() }})
 	</h5>
+	
 	<form action='profile' method='POST' style="display: inline-block">
         {{ csrf_field() }}
         <input type='hidden' name='id' value="{{ $user->getId() }}">
         <button type="submit" class="btn btn-default">View Profile</button>
     </form>
 	<br>
-	
 	@endforeach
 		
 	@if($memberExists)
