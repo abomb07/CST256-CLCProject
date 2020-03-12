@@ -15,7 +15,6 @@ use Exception;
 use App\Model\Group;
 use App\Services\Business\GroupBusinessService;
 use Validator;
-use App\Services\Business\MemberBusinessService;
 use App\Services\Business\UserBusinessService;
 use App\Model\Member;
 
@@ -39,16 +38,16 @@ class GroupController extends Controller
             $group = new Group(0, $name, $description, $owner_id);
             $gbs = new GroupBusinessService();
             $ubs = new UserBusinessService();
-            $mbs = new MemberBusinessService();
             
             //check for duplicate names
             if($gbs->findByGroupName($name) == null)
             {
-                $result = $gbs->createGroup($group);
+                $result = $gbs->addGroup($group);
             }
             else
             {
-                return "Group name already exists. Please choose a different name.";
+                $error = "Group name already exists. Please choose a different name.";
+                return view(('errorPage'),compact(['error']));
             }
             
             
@@ -60,15 +59,17 @@ class GroupController extends Controller
                 
                 //create member for the owner
                 $member = new Member(0, $group_id, $owner_id);
-                $mbs->createMember($member);
+                $gbs->joinGroup($member);
                 
                 //find all groups to return to groupPage form
                 $groups = $gbs->findAllGroups();
                 
                 return view(('groupPage'),compact(['groups']));
                 
-            }else{
-                 return "Create group unsuccessfully";
+            }else
+            {
+                $error = "Create group unsuccessfully";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(ValidationException $e1){
             throw ($e1);
@@ -111,12 +112,11 @@ class GroupController extends Controller
             $group_id = $request->input('group_id');
             $user_id = $request->input('user_id');
             
-            $mbs = new MemberBusinessService();
             $gbs = new GroupBusinessService();
             $ubs = new UserBusinessService();
             
             //calls findByGroupId in the MemberBusinessService to get all members in the group
-            $members = $mbs->findByGroupId($group_id);
+            $members = $gbs->findAllMembers($group_id);
             
             //calls findById in the GroupBusinessService to get group information
             $group = $gbs->findById($group_id);
@@ -180,8 +180,10 @@ class GroupController extends Controller
             if($group = $gbs->findById($id))
             {
                 return view('groupEditForm')->with(compact('group'));
-            }else{
-                return "Group not found. Please try again";
+            }else
+            {
+                $error = "Group not found. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
             
         }catch(Exception $e2){
@@ -232,7 +234,7 @@ class GroupController extends Controller
             $gbs = new GroupBusinessService();
             
             //calls updateGroup in the GroupBusinessService
-            $result = $gbs->updateGroup($updatedGroup);
+            $result = $gbs->editGroup($updatedGroup);
             
             // if success returns to adminJobs, else returns error message
             if($result)
@@ -243,7 +245,8 @@ class GroupController extends Controller
             }
             else
             {
-                return "Update group information unsuccessfully. Please try again";
+                $error = "Update group information unsuccessfully. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(ValidationException $e1){
             throw ($e1);
@@ -293,10 +296,10 @@ class GroupController extends Controller
             //Save posted Form Data to Group Object Model
             $theGroup = new Group($id, "", "", "");
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();  
+              
             
             // calls deleteByGroupId method in the MemberBusinessService and passes group id
-            $result1 = $mbs->deleteByGroupId($id);
+            $result1 = $gbs->deleteGroupMembers($id);
             
             // calls deleteGroup method in GroupBusinessService and passes Group Object
             $result = $gbs->deleteGroup($theGroup);
@@ -310,7 +313,8 @@ class GroupController extends Controller
             }
             else
             {
-                return "Unable to delete group. Please try again!";
+                $error = "Unable to delete group. Please try again!";
+                return view(('errorPage'),compact(['error']));
             }
             
         }catch(Exception $e2){
@@ -335,18 +339,17 @@ class GroupController extends Controller
             //create new Member object
             $member = new Member(0, $group_id, $user_id);
             
-            $mbs = new MemberBusinessService();
-            
+            $gbs = new GroupBusinessService();
             //pass member object into createMember in the MemberBusinessService
-            $result = $mbs->createMember($member);
+            $result = $gbs->joinGroup($member);
             
             if($result)
             {
-                $gbs = new GroupBusinessService();
+               
                 $ubs = new UserBusinessService();
                 
                 //get all members in the group
-                $members = $mbs->findByGroupId($group_id);
+                $members = $gbs->findAllMembers($group_id);
                 
                 //group information
                 $group = $gbs->findById($group_id);
@@ -403,8 +406,7 @@ class GroupController extends Controller
             $user_id = $request->input('user_id');
             
             $member = new Member(0, $group_id, $user_id);
-            
-            $mbs = new MemberBusinessService();
+
             $gbs = new GroupBusinessService();
             $ubs = new UserBusinessService();
            
@@ -420,12 +422,12 @@ class GroupController extends Controller
                 return view(('errorPage'),compact(['error']));
             }
             
-            $result = $mbs->deleteMember($member);
+            $result = $gbs->leaveGroup($member);
             
             if($result)
             {
                 //members in the group
-                $members = $mbs->findByGroupId($group_id);
+                $members = $gbs->findByGroupId($group_id);
                 
                 if($members)
                 {

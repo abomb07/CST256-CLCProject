@@ -14,13 +14,13 @@ use Illuminate\Support\Facades\Log;
 class UserBusinessService{
     
     /**
-     * createUser method calls createUser method in UserDataService
+     * register method calls createUser method in UserDataService
      * @param $user
      * @return boolean
      */
-    function createUser($user){
+    function register($user){
         
-        Log::info("Entering SecurityService.createUser()");
+        Log::info("Entering SecurityService.register()");
         
         // create connection to database
         $database = new Database();
@@ -34,7 +34,7 @@ class UserBusinessService{
         $db = null;
         
         // return the finder result
-        Log::info("Exit UserBusinessService.createUser() with ". $flag);
+        Log::info("Exit UserBusinessService.register() with ". $flag);
         return $flag;
     }
     
@@ -116,13 +116,13 @@ class UserBusinessService{
     }
     
     /**
-     * updateUser method calls and passes $user to updateUser method in UserDataService
+     * editUser method calls and passes $user to updateUser method in UserDataService
      * @param $user
      * @return boolean
      */
-    function updateUser($user){
+    function editUser($user){
         
-        Log::info("Entering SecurityService.updateUser()");
+        Log::info("Entering SecurityService.editUser()");
         
         $database = new Database();
         $db = $database->getConnection();
@@ -135,7 +135,7 @@ class UserBusinessService{
         $db = null;
         
         // return the finder result
-        Log::info("Exit UserBusinessService.updateUser() with ". $flag);
+        Log::info("Exit UserBusinessService.editUSer() with ". $flag);
         return $flag;
     }
     
@@ -165,12 +165,12 @@ class UserBusinessService{
     }
     
     /**
-     * findAllUser method calls findAllUser method in UserDataService
+     * findAllUsers method calls findAllUser method in UserDataService
      * @return array
      */
-    function findAllUser (){
+    function findAllUsers (){
         
-        Log::info("Entering SecurityService.showAllUser()");
+        Log::info("Entering SecurityService.findAllUsers()");
         
         //create connection to database
         $database = new Database();
@@ -184,7 +184,7 @@ class UserBusinessService{
         $db = null;
         
         // return the finder result
-        Log::info("Exit UserBusinessService.showAllUser()");
+        Log::info("Exit UserBusinessService.findAllUsers()");
         return $flag;
     }
     
@@ -272,7 +272,7 @@ class UserBusinessService{
      * @param $user
      * @return array
      */
-    function findByFirstName ($user){
+    function findUserByFirstName ($user){
         
         Log::info("Entering SecurityService.findUserByFirstName()");
         
@@ -297,7 +297,7 @@ class UserBusinessService{
      * @param $user
      * @return array
      */
-    function findByLastName ($user){
+    function findUserByLastName ($user){
         
         Log::info("Entering SecurityService.findUserByLastName()");
         

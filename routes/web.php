@@ -405,3 +405,31 @@ Route::post('/joinGroup','GroupController@joinGroup');
  * remove a user from the group selected
  */
 Route::post('/leaveGroup','GroupController@leaveGroup');
+
+/*========= Milestone 5 =======*/
+/*
+ * this route is mapped to the '/leaveGroup' URI and will
+ * remove a user from the group selected
+ */
+Route::post('/findByTitle','JobController@findByTitle');
+
+/*
+ * this route is mapped to the '/leaveGroup' URI and will
+ * remove a user from the group selected
+ */
+Route::post('/findByCategory','JobController@findByCategory');
+
+/*
+ * this route is mapped to the '/leaveGroup' URI and will
+ * remove a user from the group selected
+ */
+Route::post('/findByLocation','JobController@findByLocation');
+
+/*
+ * this route is mapped to the '/groupNewGroupForm' URI renders to the
+ * groupNewGroupForm Form (an HTML Form)
+ */
+Route::get('/jobSearch', function()
+{
+    return view('jobSearchForm');
+});

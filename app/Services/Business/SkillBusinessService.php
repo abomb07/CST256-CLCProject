@@ -14,13 +14,13 @@ use App\Services\Data\SkillDataService;
 class SkillBusinessService
 {
     /**
-     * createSkill method calls and passes $skill to createSkill method in SkillDataService
+     * addSkill method calls and passes $skill to createSkill method in SkillDataService
      * @param $skill
      * @return boolean
      */
-    function createSkill($skill){
+    function addSkill($skill){
         
-        Log::info("Entering SkillBusinessService.createSkill()");
+        Log::info("Entering SkillBusinessService.addSkill()");
         
         // create connection to database
         $database = new Database();
@@ -33,7 +33,7 @@ class SkillBusinessService
         $db = null;
         
         // return the finder result
-        Log::info("Exit SkillBusinessService.createSkill() ");
+        Log::info("Exit SkillBusinessService.addSkill() ");
         return $flag;
     }
     
@@ -63,11 +63,11 @@ class SkillBusinessService
     }
     
     /**
-     * updateSkill method calls and passes $skill to updateSkill method in SkillDataService
+     * editSkill method calls and passes $skill to updateSkill method in SkillDataService
      * @param $skill
      * @return boolean
      */
-    function updateSkill($skill){
+    function editSkill($skill){
         
         Log::info("Entering SkillBusinessService.updateSkill()");
         
@@ -82,7 +82,7 @@ class SkillBusinessService
         $db = null;
         
         // return the finder result
-        Log::info("Exit SkillBusinessService.updateSkill() ");
+        Log::info("Exit SkillBusinessService.editSkill() ");
         return $flag;
     }
     
@@ -111,13 +111,13 @@ class SkillBusinessService
     }
     
     /**
-     * findByUserId method calls and passes $user_id to findByUserId method in SkillDataService
+     * findSkillByUserId method calls and passes $user_id to findByUserId method in SkillDataService
      * @param $user_id
      * @return array
      */
-    function findByUserId($user_id){
+    function findSkillByUserId($user_id){
         
-        Log::info("Entering SkillBusinessService.findByUserId()");
+        Log::info("Entering SkillBusinessService.findSkillByUserId()");
         
         $database = new Database();
         $db = $database->getConnection();
@@ -130,7 +130,7 @@ class SkillBusinessService
         $db = null;
         
         // return the finder result
-        Log::info("Exit SkillBusinessService.findByUser() ");
+        Log::info("Exit SkillBusinessService.findSkillByUserId() ");
         return $flag;
     }
        

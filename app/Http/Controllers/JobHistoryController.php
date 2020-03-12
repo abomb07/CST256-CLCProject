@@ -45,14 +45,13 @@ class JobHistoryController extends Controller
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
             
-            if($result = $jhbs->createJobHistory($jobhistory)){
+            if($result = $jhbs->addJobHistory($jobhistory)){
     
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 if($groups)
                 {
@@ -123,7 +122,6 @@ class JobHistoryController extends Controller
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
             
             // calls deleteJobHistory method in UserBusinessService and passes User Object
             $result = $jhbs->deleteJobHistory($theJob);
@@ -131,10 +129,10 @@ class JobHistoryController extends Controller
             //if success, return to homePage, else return error message
             if($result)
             {
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 if($groups)
                 {
@@ -240,17 +238,16 @@ class JobHistoryController extends Controller
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
             
-            $result = $jhbs->updateJobHistory($updatedJobHistory);
+            $result = $jhbs->editJobHistory($updatedJobHistory);
             
             // if success returns to userPortfolio, else returns error message
             if($result)
             {
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 if($groups)
                 {

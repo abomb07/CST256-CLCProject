@@ -13,11 +13,11 @@ use App\Services\Data\EducationDataService;
 class EducationBusinessService
 {
     /**
-     * createEducation method calls and passes $education to createEducation method in EducationDataService
+     * addEducation method calls and passes $education to createEducation method in EducationDataService
      * @param $education
      * @return boolean
      */
-    function createEducation($education){
+    function addEducation($education){
         
         Log::info("Entering EducationBusinessService.createEducation()");
         
@@ -62,11 +62,11 @@ class EducationBusinessService
     }
     
     /**
-     * updateEducation method calls and passes $user to updateEducation method in EducationDataService
+     * editEducation method calls and passes $user to updateEducation method in EducationDataService
      * @param $education
      * @return boolean
      */
-    function updateEducation($education){
+    function editEducation($education){
         
         Log::info("Entering EducationBusinessService.updateSkill()");
         
@@ -86,11 +86,11 @@ class EducationBusinessService
     }
     
     /**
-     * findByUserId method calls and passes $user to findByUserId method in SkillDataService
+     * findEducationByUserId method calls and passes $user to findByUserId method in SkillDataService
      * @param $user_id
      * @return object
      */
-    function findByUserId($user_id){
+    function findEducationByUserId($user_id){
         
         Log::info("Entering EducationBusinessService.findByUserId()");
         

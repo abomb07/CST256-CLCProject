@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Log;
 class JobBusinessService
 {
     /**
-     * createJob method calls and passes $job to createJob method in JobDataService
+     * addJob method calls and passes $job to createJob method in JobDataService
      * @param $job
      * @return boolean
      */
-    function createJob($job){
+    function addJob($job){
         
         Log::info("Entering JobBusinessService.createUser()");
         
@@ -63,11 +63,11 @@ class JobBusinessService
     }
     
     /**
-     * updateJob method calls and passes $job to updateJob method in JobDataService
+     * editJob method calls and passes $job to updateJob method in JobDataService
      * @param $job
      * @return boolean
      */
-    function updateJob($job){
+    function editJob($job){
         
         Log::info("Entering JobBusinessService.updateUser()");
         
@@ -134,11 +134,11 @@ class JobBusinessService
     }
     
     /**
-     * findByTitle method calls and passes $job to findByTitle method in JobDataService
+     * findByJobTitle method calls and passes $job to findByTitle method in JobDataService
      * @param $job
      * @return \App\Model\Job
      */
-    function findByTitle($job){
+    function findByJobTitle($job){
         
         Log::info("Entering JobBusinessService.findById()");
         
@@ -158,11 +158,11 @@ class JobBusinessService
     }
     
     /**
-     * findByCategory method calls and passes $job to findByCategory method in JobDataService
+     * findByJobCategory method calls and passes $job to findByCategory method in JobDataService
      * @param $job
      * @return \App\Model\Job
      */
-    function findByCategory($job){
+    function findByJobCategory($job){
         
         Log::info("Entering JobBusinessService.findByCategory()");
         
@@ -182,11 +182,11 @@ class JobBusinessService
     }
     
     /**
-     * findByLocation method calls and passes $job to findByLocation method in JobDataService
+     * findByJobLocation method calls and passes $job to findByLocation method in JobDataService
      * @param $job
      * @return \App\Model\Job
      */
-    function findByLocation($job){
+    function findByJobLocation($job){
         
         Log::info("Entering JobBusinessService.findByLocation()");
         

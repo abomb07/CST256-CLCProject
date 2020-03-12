@@ -14,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use App\Model\User;
 use App\Services\Business\UserBusinessService;
+use App\Services\Business\GroupBusinessService;
 class AdminController extends Controller
 {
     
@@ -26,7 +27,7 @@ class AdminController extends Controller
     {
         try{
             $ubs = new UserBusinessService();
-            $users = $ubs->findAllUser();
+            $users = $ubs->findAllUsers();
             // check user session for admin, if session is admin
             // calls showAllUser in Business Service
             //else return error message
@@ -99,12 +100,12 @@ class AdminController extends Controller
             
             // calls findById method in UserBusinessService and passes User Object
             $ubs = new UserBusinessService();
-            $result = $ubs->updateUser($updatedUser);
+            $result = $ubs->editUSer($updatedUser);
             
             // if success returns to homePage, else returns error message
             if($result)
             {
-                $users= $ubs->findAllUser();
+                $users= $ubs->findAllUsers();
                 return view(('adminUsers'),compact(['users']));
             }
             else
@@ -152,32 +153,35 @@ class AdminController extends Controller
      */
     public function deleteUser(Request $request)
     {
-        try{
+        //try{
             //Get posted Form data
             $id = $request->input('id');
             
             //Save posted Form Data to User Object Model
             $theUser = new User($id, "", "", "", "", "", "", "", "", "");
             $ubs = new UserBusinessService();
+            $gbs = new GroupBusinessService();
             
+            //delete user from all the groups they are in
+            $result1 = $gbs->leaveAllGroups($id);
             // calls deleteUser method in UserBusinessService and passes User Object
             $result = $ubs->deleteUser($theUser);
             
             //if success, return to homePage, else return error message
-            if($result)
+            if($result && $result1)
             {
-                $users= $ubs->findAllUser();
+                $users = $ubs->findAllUsers();
                 return view(('adminUsers'),compact(['users']));
             }
             else
             {
                 return "Unable to delete user. Please try again!";
             }
-        }catch(Exception $e2){
+        /* }catch(Exception $e2){
             Log::info("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
-        }
+        } */
     }
     
     /**
@@ -199,7 +203,7 @@ class AdminController extends Controller
             if($result = $ubs->findById($id))
             {
                 $userSuspended = $ubs->suspendUser($result);
-                $users= $ubs->findAllUser();
+                $users= $ubs->findAllUsers();
                 return view(('adminUsers'),compact(['users']));
                 
             }else
@@ -230,7 +234,7 @@ class AdminController extends Controller
             // if success, return to adminUsers with data
             if($result = $ubs->findById($id)){
                 $userSuspended = $ubs->activateUser($result);
-                $users= $ubs->findAllUser();
+                $users= $ubs->findAllUsers();
                 return view(('adminUsers'),compact(['users']));
                 
             }else
@@ -265,7 +269,7 @@ class AdminController extends Controller
             
             // calls findByFirstName method in UserBusinessService and passes User Object
             // if success, return to adminUsers with data, else return error message
-            if($users = $ubs->findByFirstName($theUser)){
+            if($users = $ubs->findUserByFirstName($theUser)){
             
                 return view(('adminUsers'),compact(['users']));       
             }else{
@@ -301,7 +305,7 @@ class AdminController extends Controller
             
             // calls findByLastName method in UserBusinessService and passes User Object
             // if success, return to adminUsers with data, else return error message
-            if($users = $ubs->findByLastName($theUser)){
+            if($users = $ubs->findUserByLastName($theUser)){
             
                 return view(('adminUsers'),compact(['users']));
             }else{

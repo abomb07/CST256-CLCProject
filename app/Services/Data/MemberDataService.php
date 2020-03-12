@@ -151,6 +151,44 @@ class MemberDataService
     }
     
     /**
+     * deleteByUserId method delete member with matched id in database
+     * @param $group_id
+     * @throws DatabaseException
+     * @return boolean
+     */
+    function deleteByUserId($user_id){
+        Log::info("Entering MemberDataService::deleteByUserId()");
+        
+        try{
+            
+            $statement = $this->connection->prepare("DELETE FROM MEMBER WHERE USER_ID = :user_id ");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }
+            //bindParam $id
+            $statement->bindParam(':user_id', $user_id);
+            $statement->execute();
+            
+            if($statement->rowCount() > 0){
+                
+                Log::info("Exit MemberDataService.deleteByUserId() with true");
+                return true;
+            }else{
+                Log::info("Exit MemberDataService.deleteByUserId() with false");
+                return false;
+            }
+            
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
+    
+    /**
      * findByGroupId method find member with matched group id in database
      * @param $group_id
      * @throws DatabaseException

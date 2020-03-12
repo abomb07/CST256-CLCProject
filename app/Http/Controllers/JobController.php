@@ -40,7 +40,7 @@ class JobController extends Controller
             $job = new Job(0, $jobtitle, $category, $description, $requirements, $company, $location, $salary);
             $service = new JobBusinessService();
             
-            if($result = $service->createJob($job))
+            if($result = $service->addJob($job))
             {
                 $jobs = $service->findAllJobs();
                 return view(('adminJobs'),compact(['jobs']));
@@ -194,7 +194,7 @@ class JobController extends Controller
             
             // calls findById method in JobBusinessService and passes Job object
             $jbs = new JobBusinessService();
-            $result = $jbs->updateJob($updatedJob);
+            $result = $jbs->editJob($updatedJob);
             
             // if success returns to adminJobs, else returns error message
             if($result)
@@ -273,7 +273,6 @@ class JobController extends Controller
             'company' => 'Required|max:256',
             'location' => 'Required|max:256',
             'salary' => 'Required',
-            
         ];
         
         // Run Data Validation Rules

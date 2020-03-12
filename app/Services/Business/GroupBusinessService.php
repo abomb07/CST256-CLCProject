@@ -10,16 +10,17 @@ namespace App\Services\Business;
 
 use App\Database\Database;
 use App\Services\Data\GroupDataService;
+use App\Services\Data\MemberDataService;
 use Illuminate\Support\Facades\Log;
 
 class GroupBusinessService
 {
     /**
-     * createGroup method calls and passes $group to createGroup method in GroupDataService
+     * addGroup method calls and passes $group to createGroup method in GroupDataService
      * @param $group
      * @return boolean
      */
-    function createGroup($group){
+    function addGroup($group){
         Log::info("Entering GroupBusinessService.createGroup()");
         
         // create connection to database
@@ -64,11 +65,11 @@ class GroupBusinessService
     }
     
     /**
-     * updateGroup method calls and passes $group to updateGroup method in GroupDataService
+     * editGroup method calls and passes $group to updateGroup method in GroupDataService
      * @param $group
      * @return boolean
      */
-    function updateGroup($group){
+    function editGroup($group){
         
         Log::info("Entering GroupBusinessService.updateGroup() ");
         
@@ -88,7 +89,7 @@ class GroupBusinessService
     }
     
     /**
-     * findAllJobs method calls and passes $job to findAllJobs method in GroupDataService
+     * findAllGroups method calls and passes $job to findAllJobs method in GroupDataService
      * @return array
      */
     function findAllGroups(){
@@ -155,6 +156,156 @@ class GroupBusinessService
         
         // return the finder result
         Log::info("Exit GroupBusinessService.findByGroupName() ");
+        return $flag;
+    }
+    
+    /* ================================== MEMBER FUNCTIONS =================================== *\
+    
+    /**
+     * joinGroup method calls and passes $member to createMember method in MemberDataService
+     * @param $member
+     * @return boolean
+     */
+    function joinGroup($member)
+    {
+        Log::info("Entering MemberBusinessService.createMember()");
+        
+        // create connection to database
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Group Data Service with this connection and calls createGroup method/
+        $dbService = new MemberDataService($db);
+        $flag = $dbService->createMember($member);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit GroupBusinessService.createMember() ");
+        return $flag;
+    }
+    
+    /**
+     * leaveGroup method calls and passes $member to deleteMember method in MemberDataService
+     * @param $member
+     * @return boolean
+     */
+    function leaveGroup($member){
+        
+        Log::info("Entering MemberBusinessService.deleteMember() ");
+        
+        //create connection to database
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Group Data Service with this connection and calls deleteGroup method/
+        $dbService = new MemberDataService($db);
+        $flag = $dbService->deleteMember($member);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit MemberBusinessService.deleteMember() ");
+        return $flag;
+    }
+    
+    /**
+     * deleteGroupMembers method calls and passes $group_id to deleteByGroupId method in MemberDataService
+     * @param $group_id
+     * @return boolean
+     */
+    function deleteGroupMembers($group_id){
+        
+        Log::info("Entering MemberBusinessService.deleteByGroupId() ");
+        
+        //create connection to database
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Group Data Service with this connection and calls deleteGroup method/
+        $dbService = new MemberDataService($db);
+        $flag = $dbService->deleteByGroupId($group_id);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit MemberBusinessService.deleteMember() ");
+        return $flag;
+    }
+    
+    /**
+     * leaveAllGroups method calls and passes $user_id to deleteByUserId method in MemberDataService
+     * @param $group_id
+     * @return boolean
+     */
+    function leaveAllGroups($user_id){
+        
+        Log::info("Entering MemberBusinessService.leaveAllGroups() ");
+        
+        //create connection to database
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Group Data Service with this connection and calls deleteGroup method/
+        $dbService = new MemberDataService($db);
+        $flag = $dbService->deleteByUserId($user_id);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit MemberBusinessService.leaveAllGroups() ");
+        return $flag;
+    }
+    
+    /**
+     * findAllMembers method calls and passes $group_id to findByGroupId method in MemberDataService
+     * @param $group_id
+     * @return array|\App\Model\User[]
+     */
+    function findAllMembers($group_id){
+        
+        Log::info("Entering MemberBusinessService.findByGroupId() ");
+        
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Member Data Service with this connection and calls findAllMembers method/
+        $dbService = new MemberDataService($db);
+        $flag = $dbService->findByGroupId($group_id);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit MemberBusinessService.findByGroupId() ");
+        return $flag;
+    }
+    
+    /**
+     * findGroupsByUserId method calls and passes $user_id to findByUserId method in MemberDataService
+     * @param $user_id
+     * @return array|\App\Model\Group
+     */
+    function findGroupsByUserId($user_id){
+        
+        Log::info("Entering MemberBusinessService.findByUserId() ");
+        
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Member Data Service with this connection and calls findAllMembers method/
+        $dbService = new MemberDataService($db);
+        $flag = $dbService->findByUserId($user_id);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit MemberBusinessService.findByUserId() ");
         return $flag;
     }
 }

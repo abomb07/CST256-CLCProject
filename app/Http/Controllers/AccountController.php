@@ -53,7 +53,7 @@ class AccountController extends Controller
             
             if($ubs->checkUsername($user)){
                 //Create user and return to loginForm view
-                if($ubs->createUser($user))
+                if($ubs->register($user))
                 {
                 return view('loginForm');
                 }
@@ -133,13 +133,13 @@ class AccountController extends Controller
             $jhbs = new JobHistoryBusinessService();
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
-            $mbs = new MemberBusinessService();
             
-            $jobhistorys = $jhbs->findByUserId($user_id);
-            $skills = $sbs->findByUserId($user_id);
-            $educations = $eds->findByUserId($user_id);
+            
+            $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+            $skills = $sbs->findSkillByUserId($user_id);
+            $educations = $eds->findEducationByUserId($user_id);
             $gbs = new GroupBusinessService();
-            $groups = $mbs->findByUserId($user_id);
+            $groups = $gbs->findGroupsByUserId($user_id);
             
             if($groups)
             {

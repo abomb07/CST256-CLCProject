@@ -14,13 +14,13 @@ use App\Services\Data\JobHistoryDataService;
 class JobHistoryBusinessService
 {
     /**
-     * createJobHistory method calls and passes $job to createJobHistory method in JobHistoryDataService
+     * addJobHistory method calls and passes $job to createJobHistory method in JobHistoryDataService
      * @param $job
      * @return boolean
      */
-    function createJobHistory($job){
+    function addJobHistory($job){
         
-        Log::info("Entering JobHistoryBusinessService.createJobHistory()");
+        Log::info("Entering JobHistoryBusinessService.addJobHistory()");
         
         // create connection to database
         $database = new Database();
@@ -33,12 +33,12 @@ class JobHistoryBusinessService
         $db = null;
         
         // return the finder result
-        Log::info("Exit JobHistoryBusinessService.createJobHistory() ");
+        Log::info("Exit JobHistoryBusinessService.addJobHistory() ");
         return $flag;
     }
     
     /**
-     * deleteJobHistory method calls and passes $job to deleteJobHistory method in JobHistoryDataService
+     * deleteJobHistory method calls and passes $jobhistory to deleteJobHistory method in JobHistoryDataService
      * @param $job
      * @return boolean
      */
@@ -63,13 +63,13 @@ class JobHistoryBusinessService
     }
     
     /**
-     * updateJobHistory method calls and passes $job to updateJobHistory method in JobHistoryDataService
+     * editJobHistory method calls and passes $job to updateJobHistory method in JobHistoryDataService
      * @param $job
      * @return boolean
      */
-    function updateJobHistory($job){
+    function editJobHistory($job){
         
-        Log::info("Entering JobHistoryBusinessService.updateJobHistory()");
+        Log::info("Entering JobHistoryBusinessService.editJobHistory()");
         
         $database = new Database();
         $db = $database->getConnection();
@@ -82,7 +82,7 @@ class JobHistoryBusinessService
         $db = null;
         
         // return the finder result
-        Log::info("Exit JobHistoryBusinessService.updateJobHistory() ");
+        Log::info("Exit JobHistoryBusinessService.editJobHistory() ");
         return $flag;
     }
     
@@ -112,13 +112,13 @@ class JobHistoryBusinessService
     }
     
     /**
-     * findByUserId method calls and passes $user_id to findByUserId method in JobHistoryDataService
+     * findJobHistoryByUserId method calls and passes $user_id to findByUserId method in JobHistoryDataService
      * @param $user_id
      * @return array
      */
-    function findByUserId($user_id){
+    function findJobHistoryByUserId($user_id){
         
-        Log::info("Entering JobHistoryBusinessService.findByUserId()");
+        Log::info("Entering JobHistoryBusinessService.findJobHistoryByUserId()");
         
         $database = new Database();
         $db = $database->getConnection();
@@ -131,7 +131,7 @@ class JobHistoryBusinessService
         $db = null;
         
         // return the finder result
-        Log::info("Exit JobHistoryBusinessService.findByUserId() ");
+        Log::info("Exit JobHistoryBusinessService.findJobHistoryByUserId() ");
         return $flag;
     }
 }

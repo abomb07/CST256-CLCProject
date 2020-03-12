@@ -48,14 +48,14 @@ class EducationController extends Controller
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
+           
             
-            if($result = $eds->createEducation($education))
+            if($result = $eds->addEducation($education))
             {
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 //pass groups user is apart of to portfolio
                 if($groups)
@@ -128,7 +128,7 @@ class EducationController extends Controller
             $jhbs = new JobHistoryBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
+            
             
             // calls deleteUser method in EducationBusinessService and passes Education Object
             $result = $eds->deleteEducation($education);
@@ -136,10 +136,10 @@ class EducationController extends Controller
             //if success, return to homePage, else return error message
             if($result)
             {
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 //pass groups user is apart of to portfolio
                 if($groups)
@@ -243,17 +243,17 @@ class EducationController extends Controller
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
             
-            $result = $eds->updateEducation($updatedEducation);
+            
+            $result = $eds->editEducation($updatedEducation);
             
             // if success returns to homePage, else returns error message
             if($result)
             {
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 if($groups)
                 {

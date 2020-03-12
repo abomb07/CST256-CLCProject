@@ -41,14 +41,13 @@ class SkillController extends Controller
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
             
-            if($result = $sbs->createSkill($skill)){
+            if($result = $sbs->addSkill($skill)){
                 
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 if($groups)
                 {
@@ -151,7 +150,6 @@ class SkillController extends Controller
             $jhbs = new JobHistoryBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
             
             // calls deleteUser method in SkillBusinessService and passes Skill Object
             $result = $sbs->deleteSkill($theSkill);
@@ -159,10 +157,10 @@ class SkillController extends Controller
             //if success, return to homePage, else return error message
             if($result)
             {
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 if($groups)
                 {
@@ -227,17 +225,16 @@ class SkillController extends Controller
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
-            $mbs = new MemberBusinessService();
             
-            $result = $sbs->updateSkill($updatedSkill);
+            $result = $sbs->editSkill($updatedSkill);
             
             // if success returns to homePage, else returns error message
             if($result)
             {
-                $groups = $mbs->findByUserId($user_id);
-                $jobhistorys = $jhbs->findByUserId($user_id);
-                $skills = $sbs->findByUserId($user_id);
-                $educations = $eds->findByUserId($user_id);
+                $groups = $gbs->findGroupsByUserId($user_id);
+                $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+                $skills = $sbs->findSkillByUserId($user_id);
+                $educations = $eds->findEducationByUserId($user_id);
                 
                 if($groups)
                 {

@@ -11,6 +11,7 @@
 
 @section('content')
 <h2>Featured Jobs</h2>
+<a href="jobSearch">Search For Jobs Here</a>
 
 <table id="jobs" class="table table-hover">
 	<tr>

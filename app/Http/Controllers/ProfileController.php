@@ -120,7 +120,7 @@ class ProfileController extends Controller
             
             //calls updateUser in UserBusinessService and pass $updateUser
             $ubs = new UserBusinessService();
-            $result = $ubs->updateUser($updatedUser);
+            $result = $ubs->editUser($updatedUser);
             
             //if result exists return to user profile Page else return error message
             if($result)
