@@ -258,7 +258,7 @@ class JobDataService
         
         try{
             $jobtitle = $job->getJobtitle();
-            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM USER WHERE JOB_TITLE LIKE CONCAT('%', :jobtitle, '%') ");
+            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE JOB_TITLE LIKE CONCAT('%', :jobtitle, '%') ");
             
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
@@ -297,7 +297,7 @@ class JobDataService
         
         try{
             $location = $job->getLocation();
-            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM USER WHERE JOB_TITLE LIKE CONCAT('%', :location, '%') ");
+            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE LOCATION LIKE CONCAT('%', :location, '%') ");
             
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
@@ -326,17 +326,17 @@ class JobDataService
     }
     
     /**
-     * findbyCategory method finds for user with entered category
+     * findbyDescription method finds for user with entered description
      * @param Job $job
      * @throws DatabaseException
      * @return array
      */
-    function findByCategory(Job $job){
-        Log::info("Entering SecurityDAO::findByCategory()");
+    function findByDescription(Job $job){
+        Log::info("Entering SecurityDAO::findByDescription()");
         
         try{
-            $category = $job->getJobtitle();
-            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM USER WHERE JOB_TITLE LIKE CONCAT('%', :category, '%') ");
+            $description = $job->getDescription();
+            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE DESCRIPTION LIKE CONCAT('%', :description, '%') ");
             
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
@@ -344,12 +344,12 @@ class JobDataService
             }
             
             //bindParam lastname and executes statement
-            $statement->bindParam(':category', $category);
+            $statement->bindParam(':description', $description);
             $statement->execute();
             
             //if statement executes successfully
             if($statement->rowCount() > 0){
-                Log::info("Exit SecurityDAO.findByCategory() ");
+                Log::info("Exit SecurityDAO.findByDescription() ");
                 
                 //fetching users from database
                 $jobs = $statement->fetchAll();
@@ -362,6 +362,52 @@ class JobDataService
             Log::error("Exception: ", array("message " => $e->getMessage()));
             throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
         }
-    }     
+    } 
+    
+    /**
+     * findBySkills method finds for job with matched skills
+     * @param Job $job
+     * @throws DatabaseException
+     * @return array
+     */
+    function findBySkills($skills){
+        Log::info("Entering SecurityDAO::findBySkills()");
+        
+        try{
+            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE REQUIREMENTS LIKE CONCAT('%', :skills, '%') ");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }
+            
+            //bindParam lastname and executes statement
+            $statement->bindParam(':skills', $skills);
+            $statement->execute();
+            
+            //if statement executes successfully
+            if($statement->rowCount() > 0){
+                Log::info("Exit SecurityDAO.findBySkills() ");
+                
+                $jobs = $statement->fetchAll();
+                /* $index = 0;
+                $jobs = array();
+                
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    $job = new Job($row['ID'], $row['JOB_TITLE'], $row['CATEGORY'], $row['DESCRIPTION'], $row['REQUIREMENTS'], $row['COMPANY'], $row['LOCATION'], $row['SALARY']);
+                    $jobs[$index++] = $job;
+                } */
+                
+                return $jobs;
+            }
+            
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
 }
 

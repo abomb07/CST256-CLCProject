@@ -158,26 +158,26 @@ class JobBusinessService
     }
     
     /**
-     * findByJobCategory method calls and passes $job to findByCategory method in JobDataService
+     * findByJobDescription method calls and passes $job to findByCategory method in JobDataService
      * @param $job
      * @return \App\Model\Job
      */
-    function findByJobCategory($job){
+    function findByJobDescription($job){
         
-        Log::info("Entering JobBusinessService.findByCategory()");
+        Log::info("Entering JobBusinessService.findByDescription()");
         
         $database = new Database();
         $db = $database->getConnection();
         
-        // Create a User Data Service with this connection and calls findByCategory method/
+        // Create a User Data Service with this connection and calls findByDescription method/
         $dbService = new JobDataService($db);
-        $flag = $dbService->findByCategory($job);
+        $flag = $dbService->findByDescription($job);
         
         // close the connection
         $db = null;
         
         // return the finder result
-        Log::info("Exit JobBusinessService.findByCategory() with ");
+        Log::info("Exit JobBusinessService.findByDescription() with ");
         return $flag;
     }
     
@@ -202,6 +202,30 @@ class JobBusinessService
         
         // return the finder result
         Log::info("Exit JobBusinessService.findByLocation() with ");
+        return $flag;
+    }
+    
+    /**
+     * findBySkills method calls and passes $job to findBySkills method in JobDataService
+     * @param $job
+     * @return \App\Model\Job
+     */
+    function findBySkills($skills){
+
+        Log::info("Entering JobBusinessService.findBySkills()");
+        
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a User Data Service with this connection and calls updateUser method/
+        $dbService = new JobDataService($db);
+        $flag = $dbService->findBySkills($skills);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit JobBusinessService.findBySkills() ");
         return $flag;
     }
     

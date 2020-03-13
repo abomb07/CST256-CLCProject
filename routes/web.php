@@ -408,26 +408,45 @@ Route::post('/leaveGroup','GroupController@leaveGroup');
 
 /*========= Milestone 5 =======*/
 /*
- * this route is mapped to the '/leaveGroup' URI and will
- * remove a user from the group selected
+ * this route is mapped to the '/findByTitle' URI and will
+ * render the jobSearchResults page
  */
 Route::post('/findByTitle','JobController@findByTitle');
 
 /*
- * this route is mapped to the '/leaveGroup' URI and will
- * remove a user from the group selected
+ * this route is mapped to the '/findByDescription' URI and will
+ * render the jobSearchResults page
  */
-Route::post('/findByCategory','JobController@findByCategory');
+Route::post('/findByDescription','JobController@findByDescription');
 
 /*
- * this route is mapped to the '/leaveGroup' URI and will
- * remove a user from the group selected
+ * this route is mapped to the '/findByLocation' URI and will
+ * render the jobSearchResults page
  */
 Route::post('/findByLocation','JobController@findByLocation');
 
 /*
- * this route is mapped to the '/groupNewGroupForm' URI renders to the
- * groupNewGroupForm Form (an HTML Form)
+ * this route is mapped to the '/jobDetails' URI and will
+ * render the jobDetails page
+ */
+Route::post('/jobDetails','JobController@showDetails');  
+
+
+/*
+ * this route is mapped to the '/jobApply' URI and will
+ * render the successful application page
+ */
+Route::post('/jobApply','JobController@applyToJob');
+
+/*
+ * this route is mapped to the '/findBySkills' URI and will
+ * render the job results page
+ */
+Route::post('/findBySkills','JobController@findBySkills');
+
+/*
+ * this route is mapped to the '/jobSearch' URI renders to the
+ * jobSearchForm Form (an HTML Form)
  */
 Route::get('/jobSearch', function()
 {

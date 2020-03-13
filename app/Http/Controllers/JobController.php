@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Model\Job;
 use App\Services\Business\JobBusinessService;
+use App\Services\Business\SkillBusinessService;
 use Exception;
 use Validator;
 
@@ -280,15 +281,168 @@ class JobController extends Controller
     }
     
     
-    /* find job by title
-     * ==== future developement == 
-    */
-    
-    /* find job by category
-     * ==== future developement ==
+    /**
+     * Returns jobs by the inputed title
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
+    public function findByTitle(Request $request)
+    {
+        try{
+            $title = $request->input('jobtitle');
+            $theJob = new Job("", $title, "", "", "", "", "", "");
+            
+            //findByJobTitle in the JobBusinessService
+            $jbs = new JobBusinessService();
+            $jobs = $jbs->findByJobTitle($theJob);
+            
+            //return all jobs if input is null
+            if($title == null)
+            {
+                $jobs = $jbs->findAllJobs();
+            }
+            
+            return view(('jobSearchResults'),compact(['jobs']));
+        
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    } 
     
-    /* find job by location
-     * ==== future developement ==
+    /**
+     * Returns jobs by the inputed description
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
+    public function findByDescription(Request $request)
+    {
+        try{
+            $description = $request->input('jobdescription');
+            $theJob = new Job("", "", "", $description, "", "", "", "");
+            
+            $jbs = new JobBusinessService();
+            $jobs = $jbs->findByJobDescription($theJob);
+            
+            //return all jobs if input is null
+            if($description == null)
+            {
+                $jobs = $jbs->findAllJobs();
+            }
+            
+            return view(('jobSearchResults'),compact(['jobs']));
+            
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    } 
+    
+    /**
+     * Returns jobs by the inputed location
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function findByLocation(Request $request)
+    {
+        try{
+            $location = $request->input('joblocation');
+            $theJob = new Job("", "", "", "", "", "", $location, "");
+            
+            $jbs = new JobBusinessService();
+            $jobs = $jbs->findByJobLocation($theJob);
+            
+            //return all jobs if input is null
+            if($location == null)
+            {
+                $jobs = $jbs->findAllJobs();
+            }
+            
+            return view(('jobSearchResults'),compact(['jobs']));
+            
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    } 
+    
+    /**
+     * Show details of selected job
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function showDetails(Request $request)
+    {
+        try{
+            //id of job selected
+            $id = $request->input('id');
+            
+            //calls findById in the JobBusinessService
+            $jbs = new JobBusinessService();
+            $job = $jbs->findById($id);
+            
+            return view('jobDetails')->with(compact('job'));
+            
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    } 
+    
+    /**
+     * Simple application success page returned when user applies to job
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function applyToJob(Request $request)
+    {
+        try{
+            $title = $request->input('jobtitle');
+            $company = $request->input('jobcompany');
+            
+            return view(('jobApplySuccess'),compact(['title'], ['company']));
+            
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    }
+    
+    /**
+     * findBySkills method takes skills as parameter
+     * and find all jobs that matched user skills
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function findBySkills(Request $request)
+    {
+        try{
+            $user_id = $request->input('id');
+            
+            $sbs = new SkillBusinessService();
+            $jbs = new JobBusinessService();
+            
+            $skills = $sbs->findSkillByUserId($user_id);
+            
+            if($skills){
+
+                for($i = 0; $i < count($skills); $i++)
+                {
+                    $jobs = $jbs->findBySkills($skills[$i]['SKILL']);
+                }
+            }
+
+            return view(('jobSearchResults'),compact(['jobs']));
+            
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    }
 }

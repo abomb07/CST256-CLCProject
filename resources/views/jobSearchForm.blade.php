@@ -31,6 +31,13 @@
   <input type="text" placeholder="Search By Job Location" name="joblocation">
     <input type='submit' value='Search'>{{$errors->first('joblocation')}}
 </form>
+
+<br>
+<form action="findBySkills" method="POST">
+{{ csrf_field() }}
+	<input type='hidden' name='id' value="{{Session::get('id')}}">
+    <input type='submit' value='Find Jobs Based On Your Skills'>
+</form>
 @else
 <h2> Must be logged in!!!</h2>
 @endif	

@@ -427,7 +427,7 @@ class GroupController extends Controller
             if($result)
             {
                 //members in the group
-                $members = $gbs->findByGroupId($group_id);
+                $members = $gbs->findAllMembers($group_id);
                 
                 if($members)
                 {
