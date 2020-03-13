@@ -409,5 +409,84 @@ class JobDataService
             throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
         }
     }
+    
+    /**
+     * findByEducation method finds for job with matched skills
+     * @param Job $job
+     * @throws DatabaseException
+     * @return array
+     */
+    function findByEducation($education){
+        Log::info("Entering SecurityDAO::findByEducation()");
+        
+        try{
+            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE REQUIREMENTS LIKE CONCAT('%', :education, '%') ");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }
+            
+            //bindParam lastname and executes statement
+            $statement->bindParam(':education', $education);
+            $statement->execute();
+            
+            //if statement executes successfully
+            if($statement->rowCount() > 0){
+                Log::info("Exit SecurityDAO.findByEducation() ");
+                
+                $jobs = $statement->fetchAll();
+                
+                
+                return $jobs;
+            }
+            
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
+    
+    
+    /**
+     * findByEducation method finds for job with matched skills
+     * @param Job $job
+     * @throws DatabaseException
+     * @return array
+     */
+    function findByJobHistory($jobhistory){
+        Log::info("Entering SecurityDAO::findByJobHistory()");
+        
+        try{
+            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE JOB_TITLE LIKE CONCAT('%', :jobhistory, '%') ");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }
+            
+            //bindParam lastname and executes statement
+            $statement->bindParam(':jobhistory', $jobhistory);
+            $statement->execute();
+            
+            //if statement executes successfully
+            if($statement->rowCount() > 0){
+                Log::info("Exit SecurityDAO.findByJobHistory() ");
+                
+                $jobs = $statement->fetchAll();
+                
+                
+                return $jobs;
+            }
+            
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
 }
 

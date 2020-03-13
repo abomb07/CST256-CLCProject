@@ -38,6 +38,24 @@
 	<input type='hidden' name='id' value="{{Session::get('id')}}">
     <input type='submit' value='Find Jobs Based On Your Skills'>
 </form>
+
+<form action="findByEducation" method="POST">
+{{ csrf_field() }}
+	<input type='hidden' name='id' value="{{Session::get('id')}}">
+    <input type='submit' value='Find Jobs Based On Your Education'>
+</form>
+
+<form action="findByJobHistory" method="POST">
+{{ csrf_field() }}
+	<input type='hidden' name='id' value="{{Session::get('id')}}">
+    <input type='submit' value='Find Jobs Based On Your Job History'>
+</form>
+
+<form action="jobMatch" method="POST">
+{{ csrf_field() }}
+	<input type='hidden' name='id' value="{{Session::get('id')}}">
+    <input type='submit' value='Job Match'>
+</form>
 @else
 <h2> Must be logged in!!!</h2>
 @endif	

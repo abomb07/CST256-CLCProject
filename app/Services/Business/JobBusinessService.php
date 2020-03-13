@@ -169,7 +169,7 @@ class JobBusinessService
         $database = new Database();
         $db = $database->getConnection();
         
-        // Create a User Data Service with this connection and calls findByDescription method/
+        // Create a User Data Service with this connection and calls findByJobDescription method/
         $dbService = new JobDataService($db);
         $flag = $dbService->findByDescription($job);
         
@@ -193,7 +193,7 @@ class JobBusinessService
         $database = new Database();
         $db = $database->getConnection();
         
-        // Create a User Data Service with this connection and calls updateUser method/
+        // Create a User Data Service with this connection and calls findByJobLocation method/
         $dbService = new JobDataService($db);
         $flag = $dbService->findByLocation($job);
         
@@ -217,7 +217,7 @@ class JobBusinessService
         $database = new Database();
         $db = $database->getConnection();
         
-        // Create a User Data Service with this connection and calls updateUser method/
+        // Create a User Data Service with this connection and calls findBySkills method/
         $dbService = new JobDataService($db);
         $flag = $dbService->findBySkills($skills);
         
@@ -226,6 +226,54 @@ class JobBusinessService
         
         // return the finder result
         Log::info("Exit JobBusinessService.findBySkills() ");
+        return $flag;
+    }
+    
+    /**
+     * findByEducation method calls and passes $job to findByEducation method in JobDataService
+     * @param $job
+     * @return \App\Model\Job
+     */
+    function findByEducation($education){
+        
+        Log::info("Entering JobBusinessService.findByEducation()");
+        
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a User Data Service with this connection and calls findByEducation method/
+        $dbService = new JobDataService($db);
+        $flag = $dbService->findBySkills($education);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit JobBusinessService.findByEducation() ");
+        return $flag;
+    }
+    
+    /**
+     * findByJobHistory method calls and passes $job to findByJobHistory method in JobDataService
+     * @param $job
+     * @return \App\Model\Job
+     */
+    function findByJobHistory($jobhistory){
+        
+        Log::info("Entering JobBusinessService.findByJobHistory()");
+        
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a User Data Service with this connection and calls findByJobHistory method/
+        $dbService = new JobDataService($db);
+        $flag = $dbService->findByJobHistory($jobhistory);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit JobBusinessService.findByJobHistory() ");
         return $flag;
     }
     

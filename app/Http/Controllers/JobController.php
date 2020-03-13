@@ -16,6 +16,8 @@ use App\Services\Business\JobBusinessService;
 use App\Services\Business\SkillBusinessService;
 use Exception;
 use Validator;
+use App\Services\Business\EducationBusinessService;
+use App\Services\Business\JobHistoryBusinessService;
 
 class JobController extends Controller
 {
@@ -413,6 +415,59 @@ class JobController extends Controller
         }
     }
     
+    public function jobMatch(Request $request)
+    {
+        try{
+            $user_id = $request->input('id');
+            
+            $sbs = new SkillBusinessService();
+            $ebs = new EducationBusinessService();
+            $jhbs = new JobHistoryBusinessService();
+            $jbs = new JobBusinessService();
+            
+            $skills = $sbs->findSkillByUserId($user_id);
+            $education = $ebs->findEducationByUserId($user_id);
+            $jobhistory = $jhbs->findJobHistoryByUserId($user_id);
+            
+            if($skills || $education || $jobhistory){
+                
+                for($i = 0; $i < count($skills); $i++)
+                {
+                    $jobs = $jbs->findBySkills($skills[$i]['SKILL']);
+                }
+                
+                for($i = 0; $i < count($education); $i++)
+                {
+                    $value = $jbs->findByEducation($education[$i]['FIELD']);
+                    if(!in_array($value, $jobs))
+                    {
+                        $jobs = array_merge($jobs, $value);
+                    }
+                }
+                
+                for($i = 0; $i < count($jobhistory); $i++)
+                {
+                    $value = $jbs->findByJobHistory($jobhistory[$i]['TITLE']);
+                    if(!in_array($value, $jobs))
+                    {
+                        $jobs = array_merge($jobs, $value);
+                    }
+                }
+            }
+            else {
+                $error = "Please fill out your portfolio";
+                return view(('errorPage'),compact(['error']));
+            }
+            //echo print_r($jobs);
+            return view(('jobSearchResults'),compact(['jobs']));
+            
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    }
+    
     /**
      * findBySkills method takes skills as parameter
      * and find all jobs that matched user skills
@@ -437,6 +492,72 @@ class JobController extends Controller
                 }
             }
 
+            return view(('jobSearchResults'),compact(['jobs']));
+            
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    }
+    
+    /**
+     * findByEducation method takes education as parameter
+     * and find all jobs that matched user education
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function findByEducation(Request $request)
+    {
+        try{
+            $user_id = $request->input('id');
+            
+            $ebs = new EducationBusinessService();
+            $jbs = new JobBusinessService();
+            
+            $education = $ebs->findEducationByUserId($user_id);
+            
+            if($education){
+                
+                for($i = 0; $i < count($education); $i++)
+                {
+                    $jobs = $jbs->findByEducation($education[$i]['FIELD']);
+                }
+            }
+            
+            return view(('jobSearchResults'),compact(['jobs']));
+            
+        }catch(Exception $e2){
+            Log::info("Exception ". array("message" => $e2->getMessage()));
+            //Display Global Namespace Handler Page
+            return view('SystemException');
+        }
+    }
+    
+    /**
+     * findByJobHistory method takes education as parameter
+     * and find all jobs that matched user education
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function findByJobHistory(Request $request)
+    {
+        try{
+            $user_id = $request->input('id');
+            
+            $jhbs = new JobHistoryBusinessService();
+            $jbs = new JobBusinessService();
+            
+            $jobhistory = $jhbs->findJobHistoryByUserId($user_id);
+            
+            if($jobhistory){
+                
+                for($i = 0; $i < count($jobhistory); $i++)
+                {
+                    $jobs = $jbs->findByJobHistory($jobhistory[$i]['TITLE']);
+                }
+            }
+            
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){

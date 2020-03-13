@@ -445,6 +445,24 @@ Route::post('/jobApply','JobController@applyToJob');
 Route::post('/findBySkills','JobController@findBySkills');
 
 /*
+ * this route is mapped to the '/findByEducation' URI and will
+ * render the job results page
+ */
+Route::post('/findByEducation','JobController@findByEducation');
+
+/*
+ * this route is mapped to the '/findByJobHistory' URI and will
+ * render the job results page
+ */
+Route::post('/findByJobHistory','JobController@findByJobHistory');
+
+/*
+ * this route is mapped to the '/findByJobHistory' URI and will
+ * render the job results page
+ */
+Route::post('/jobMatch','JobController@jobMatch');
+
+/*
  * this route is mapped to the '/jobSearch' URI renders to the
  * jobSearchForm Form (an HTML Form)
  */
