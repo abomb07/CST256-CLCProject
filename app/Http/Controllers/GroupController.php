@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 4.0
- * GroupController version 4.0
+ * CLC Project version 5.0
+ * GroupController version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * Group Controller handles group functionalities
  */
 namespace App\Http\Controllers;
@@ -444,10 +444,12 @@ class GroupController extends Controller
                         {
                             if($users[$i]->getId() == $user_id)
                             {
+                                // if finds member, set memberExists to true
                                 $memberExists = true;
                                 break;
                             }
                             else {
+                                // else set memberExists to false
                                 $memberExists = false;
                             }
                         }

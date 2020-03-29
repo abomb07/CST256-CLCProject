@@ -1,6 +1,6 @@
 <?php
-/* CLC Project version 4.0
- * Error Page version 4.0
+/* CLC Project version 5.0
+ * Error Page version 5.0
  * Adam Bender and Jim Nguyen
  * March 15, 2020
  * Job Apply Success Form

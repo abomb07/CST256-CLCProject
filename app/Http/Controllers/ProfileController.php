@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * ProfileController version 4.0
+/* CLC Project version 5.0
+ * ProfileController version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * ProfileController handles user profile action
  */
 namespace App\Http\Controllers;

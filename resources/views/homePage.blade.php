@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * Home Page version 4.0
+/* CLC Project version 5.0
+ * Home Page version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * Home Page Form
  */
 ?>
@@ -31,13 +31,13 @@
 	@foreach($jobs as $job)
 
 	<tr>
-		<td>{{$job['JOB_TITLE']}}</td>
-		<td>{{$job['CATEGORY']}}</td>
-		<td>{{$job['DESCRIPTION']}}</td>
-		<td>{{$job['REQUIREMENTS']}}</td>
-		<td>{{$job['COMPANY']}}</td>
-		<td>{{$job['LOCATION']}}</td>
-		<td>{{$job['SALARY']}}</td>
+		<td>{{$job->getJobtitle()}}</td>
+		<td>{{$job->getCategory()}}</td>
+		<td>{{$job->getDescription()}}</td>
+		<td>{{$job->getRequirements()}}</td>
+		<td>{{$job->getCompany()}}</td>
+		<td>{{$job->getLocation()}}</td>
+		<td>{{$job->getSalary()}}</td>
 
 	</tr>
 

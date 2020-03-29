@@ -438,27 +438,10 @@ Route::post('/jobDetails','JobController@showDetails');
  */
 Route::post('/jobApply','JobController@applyToJob');
 
-/*
- * this route is mapped to the '/findBySkills' URI and will
- * render the job results page
- */
-Route::post('/findBySkills','JobController@findBySkills');
 
 /*
- * this route is mapped to the '/findByEducation' URI and will
- * render the job results page
- */
-Route::post('/findByEducation','JobController@findByEducation');
-
-/*
- * this route is mapped to the '/findByJobHistory' URI and will
- * render the job results page
- */
-Route::post('/findByJobHistory','JobController@findByJobHistory');
-
-/*
- * this route is mapped to the '/findByJobHistory' URI and will
- * render the job results page
+ * this route is mapped to the '/jobMatch' URI and will
+ * render the search job result page
  */
 Route::post('/jobMatch','JobController@jobMatch');
 
@@ -470,3 +453,8 @@ Route::get('/jobSearch', function()
 {
     return view('jobSearchForm');
 });
+
+/*========= Milestone 5 =======*/
+Route::resource('/userrest', 'UserRestController'); 
+
+Route::resource('/jobrest', 'JobRestController'); 

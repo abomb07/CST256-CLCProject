@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * UserDataService version 4.0
+/* CLC Project version 5.0
+ * UserDataService version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * UserDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -213,7 +213,15 @@ class UserDataService{
             if($statement->rowCount() > 0){
                 
                 Log::info("Exit SecurityDAO.showAll with true");
-                $users = $statement->fetchAll();
+                
+                $index = 0;
+                $users = array();
+                
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    $user = new User($row["ID"], $row["USERNAME"], $row["PASSWORD"], $row['FIRSTNAME'], $row['LASTNAME'], $row['EMAIL'], $row['PHONENUMBER'], $row['CITY'], $row['ROLE'], $row['STATUS']);
+                    $users[$index++] = $user;
+                }
                 return $users;
             }
             

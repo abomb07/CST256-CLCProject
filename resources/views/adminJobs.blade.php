@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 4.0
- * Admin job page version 4.0
+ * CLC Project version 5.0
+ * Admin job page version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * Admin Jobs Page
  */
 ?>
@@ -36,26 +36,26 @@
 		<td>
 			<form action='adminJobEdit' method='POST'>
 				{{ csrf_field() }} 
-				<input type='hidden' name='id' value="{{ $job['ID'] }}"> 
+				<input type='hidden' name='id' value="{{ $job->getId() }}"> 
 				<input type='submit' value='Edit'>
 			</form>
 		</td>
 		<td>
 			<form action='adminConfirmJobDelete' method='POST'>
 				{{ csrf_field() }} 
-				<input type='hidden' name='id' value="{{ $job['ID'] }}"> 
+				<input type='hidden' name='id' value="{{ $job->getId() }}"> 
 				<input type='submit' value='Delete'>
 			</form>
 		</td> 
 
-		<td>{{$job['ID']}}</td>
-		<td>{{$job['JOB_TITLE']}}</td>
-		<td>{{$job['CATEGORY']}}</td>
-		<td>{{$job['DESCRIPTION']}}</td>
-		<td>{{$job['REQUIREMENTS']}}</td>
-		<td>{{$job['COMPANY']}}</td>
-		<td>{{$job['LOCATION']}}</td>
-		<td>{{$job['SALARY']}}</td>
+		<td>{{$job->getId()}}</td>
+		<td>{{$job->getJobtitle()}}</td>
+		<td>{{$job->getCategory()}}</td>
+		<td>{{$job->getDescription()}}</td>
+		<td>{{$job->getRequirements()}}</td>
+		<td>{{$job->getCompany()}}</td>
+		<td>{{$job->getLocation()}}</td>
+		<td>{{$job->getSalary()}}</td>
 
 	</tr>
 

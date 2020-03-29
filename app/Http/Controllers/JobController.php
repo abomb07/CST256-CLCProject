@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 4.0
- * JobController version 4.0
+ * CLC Project version 5.0
+ * JobController version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * Job Controller handles job functionalities
  */
 namespace App\Http\Controllers;
@@ -226,6 +226,7 @@ class JobController extends Controller
     public function findAllJobs()
     {
         try{
+            //
             $jbs = new JobBusinessService();
             $jobs = $jbs->findAllJobs();
             
@@ -291,6 +292,7 @@ class JobController extends Controller
     public function findByTitle(Request $request)
     {
         try{
+            //Get posted form data
             $title = $request->input('jobtitle');
             $theJob = new Job("", $title, "", "", "", "", "", "");
             
@@ -301,9 +303,11 @@ class JobController extends Controller
             //return all jobs if input is null
             if($title == null)
             {
+                // call findAllJobs in JobBusinessService class
                 $jobs = $jbs->findAllJobs();
             }
             
+            //return jobSearchResults page with found jobs
             return view(('jobSearchResults'),compact(['jobs']));
         
         }catch(Exception $e2){
@@ -321,6 +325,7 @@ class JobController extends Controller
     public function findByDescription(Request $request)
     {
         try{
+            //Get posted form data
             $description = $request->input('jobdescription');
             $theJob = new Job("", "", "", $description, "", "", "", "");
             
@@ -330,9 +335,11 @@ class JobController extends Controller
             //return all jobs if input is null
             if($description == null)
             {
+                // call findAllJobs in JobBusinessService class
                 $jobs = $jbs->findAllJobs();
             }
             
+            // returns to jobSearchResults with found jobs
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
@@ -350,18 +357,23 @@ class JobController extends Controller
     public function findByLocation(Request $request)
     {
         try{
+            //Get posted form data
             $location = $request->input('joblocation');
             $theJob = new Job("", "", "", "", "", "", $location, "");
             
             $jbs = new JobBusinessService();
+            // call 
             $jobs = $jbs->findByJobLocation($theJob);
             
+            // calls findAlljobs in Job Business Services to return jobs
             //return all jobs if input is null
             if($location == null)
             {
+                // call findAllJobs in JobBusinessService class
                 $jobs = $jbs->findAllJobs();
             }
             
+            // returns to jobSearchResults with found jobs
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
@@ -386,6 +398,7 @@ class JobController extends Controller
             $jbs = new JobBusinessService();
             $job = $jbs->findById($id);
             
+            //return to jobDetails with job information
             return view('jobDetails')->with(compact('job'));
             
         }catch(Exception $e2){
@@ -403,9 +416,11 @@ class JobController extends Controller
     public function applyToJob(Request $request)
     {
         try{
+            //Get posted form data
             $title = $request->input('jobtitle');
             $company = $request->input('jobcompany');
             
+            // returns to jobApplySucess page
             return view(('jobApplySuccess'),compact(['title'], ['company']));
             
         }catch(Exception $e2){
@@ -417,55 +432,44 @@ class JobController extends Controller
     
     public function jobMatch(Request $request)
     {
-        try{
+         try{
+             //Get posted form data
             $user_id = $request->input('id');
             
+            // Call neccesary Business Classes
             $sbs = new SkillBusinessService();
             $ebs = new EducationBusinessService();
             $jhbs = new JobHistoryBusinessService();
             $jbs = new JobBusinessService();
             
+            // find skills education and job history with user id
             $skills = $sbs->findSkillByUserId($user_id);
             $education = $ebs->findEducationByUserId($user_id);
             $jobhistory = $jhbs->findJobHistoryByUserId($user_id);
             
-            if($skills || $education || $jobhistory){
-                
-                for($i = 0; $i < count($skills); $i++)
-                {
-                    $jobs = $jbs->findBySkills($skills[$i]['SKILL']);
-                }
-                
-                for($i = 0; $i < count($education); $i++)
-                {
-                    $value = $jbs->findByEducation($education[$i]['FIELD']);
-                    if(!in_array($value, $jobs))
-                    {
-                        $jobs = array_merge($jobs, $value);
-                    }
-                }
-                
-                for($i = 0; $i < count($jobhistory); $i++)
-                {
-                    $value = $jbs->findByJobHistory($jobhistory[$i]['TITLE']);
-                    if(!in_array($value, $jobs))
-                    {
-                        $jobs = array_merge($jobs, $value);
-                    }
-                }
+            $jobs = array();
+            // if statements call jobMatch when 
+            // find user's skills, education, and job history
+            if($skills || $education || $jobhistory)
+            {               
+                // call jobMatch in Job Business Service
+                $jobs = $jbs->jobMatch($skills, $education, $jobhistory);
             }
             else {
+                // responses with errors when $skills & $education & $jobhistory is empty
+                // if erros return errorPage with message
                 $error = "Please fill out your portfolio";
                 return view(('errorPage'),compact(['error']));
             }
-            //echo print_r($jobs);
+            
+            // returns to jobSearchResults with found jobs
             return view(('jobSearchResults'),compact(['jobs']));
             
-        }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
-            //Display Global Namespace Handler Page
-            return view('SystemException');
-        }
+         }catch(Exception $e2){
+             Log::info("Exception ". array("message" => $e2->getMessage()));
+             //Display Global Namespace Handler Page
+             return view('SystemException');
+         }
     }
     
     /**
@@ -477,21 +481,27 @@ class JobController extends Controller
     public function findBySkills(Request $request)
     {
         try{
+            //Get posted form data
             $user_id = $request->input('id');
             
+            // Call neccesary Business Classes
             $sbs = new SkillBusinessService();
             $jbs = new JobBusinessService();
             
+            // call findSkillByUserId in SkillBusinessService
             $skills = $sbs->findSkillByUserId($user_id);
             
+            // if statement loops through found skills
             if($skills){
-
+               
                 for($i = 0; $i < count($skills); $i++)
                 {
+                    // find jobs with matched Skills
                     $jobs = $jbs->findBySkills($skills[$i]['SKILL']);
                 }
             }
 
+            // returns to jobSearchResults with found jobs
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
@@ -510,21 +520,27 @@ class JobController extends Controller
     public function findByEducation(Request $request)
     {
         try{
+            //Get posted form data
             $user_id = $request->input('id');
             
+            // Call neccesary Business Classes
             $ebs = new EducationBusinessService();
             $jbs = new JobBusinessService();
             
+            // call findEducationByUserId with user id in Education Business Service
             $education = $ebs->findEducationByUserId($user_id);
             
+            // if statement loops through found education
             if($education){
                 
                 for($i = 0; $i < count($education); $i++)
                 {
+                    // find jobs with matched education
                     $jobs = $jbs->findByEducation($education[$i]['FIELD']);
                 }
             }
             
+            // returns to jobSearchResults with found jobs
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
@@ -543,21 +559,26 @@ class JobController extends Controller
     public function findByJobHistory(Request $request)
     {
         try{
+            //Get posted form data
             $user_id = $request->input('id');
             
             $jhbs = new JobHistoryBusinessService();
             $jbs = new JobBusinessService();
             
+            // call findJobHistoryByUserId with user id
             $jobhistory = $jhbs->findJobHistoryByUserId($user_id);
             
+            // if statement loops through found job history
             if($jobhistory){
                 
                 for($i = 0; $i < count($jobhistory); $i++)
                 {
+                    // find jobs with matched job history
                     $jobs = $jbs->findByJobHistory($jobhistory[$i]['TITLE']);
                 }
             }
             
+            // returns to jobSearchResults with found jobs
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){

@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 4.0
- * Edit Group Form version 4.0
+ * CLC Project version 5.0
+ * Edit Group Form version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * Edit Group Form
  */
 ?>

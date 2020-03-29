@@ -7,7 +7,9 @@
  */
 namespace App\Model;
 
-class User
+use JsonSerializable;
+
+class User implements \JsonSerializable
 {
     private $id;
     private $username;
@@ -195,5 +197,11 @@ class User
     {
         $this->status = $status;
     }
+    
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
+
 }
 

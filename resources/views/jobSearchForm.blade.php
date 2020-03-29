@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * Job Search page version 4.0
+/* CLC Project version 5.0
+ * Job Search page version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * Job Search Page
  */
 ?>
@@ -11,6 +11,7 @@
 
 @section('content')
 @if(Session::get('principal') == true) 	
+<h2> Job Search Form</h2>
 <br>
 <form action="findByTitle" method="POST">
 {{ csrf_field() }}
@@ -33,24 +34,8 @@
 </form>
 
 <br>
-<form action="findBySkills" method="POST">
-{{ csrf_field() }}
-	<input type='hidden' name='id' value="{{Session::get('id')}}">
-    <input type='submit' value='Find Jobs Based On Your Skills'>
-</form>
 
-<form action="findByEducation" method="POST">
-{{ csrf_field() }}
-	<input type='hidden' name='id' value="{{Session::get('id')}}">
-    <input type='submit' value='Find Jobs Based On Your Education'>
-</form>
-
-<form action="findByJobHistory" method="POST">
-{{ csrf_field() }}
-	<input type='hidden' name='id' value="{{Session::get('id')}}">
-    <input type='submit' value='Find Jobs Based On Your Job History'>
-</form>
-
+<p>Job Match features will find job that matches with skills, education and job history in your portfolio</p>
 <form action="jobMatch" method="POST">
 {{ csrf_field() }}
 	<input type='hidden' name='id' value="{{Session::get('id')}}">

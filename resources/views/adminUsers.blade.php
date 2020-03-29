@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * Admin page version 4.0
+/* CLC Project version 5.0
+ * Admin page version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * Admin Users Page
  */
 ?>
@@ -57,18 +57,18 @@
     @foreach($users as $user)
     	
 	<tr>
-		@if(Session::get('id') != $user['ID'])
+		@if(Session::get('id') != $user->getId())
 	<td>
 	<form action='adminEdit' method='POST'>
 		{{ csrf_field() }}
-    	<input type='hidden' name='id' value="{{ $user['ID'] }}">
+    	<input type='hidden' name='id' value="{{ $user->getId() }}">
     	<input type='submit' value='Edit'>
 	</form>
 	</td>
 	<td>
 	<form action='adminConfirmDelete' method='POST'>
     {{ csrf_field() }}
-    <input type='hidden' name='id' value="{{ $user['ID'] }}">
+    <input type='hidden' name='id' value="{{ $user->getId() }}">
     <input type='submit' value='Delete'>
 </form>
 	</td>
@@ -76,32 +76,32 @@
 	<td></td>
 	<td></td>
 		@endif
-	<td>{{$user['ID']}}</td>
-	<td>{{$user['USERNAME']}}</td>
-	<td>{{$user['PASSWORD']}}</td>
-	<td>{{$user['FIRSTNAME']}}</td>
-	<td>{{$user['LASTNAME']}}</td>
-	<td>{{$user['EMAIL']}}</td>
-	<td>{{$user['PHONENUMBER']}}</td>
-	<td>{{$user['CITY']}}</td>
-	<td>{{$user['ROLE']}}</td>
-	<td>{{$user['STATUS']}}</td>
+	<td>{{$user->getId()}}</td>
+	<td>{{$user->getUsername()}}</td>
+	<td>{{$user->getPassword()}}</td>
+	<td>{{$user->getFirstname()}}</td>
+	<td>{{$user->getLastname()}}</td>
+	<td>{{$user->getEmail()}}</td>
+	<td>{{$user->getPhonenumber()}}</td>
+	<td>{{$user->getCity()}}</td>
+	<td>{{$user->getRole()}}</td>
+	<td>{{$user->getStatus()}}</td>
 	
-	@if(Session::get('id') != $user['ID'] && $user['STATUS'] == "active" )
+	@if(Session::get('id') != $user->getId() && $user->getStatus() == "active" )
 	<td>
 	<form action='adminSuspend' method='POST'>
 		{{ csrf_field() }}
-    	<input type='hidden' name='id' value="{{ $user['ID'] }}">
+    	<input type='hidden' name='id' value="{{ $user->getId() }}">
     	<input type='submit' value='Suspend'>
 	</form>
 	</td>
 	@endif
 	
-	@if(Session::get('id') != $user['ID'] && $user['STATUS'] == "suspended")
+	@if(Session::get('id') != $user->getId() && $user->getStatus() == "suspended")
 	<td>
 	<form action='adminActivate' method='POST'>
 		{{ csrf_field() }}
-    	<input type='hidden' name='id' value="{{ $user['ID'] }}">
+    	<input type='hidden' name='id' value="{{ $user->getId() }}">
     	<input type='submit' value='Activate'>
 	</form>
 	</td>

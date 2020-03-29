@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 3.0
- * JobBusinessService version 3.0
+/* CLC Project version 5.0
+ * JobBusinessService version 5.0
  * Adam Bender and Jim Nguyen
- * February 23, 2020
+ * March 15, 2020
  * JobBusinessService handles CRUD methods
  */
 namespace App\Services\Business;
@@ -10,6 +10,7 @@ namespace App\Services\Business;
 use App\Database\Database;
 use App\Services\Data\JobDataService;
 use Illuminate\Support\Facades\Log;
+use App\Model\Job;
 
 class JobBusinessService
 {
@@ -243,7 +244,7 @@ class JobBusinessService
         
         // Create a User Data Service with this connection and calls findByEducation method/
         $dbService = new JobDataService($db);
-        $flag = $dbService->findBySkills($education);
+        $flag = $dbService->findByEducation($education);
         
         // close the connection
         $db = null;
@@ -260,7 +261,7 @@ class JobBusinessService
      */
     function findByJobHistory($jobhistory){
         
-        Log::info("Entering JobBusinessService.findByJobHistory()");
+        
         
         $database = new Database();
         $db = $database->getConnection();
@@ -277,5 +278,75 @@ class JobBusinessService
         return $flag;
     }
     
+    /**
+     * jobMatch method calls and passes $job to findBySkills,
+     * findByEducation and findByJobHistory method in JobDataService
+     * @param $skills, $education, $jobhistory
+     * @return \App\Model\Job
+     */
+    function jobMatch($skills, $education, $jobhistory) 
+    {
+        Log::info("Entering JobBusinessService.jobMatch()");
+        $jobs = array();
+        
+        //if find skills, calls findBySkills in Job Data Service
+        if($skills != null)
+        {
+            //loops through skills array
+            for($i = 0; $i < count($skills); $i++)
+            {
+                //calls findBySkills 
+                $value = $this->findBySkills($skills[$i]['SKILL']);
+                if(!in_array($value, $jobs) && $value != null)
+                {
+                    // merge  jobs into jobs array  
+                    $jobs = array_merge($jobs, $value);
+                }
+            }
+        }
+        
+        //if finds education, calls findByEducation in Job Data Service
+        if($education != null)
+        {
+            //loops through education array
+            for($i = 0; $i < count($education); $i++)
+            {
+                // calls findByEducation
+                $value1 = $this->findByEducation($education[$i]['FIELD']);
+                if(!in_array($value1, $jobs) && $value1 != null)
+                {
+                    // merge  jobs into jobs array from previous found jobs 
+                    $jobs = array_merge($jobs, $value1);
+                }
+            }
+        }
+        
+        //if finds jobhistory, calls findByJobHistoryin Job Data Service
+        if($jobhistory != null)
+        {
+            //loops through jobhistory array
+            for($i = 0; $i < count($jobhistory); $i++)
+            {
+                //calls findByJobHistoryin Job Data Service
+                $value2 = $this->findByJobHistory($jobhistory[$i]['TITLE']);
+                if(!in_array($value2, $jobs) && $value2 != null)
+                {
+                    // merge  jobs into jobs array from previous found jobs 
+                    $jobs = array_merge($jobs, $value2);
+                }
+            }
+        }
+        
+        $theJobs = array();
+        $index = 0;
+        for ($i = 0; $i < count($jobs); $i++) 
+        {
+            $job = new Job($jobs[$i]['ID'], $jobs[$i]['JOB_TITLE'], $jobs[$i]['CATEGORY'], $jobs[$i]['DESCRIPTION'], $jobs[$i]['REQUIREMENTS'], $jobs[$i]['COMPANY'], $jobs[$i]['LOCATION'], $jobs[$i]['SALARY']);
+            $theJobs[$index++] = $job;
+        }
+        
+        Log::info("Exit JobBusinessService.jobMatch() ");
+        return $theJobs;
+    }
 }
 

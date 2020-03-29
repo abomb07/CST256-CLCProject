@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * UserBusinessService version 4.0
+/* CLC Project version 5.0
+ * UserBusinessService version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * UserBusinessService handles CRUD methods
  */
 

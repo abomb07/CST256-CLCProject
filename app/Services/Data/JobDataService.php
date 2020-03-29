@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * JobDataService version 4.0
+/* CLC Project version 5.0
+ * JobDataService version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * JobDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -38,6 +38,8 @@ class JobDataService
             // Insert job information into Job table
             $statement = $this->connection->prepare("INSERT INTO JOB (JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY) VALUES ( :jobtitle, :category, :description, :requirements, :company, :location, :salary)");
             
+            
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -89,6 +91,7 @@ class JobDataService
         try{
             $statement = $this->connection->prepare("DELETE FROM JOB WHERE ID = :id");
             
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -129,6 +132,7 @@ class JobDataService
             //update user information in database
             $statement = $this->connection->prepare("UPDATE JOB SET ID = :id, JOB_TITLE = :jobtitle, CATEGORY = :category, DESCRIPTION = :description, REQUIREMENTS = :requirements, COMPANY = :company, LOCATION = :location, SALARY = :salary WHERE ID = :id");
             
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -180,9 +184,11 @@ class JobDataService
         Log::info("Entering SecurityDAO::findAllJob()");
         
         try{
-            // Select all user in database
+            // Select all jobs in database
             $statement = $this->connection->prepare("SELECT * FROM JOB");
             
+            
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -195,7 +201,15 @@ class JobDataService
             if($statement->rowCount() > 0){
                 
                 Log::info("Exit SecurityDAO.findAllJobs with true");
-                $jobs = $statement->fetchAll();
+                
+                $index = 0;
+                $jobs = array();
+                
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    $job = new Job($row['ID'], $row['JOB_TITLE'], $row['CATEGORY'], $row['DESCRIPTION'], $row['REQUIREMENTS'], $row['COMPANY'], $row['LOCATION'], $row['SALARY']);
+                    $jobs[$index++] = $job;
+                }
                 return $jobs;
             }
             
@@ -219,8 +233,11 @@ class JobDataService
         
         try{
             
+            // find job information by given id in database
             $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE ID = :id ");
             
+            
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -236,6 +253,7 @@ class JobDataService
                 $row = $statement->fetch(PDO::FETCH_ASSOC);
                 $result = new Job($row['ID'],$row['JOB_TITLE'], $row['CATEGORY'], $row['DESCRIPTION'], $row['REQUIREMENTS'], $row['COMPANY'], $row['LOCATION'], $row['SALARY']);
                 
+                //return  found results
                 return $result;
             }
             
@@ -260,6 +278,7 @@ class JobDataService
             $jobtitle = $job->getJobtitle();
             $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE JOB_TITLE LIKE CONCAT('%', :jobtitle, '%') ");
             
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -274,8 +293,10 @@ class JobDataService
                 Log::info("Exit SecurityDAO.findByTitle() ");
                 
                 //fetching users from database
-                $users = $statement->fetchAll();
-                return $users;
+                $jobs = $statement->fetchAll();
+                
+                //return users object
+                return $jobs;
             }
             
         }catch(PDOException $e)
@@ -299,6 +320,7 @@ class JobDataService
             $location = $job->getLocation();
             $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE LOCATION LIKE CONCAT('%', :location, '%') ");
             
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -314,6 +336,8 @@ class JobDataService
                 
                 //fetching users from database
                 $jobs = $statement->fetchAll();
+                
+                //return jobs object
                 return $jobs;
             }
             
@@ -338,6 +362,7 @@ class JobDataService
             $description = $job->getDescription();
             $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE DESCRIPTION LIKE CONCAT('%', :description, '%') ");
             
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -351,8 +376,10 @@ class JobDataService
             if($statement->rowCount() > 0){
                 Log::info("Exit SecurityDAO.findByDescription() ");
                 
-                //fetching users from database
+                //fetching jobs from database
                 $jobs = $statement->fetchAll();
+                
+                //return jobs object
                 return $jobs;
             }
             
@@ -374,8 +401,10 @@ class JobDataService
         Log::info("Entering SecurityDAO::findBySkills()");
         
         try{
-            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE REQUIREMENTS LIKE CONCAT('%', :skills, '%') ");
+       //select jobs with education that matches description or requirements in database
+            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE REQUIREMENTS LIKE CONCAT('%', :skills, '%') OR DESCRIPTION LIKE CONCAT('%', :skills, '%')");
             
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -389,16 +418,10 @@ class JobDataService
             if($statement->rowCount() > 0){
                 Log::info("Exit SecurityDAO.findBySkills() ");
                 
+                // fetch all result found
                 $jobs = $statement->fetchAll();
-                /* $index = 0;
-                $jobs = array();
                 
-                while($row = $statement->fetch(PDO::FETCH_ASSOC))
-                {
-                    $job = new Job($row['ID'], $row['JOB_TITLE'], $row['CATEGORY'], $row['DESCRIPTION'], $row['REQUIREMENTS'], $row['COMPANY'], $row['LOCATION'], $row['SALARY']);
-                    $jobs[$index++] = $job;
-                } */
-                
+                //return jobs object
                 return $jobs;
             }
             
@@ -420,8 +443,10 @@ class JobDataService
         Log::info("Entering SecurityDAO::findByEducation()");
         
         try{
-            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE REQUIREMENTS LIKE CONCAT('%', :education, '%') ");
+       //select jobs with education that matches description, requirements or category in database
+            $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE REQUIREMENTS LIKE CONCAT('%', :education, '%') OR DESCRIPTION LIKE CONCAT('%', :education, '%') OR CATEGORY LIKE CONCAT('%', :education, '%')");
             
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -435,9 +460,10 @@ class JobDataService
             if($statement->rowCount() > 0){
                 Log::info("Exit SecurityDAO.findByEducation() ");
                 
+                // fetch all result found
                 $jobs = $statement->fetchAll();
                 
-                
+                //return jobs object
                 return $jobs;
             }
             
@@ -460,8 +486,10 @@ class JobDataService
         Log::info("Entering SecurityDAO::findByJobHistory()");
         
         try{
+            // Select job infomation from job database table that matches job_title
             $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE JOB_TITLE LIKE CONCAT('%', :jobhistory, '%') ");
             
+            // if the statement goes wrong return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -475,9 +503,10 @@ class JobDataService
             if($statement->rowCount() > 0){
                 Log::info("Exit SecurityDAO.findByJobHistory() ");
                 
+                // fetch all result found
                 $jobs = $statement->fetchAll();
                 
-                
+                //return jobs object
                 return $jobs;
             }
             

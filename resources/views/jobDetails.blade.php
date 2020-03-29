@@ -1,7 +1,7 @@
 <?php
 /*
- * CLC Project version 4.0
- * User Profile version 4.0
+ * CLC Project version 5.0
+ * User Profile version 5.0
  * Adam Bender and Jim Nguyen
  * March 15, 2020
  * Job Details Page

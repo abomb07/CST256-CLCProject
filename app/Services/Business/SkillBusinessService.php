@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * SkillBusinessService version 4.0
+/* CLC Project version 5.0
+ * SkillBusinessService version 5.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * March 15, 2020
  * SkillBusinessService handles CRUD methods
  */
 namespace App\Services\Business;

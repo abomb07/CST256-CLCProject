@@ -216,6 +216,7 @@ class JobHistoryDataService
             
             $statement = $this->connection->prepare("SELECT ID, TITLE, COMPANY, START_DATE, END_DATE, USER_ID FROM JOB_HISTORY WHERE ID = :id ");
             
+            
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;

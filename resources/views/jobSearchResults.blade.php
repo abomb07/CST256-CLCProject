@@ -1,7 +1,7 @@
 <?php
 /*
- * CLC Project version 4.0
- * Admin job page version 4.0
+ * CLC Project version 5.0
+ * Admin job page version 5.0
  * Adam Bender and Jim Nguyen
  * March 15, 2020
  * Jobs Search Result Page
@@ -30,15 +30,15 @@
 	@foreach($jobs as $job)
 	
 	<tr>
-		<td>{{$job['JOB_TITLE']}}</td>
-		<td>{{$job['DESCRIPTION']}}</td>
-		<td>{{$job['COMPANY']}}</td>
-		<td>{{$job['LOCATION']}}</td>
-		<td>{{$job['SALARY']}}</td>
+		<td>{{$job->getJobtitle()}}</td>
+		<td>{{$job->getDescription()}}</td>
+		<td>{{$job->getCompany()}}</td>
+		<td>{{$job->getLocation()}}</td>
+		<td>{{$job->getSalary()}}</td>
 		<td>
 			<form action='jobDetails' method='POST'>
 				{{ csrf_field() }} 
-				<input type='hidden' name='id' value="{{ $job['ID'] }}"> 
+				<input type='hidden' name='id' value="{{ $job->getId() }}"> 
 				<input type='submit' value='Details'>
 			</form>
 		</td>
