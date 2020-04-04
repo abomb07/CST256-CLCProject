@@ -263,10 +263,7 @@ class AdminController extends Controller
      */
     public function findByFirstName(Request $request)
     {
-        try{
-            //validate form
-            $this->validateFirstNameSearchForm($request);
-            
+        try{            
             //Get posted Form data
             $firstname = $request->input('firstname');
             
@@ -276,12 +273,23 @@ class AdminController extends Controller
             
             // calls findByFirstName method in UserBusinessService and passes User Object
             // if success, return to adminUsers with data, else return error message
-            if($users = $ubs->findUserByFirstName($theUser)){
-            
-                return view(('adminUsers'),compact(['users']));       
-            }else{
-                return "User not found. Please try again";
+            if($firstname != null)
+            {
+                if($users = $ubs->findUserByFirstName($theUser))
+                {
+                    return view(('adminUsers'),compact(['users']));
+                }
+                else
+                {
+                    return "User not found. Please try again";
+                }
             }
+            else 
+            {
+                $users = $ubs->findAllUsers();
+                return view(('adminUsers'),compact(['users']));
+            }
+            
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
@@ -299,10 +307,7 @@ class AdminController extends Controller
      */
     public function findByLastName(Request $request)
     {
-        try{
-            //validate form
-            $this->validateLastNameSearchForm($request);
-            
+        try{            
             //Get posted Form data
             $lastname = $request->input('lastname');
             
@@ -312,12 +317,21 @@ class AdminController extends Controller
             
             // calls findByLastName method in UserBusinessService and passes User Object
             // if success, return to adminUsers with data, else return error message
-            if($users = $ubs->findUserByLastName($theUser)){
-            
-                return view(('adminUsers'),compact(['users']));
-            }else{
-                return "User not found. Please try again";
+            if($lastname != null)
+            {
+                if($users = $ubs->findUserByLastName($theUser)){
+                    
+                    return view(('adminUsers'),compact(['users']));
+                }else{
+                    return "User not found. Please try again";
+                }
             }
+            else
+            {
+                $users = $ubs->findAllUsers();
+                return view(('adminUsers'),compact(['users']));
+            }
+            
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
@@ -327,33 +341,5 @@ class AdminController extends Controller
         }
     }
     
-    /**
-     * validateFirstNameSearchForm method handles data validation in Admin Search Form
-     * @param Request $request
-     */
-    private function validateFirstNameSearchForm(Request $request)
-    {
-        //BEST PRATICE: centralize your rule so you have a consistent architecture
-        //and even resuse your rules
-        //BAD PRATICES: not using a defined data validation Framework, putting rules
-        //all over your coe, doing only on CLient side and database
-        //SEt up data validation for login form
-        $rules = ['firstname'=> 'Required|max:256'];
-        
-        // Run Data Validation Rules
-        $this->validate($request, $rules);
-    }
-    
-    /**
-     * validateLastNameSearchForm method handles data validation in Admin Search Form
-     * @param Request $request
-     */
-    private function validateLastNameSearchForm(Request $request)
-    {
-        $rules = ['lastname'=> 'Required|max:256'];
-        
-        // Run Data Validation Rules
-        $this->validate($request, $rules);
-    }
 }
 

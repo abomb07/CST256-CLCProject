@@ -213,11 +213,11 @@ class AccountController extends Controller
         // data validation rules for Register Form
         $rules = ['username'=> 'Required|max:256',
             'password' => 'Required|max:256',
-            'firstname' => 'Required|max:256',
-            'lastname' => 'Required|max:256',
-            'email' => 'Required|max:256',
-            'phonenumber' => 'Required|numeric',
-            'city' => 'Required|max:256',
+            'firstname' => 'Required|max:256|alpha',
+            'lastname' => 'Required|max:256|alpha',
+            'email' => 'Required|max:256|email',
+            'phonenumber' => 'Required|numeric|digits:10',
+            'city' => 'Required|max:256|alpha',
             'role' => 'Required'
         ];
         
