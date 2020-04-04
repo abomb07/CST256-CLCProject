@@ -9,7 +9,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Model\Job;
 use App\Services\Business\JobBusinessService;
@@ -18,9 +17,17 @@ use Exception;
 use Validator;
 use App\Services\Business\EducationBusinessService;
 use App\Services\Business\JobHistoryBusinessService;
+use App\Services\Utility\ILoggerService;
 
 class JobController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
+    
     /**
      * createJob method handles data from New Job Form
      * @param Request $request
@@ -51,7 +58,7 @@ class JobController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             
             //Display Global Namespace Handler Page
             return view('SystemException');
@@ -66,6 +73,7 @@ class JobController extends Controller
      */
     public function processDeleteJob(Request $request)
     {
+        try{
         //Get posted Form data
         $id = $request->input('id');
         
@@ -75,6 +83,10 @@ class JobController extends Controller
         $job = $jbs->findById($id);
         
         return view('adminProcessJobDelete')->with(compact('job'));
+        
+        }catch(Exception $e2){
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
+        }
     }
     
     /**
@@ -109,7 +121,7 @@ class JobController extends Controller
             }
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -142,7 +154,7 @@ class JobController extends Controller
             }
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -212,7 +224,7 @@ class JobController extends Controller
         }catch(ValidationException $e1){
             throw ($e1); 
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -236,7 +248,7 @@ class JobController extends Controller
             return view(('adminJobs'),compact(['jobs']));
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -257,7 +269,7 @@ class JobController extends Controller
             return view(('homePage'),compact(['jobs']));
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -311,7 +323,7 @@ class JobController extends Controller
             return view(('jobSearchResults'),compact(['jobs']));
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -343,7 +355,7 @@ class JobController extends Controller
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -377,7 +389,7 @@ class JobController extends Controller
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -402,7 +414,7 @@ class JobController extends Controller
             return view('jobDetails')->with(compact('job'));
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -424,7 +436,7 @@ class JobController extends Controller
             return view(('jobApplySuccess'),compact(['title'], ['company']));
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -466,7 +478,7 @@ class JobController extends Controller
             return view(('jobSearchResults'),compact(['jobs']));
             
          }catch(Exception $e2){
-             Log::info("Exception ". array("message" => $e2->getMessage()));
+             $this->logger->error("Exception ". array("message" => $e2->getMessage()));
              //Display Global Namespace Handler Page
              return view('SystemException');
          }
@@ -505,7 +517,7 @@ class JobController extends Controller
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -544,7 +556,7 @@ class JobController extends Controller
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -582,7 +594,7 @@ class JobController extends Controller
             return view(('jobSearchResults'),compact(['jobs']));
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }

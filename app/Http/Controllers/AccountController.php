@@ -17,14 +17,20 @@ use App\Services\Business\SkillBusinessService;
 use App\Services\Business\EducationBusinessService;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Exception;
-use App\Services\Business\MemberBusinessService;
 use App\Services\Business\GroupBusinessService;
+use App\Services\Utility\ILoggerService;
+
 class AccountController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
     
     /**
      * register method handles data from Register Form and passes to UserBusinessService
@@ -64,7 +70,7 @@ class AccountController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -112,7 +118,7 @@ class AccountController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -155,7 +161,7 @@ class AccountController extends Controller
             // return to userPortfolio Form with jobhistorys, skills, educations objects
             return view(('userPortfolio'),compact(['jobhistorys'],['skills'], ['educations'], ['groupNames']));
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -177,7 +183,7 @@ class AccountController extends Controller
             // return to HomePage with Form with job object
             return view(('homePage'),compact(['jobs']));
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }

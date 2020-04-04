@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Model\DTO;
 use App\Services\Business\JobBusinessService;
-use Illuminate\Support\Facades\Log;
+use App\Services\Utility\ILoggerService;
 use Illuminate\Support\Facades\Response;
 use Exception;
 
 class JobRestController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -38,7 +45,7 @@ class JobRestController extends Controller
         }
         catch (Exception $e)
         {
-            Log::error("Exception: ", array("message" => $e->getMessage()));
+            $this->logger->error("Exception: ", array("message" => $e->getMessage()));
             
             $dto = new DTO(-2, $e->getMessage(), "");
             return json_encode($dto, JSON_PRETTY_PRINT);
@@ -69,7 +76,7 @@ class JobRestController extends Controller
         }
         catch (Exception $e)
         {
-            Log::error("Exception: ", array("message" => $e->getMessage()));
+            $this->logger->error("Exception: ", array("message" => $e->getMessage()));
             
             $dto = new DTO(-2, $e->getMessage(), "");
             return json_encode($dto, JSON_PRETTY_PRINT);

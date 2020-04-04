@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Exception;
 use App\Model\DTO;
 use App\Services\Business\UserBusinessService;
+use App\Services\Utility\ILoggerService;
 
 class UserRestController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -39,7 +45,7 @@ class UserRestController extends Controller
         }
         catch (Exception $e)
         {
-            Log::error("Exception: ", array("message" => $e->getMessage()));
+            $this->logger->error("Exception: ", array("message" => $e->getMessage()));
             
             $dto = new DTO(-2, $e->getMessage(), "");
             return json_encode($dto, JSON_PRETTY_PRINT);
@@ -70,7 +76,7 @@ class UserRestController extends Controller
         }
         catch (Exception $e)
         {
-            Log::error("Exception: ", array("message" => $e->getMessage()));
+            $this->logger->error("Exception: ", array("message" => $e->getMessage()));
             
             $dto = new DTO(-2, $e->getMessage(), "");
             return json_encode($dto, JSON_PRETTY_PRINT);

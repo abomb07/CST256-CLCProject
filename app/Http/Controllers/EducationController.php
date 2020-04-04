@@ -9,7 +9,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Model\Education;
 use App\Services\Business\SkillBusinessService;
@@ -18,10 +17,16 @@ use App\Services\Business\JobHistoryBusinessService;
 use App\Services\Business\GroupBusinessService;
 use Exception;
 use Validator;
-use App\Services\Business\MemberBusinessService;
+use App\Services\Utility\ILoggerService;
 
 class EducationController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
     
     /**
      * createEducation method handles data from New Education Form
@@ -75,7 +80,7 @@ class EducationController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -102,7 +107,7 @@ class EducationController extends Controller
             return view('userPortfolioDeleteEducation')->with(compact('education'));
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -158,7 +163,7 @@ class EducationController extends Controller
             }
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -189,7 +194,7 @@ class EducationController extends Controller
             }
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -272,7 +277,7 @@ class EducationController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }

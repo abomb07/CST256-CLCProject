@@ -9,15 +9,21 @@ namespace App\Http\Controllers;
 
 use App\Model\User;
 use App\Services\Business\UserBusinessService;
-use App\Services\Business\JobBusinessService;
+use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Exception;
 use Validator;
 
 class ProfileController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
+    
     /**
      * openProfile method handle data from the home page
      and pass to UserBusinessService and return to
@@ -38,7 +44,7 @@ class ProfileController extends Controller
             return view('userProfilePage')->with(compact('user'));
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -64,7 +70,7 @@ class ProfileController extends Controller
             return view('userProfile')->with(compact('users'));
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -136,7 +142,7 @@ class ProfileController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }

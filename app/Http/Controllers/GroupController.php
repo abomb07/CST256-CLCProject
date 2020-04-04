@@ -9,17 +9,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Exception;
 use App\Model\Group;
 use App\Services\Business\GroupBusinessService;
 use Validator;
 use App\Services\Business\UserBusinessService;
+use App\Services\Utility\ILoggerService;
 use App\Model\Member;
 
 class GroupController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
+    
     /**
      * createGroup method handles data from New Group Form
      * @param Request $request
@@ -74,7 +81,7 @@ class GroupController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -94,7 +101,7 @@ class GroupController extends Controller
     
             return view(('groupPage'),compact(['groups']));
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -156,7 +163,7 @@ class GroupController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -187,7 +194,7 @@ class GroupController extends Controller
             }
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -251,7 +258,7 @@ class GroupController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -275,7 +282,7 @@ class GroupController extends Controller
             
             return view('groupDeleteForm')->with(compact('group'));
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -318,7 +325,7 @@ class GroupController extends Controller
             }
             
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -388,7 +395,7 @@ class GroupController extends Controller
                 return view(('groupViewMembersPage'),compact(['group'], ['users'],['owner'], ['memberExists'])); 
             }
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -462,7 +469,7 @@ class GroupController extends Controller
                 return view(('groupViewMembersPage'),compact(['group'], ['users'],['owner'], ['memberExists']));
             }
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }

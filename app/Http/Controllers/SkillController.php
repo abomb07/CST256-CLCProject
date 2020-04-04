@@ -8,19 +8,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Model\Skill;
 use App\Services\Business\SkillBusinessService;
 use App\Services\Business\EducationBusinessService;
 use App\Services\Business\JobHistoryBusinessService;
 use App\Services\Business\GroupBusinessService;
-use App\Services\Business\MemberBusinessService;
+use App\Services\Utility\ILoggerService;
 use Exception;
 use Validator;
 
 class SkillController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
+    
     /**
      * add a Skill
      * @param Request $request
@@ -66,7 +72,7 @@ class SkillController extends Controller
         }catch(ValidationException $e1){
             throw ($e1);
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -93,7 +99,7 @@ class SkillController extends Controller
             return view('userPortfolioDeleteSkill')->with(compact('skill'));
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -124,7 +130,7 @@ class SkillController extends Controller
             }
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -178,7 +184,7 @@ class SkillController extends Controller
             }
         
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }
@@ -253,7 +259,7 @@ class SkillController extends Controller
         }catch(ValidationException $e1){
             throw ($e1); 
         }catch(Exception $e2){
-            Log::info("Exception ". array("message" => $e2->getMessage()));
+            $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
         }

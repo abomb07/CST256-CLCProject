@@ -453,12 +453,19 @@ class UserDataService{
             $statement->bindParam(':firstname', $firstname);
             $statement->execute();
             
-            //if statement executes successfully
+            //if statement execute successfully return $users
             if($statement->rowCount() > 0){
-                Log::info("Exit SecurityDAO.findByFirstName() ");
                 
-                //fetching users from database
-                $users = $statement->fetchAll();
+                Log::info("Exit SecurityDAO.findByFirstName with true");
+                
+                $index = 0;
+                $users = array();
+                
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    $user = new User($row["ID"], $row["USERNAME"], $row["PASSWORD"], $row['FIRSTNAME'], $row['LASTNAME'], $row['EMAIL'], $row['PHONENUMBER'], $row['CITY'], $row['ROLE'], $row['STATUS']);
+                    $users[$index++] = $user;
+                }
                 return $users;
             }
             
@@ -492,12 +499,19 @@ class UserDataService{
             $statement->bindParam(':lastname', $lastname);
             $statement->execute();
             
-            //if statement executes successfully
+            //if statement execute successfully return $users
             if($statement->rowCount() > 0){
-                Log::info("Exit SecurityDAO.findByFirstName() ");
                 
-                //fetching users from database
-                $users = $statement->fetchAll();
+                Log::info("Exit SecurityDAO.showAll with true");
+                
+                $index = 0;
+                $users = array();
+                
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    $user = new User($row["ID"], $row["USERNAME"], $row["PASSWORD"], $row['FIRSTNAME'], $row['LASTNAME'], $row['EMAIL'], $row['PHONENUMBER'], $row['CITY'], $row['ROLE'], $row['STATUS']);
+                    $users[$index++] = $user;
+                }
                 return $users;
             }
             
