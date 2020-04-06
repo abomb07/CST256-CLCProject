@@ -1,5 +1,11 @@
 <?php
-
+/*
+ * CLC Project version 6.0
+ * Job REST Controller version 6.0
+ * Adam Bender and Jim Nguyen
+ * April 5, 2020
+ * Job REST Controller handles Job REST API
+ */
 namespace App\Http\Controllers;
 
 use App\Model\DTO;
@@ -26,21 +32,25 @@ class JobRestController extends Controller
     {
         try
         {
+            //find all jobs
             $service = new JobBusinessService();
             $jobs = $service->findAllJobs();
             
+            //if more than 100 jobs exist, only return the first 100
             if(count($jobs) > 100)
             {
+                //slice array to 100 elements
                 $shortArr = array_slice($jobs, 0, 100);
                 $dto = new DTO(-3, "Not all jobs displayed. Showing " . count($shortArr) . " jobs.", $shortArr);
+                
+                $json = Response::json($dto, 413, array(), JSON_PRETTY_PRINT);
             }
             else {
                 $dto = new DTO(0, "Request successfull. All jobs displayed", $jobs);
+                
+                $json = Response::json($dto, 200, array(), JSON_PRETTY_PRINT);
             }
-                        
-            //$json = json_encode($dto, JSON_PRETTY_PRINT);
-            $json = Response::json($dto, 200, array(), JSON_PRETTY_PRINT);
-            
+
             return $json;
         }
         catch (Exception $e)
@@ -48,7 +58,9 @@ class JobRestController extends Controller
             $this->logger->error("Exception: ", array("message" => $e->getMessage()));
             
             $dto = new DTO(-2, $e->getMessage(), "");
-            return json_encode($dto, JSON_PRETTY_PRINT);
+            
+            $json = Response::json($dto, 500, array(), JSON_PRETTY_PRINT);
+            return json;
         }
     }
 
@@ -62,24 +74,35 @@ class JobRestController extends Controller
     {
         try
         {
+            //find specific job
             $service = new JobBusinessService();
             $jobs = $service->findById($id);
             
             if($jobs == null)
+            {
+                //data transfer object if id is invalid
                 $dto = new DTO(-1, "JOB NOT FOUND", "");
-                else
-                    $dto = new DTO(0, "Request successful. Job ID " . $jobs->getId() . " displayed.", $jobs);
-                    
-                    $json = Response::json($dto, 200, array(), JSON_PRETTY_PRINT);
-                    
-                    return $json;
+                
+                $json = Response::json($dto, 404, array(), JSON_PRETTY_PRINT);
+            }
+            else
+            {
+                $dto = new DTO(0, "Request successful. Job ID " . $jobs->getId() . " displayed.", $jobs);
+                
+                //json formatting
+                $json = Response::json($dto, 200, array(), JSON_PRETTY_PRINT);
+            }
+                
+                return $json;
         }
         catch (Exception $e)
         {
             $this->logger->error("Exception: ", array("message" => $e->getMessage()));
             
             $dto = new DTO(-2, $e->getMessage(), "");
-            return json_encode($dto, JSON_PRETTY_PRINT);
+            
+            $json = Response::json($dto, 500, array(), JSON_PRETTY_PRINT);
+            return $json;
         }
     }
 }

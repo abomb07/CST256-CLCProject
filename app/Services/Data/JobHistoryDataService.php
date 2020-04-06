@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 4.0
- * JobHistoryDataService version 4.0
+/* CLC Project version 6.0
+ * JobHistoryDataService version 6.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * April 5, 2020
  * JobHistoryDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;

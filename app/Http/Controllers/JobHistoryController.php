@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 5.0
- * Job History Controller version 5.0
+ * CLC Project version 6.0
+ * Job History Controller version 6.0
  * Adam Bender and Jim Nguyen
- * March 15, 2020
+ * April 5, 2020
  * Job History Controller handles job history functionalities
  */
 namespace App\Http\Controllers;

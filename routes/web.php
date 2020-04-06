@@ -455,6 +455,15 @@ Route::get('/jobSearch', function()
 });
 
 /*========= Milestone 5 =======*/
-Route::resource('/userrest', 'UserRestController'); 
 
-Route::resource('/jobrest', 'JobRestController'); 
+/*
+ * this route is mapped to the '/usersrest' URI renders to the
+ * user rest service
+ */
+Route::resource('/usersrest', 'UserRestController'); 
+
+/*
+ * this route is mapped to the '/jobsrest' URI renders to the
+ * job rest service
+ */
+Route::resource('/jobsrest', 'JobRestController'); 

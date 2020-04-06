@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 5.0
- * JobDataService version 5.0
+/* CLC Project version 6.0
+ * JobDataService version 6.0
  * Adam Bender and Jim Nguyen
- * March 15, 2020
+ * April 5, 2020
  * JobDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -197,7 +197,7 @@ class JobDataService
             //execute statement
             $statement->execute();
             
-            //if statement execute successfully return $users
+            //if statement execute successfully return $jobs
             if($statement->rowCount() > 0){
                 
                 Log::info("Exit SecurityDAO.findAllJobs with true");
@@ -205,6 +205,7 @@ class JobDataService
                 $index = 0;
                 $jobs = array();
                 
+                //loop thru sql results and create array of Job models
                 while($row = $statement->fetch(PDO::FETCH_ASSOC))
                 {
                     $job = new Job($row['ID'], $row['JOB_TITLE'], $row['CATEGORY'], $row['DESCRIPTION'], $row['REQUIREMENTS'], $row['COMPANY'], $row['LOCATION'], $row['SALARY']);

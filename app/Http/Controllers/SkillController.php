@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 15.0
- * SkillController version 15.0
+/* CLC Project version 6.0
+ * SkillController version 6.0
  * Adam Bender and Jim Nguyen
- * March 15, 2020
+ * April 5, 2020
  * SkillController handles user profile action
  */
 namespace App\Http\Controllers;

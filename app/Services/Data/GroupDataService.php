@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 5.0
- * UserDataService version 5.0
+/* CLC Project version 6.0
+ * UserDataService version 6.0
  * Adam Bender and Jim Nguyen
- * March 15, 2020
+ * April 5, 2020
  * GroupDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;

@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 5.0
- * Edit Job History Form version 5.0
+ * CLC Project version 6.0
+ * Edit Job History Form version 6.0
  * Adam Bender and Jim Nguyen
- * March 15, 2020
+ * April 5, 2020
  * Edit Job History Form
  */
 ?>

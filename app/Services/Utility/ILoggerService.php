@@ -1,4 +1,11 @@
 <?php
+/*
+ * CLC Project version 6.0
+ * ILoggerService version 6.0
+ * Adam Bender and Jim Nguyen
+ * April 5, 2020
+ * ILoggerService handles logging service provider
+ */
 namespace App\Services\Utility;
 
 interface ILoggerService

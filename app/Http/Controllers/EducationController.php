@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 5.0
- * EducationController version 5.0
+ * CLC Project version 6.0
+ * EducationController version 6.0
  * Adam Bender and Jim Nguyen
- * March 15, 2020
+ * April 5, 2020
  * Education Controller handles education functionalities
  */
 namespace App\Http\Controllers;

@@ -1,5 +1,10 @@
 <?php
-
+/* CLC Project version 6.0
+ * EducationDataService version 6.0
+ * Adam Bender and Jim Nguyen
+ * April 5, 2020
+ * LoggingServiceProvider
+ */
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -33,7 +38,6 @@ class LoggingServiceProvider extends ServiceProvider
     
     public function provides()
     {
-        echo "Deferred true and I am here in provides()";
         return ['App\Services\Utility\ILoggerService'];
     }
 }

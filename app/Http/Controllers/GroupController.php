@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 5.0
- * GroupController version 5.0
+ * CLC Project version 6.0
+ * GroupController version 6.0
  * Adam Bender and Jim Nguyen
- * March 15, 2020
+ * April 5, 2020
  * Group Controller handles group functionalities
  */
 namespace App\Http\Controllers;

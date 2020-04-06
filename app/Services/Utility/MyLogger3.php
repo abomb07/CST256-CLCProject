@@ -1,4 +1,11 @@
 <?php
+/*
+ * CLC Project version 6.0
+ * MyLogger version 6.0
+ * Adam Bender and Jim Nguyen
+ * April 5, 2020
+ * MyLogger handles logging service provider
+ */
 namespace App\Services\Utility;
 
 use Illuminate\Support\Facades\Log;
