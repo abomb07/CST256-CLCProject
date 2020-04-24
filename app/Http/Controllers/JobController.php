@@ -3,7 +3,7 @@
  * CLC Project version 6.0
  * JobController version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * Job Controller handles job functionalities
  */
 namespace App\Http\Controllers;
@@ -117,7 +117,8 @@ class JobController extends Controller
             }
             else
             {
-                return "Unable to delete job. Please try again!";
+                $error = "Unable to delete job. Please try again!";
+                return view(('errorPage'),compact(['error']));
             }
         
         }catch(Exception $e2){
@@ -150,7 +151,10 @@ class JobController extends Controller
                 //if success, return to adminEditJobForm, else return error message
                 return view('adminEditJobForm')->with(compact('job'));
             }else{
-                return "Job not found. Please try again";
+                
+                // return to errorPage with error message
+                $error = "Job not found. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         
         }catch(Exception $e2){
@@ -219,7 +223,8 @@ class JobController extends Controller
             }
             else
             {
-                return "Update job unsuccessfully. Please try again";
+                $error = "Update job unsuccessfully. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(ValidationException $e1){
             throw ($e1); 
@@ -374,7 +379,7 @@ class JobController extends Controller
             $theJob = new Job("", "", "", "", "", "", $location, "");
             
             $jbs = new JobBusinessService();
-            // call 
+            // call findByJobLocation in JobBusinessService and pass jobs object
             $jobs = $jbs->findByJobLocation($theJob);
             
             // calls findAlljobs in Job Business Services to return jobs
@@ -432,7 +437,7 @@ class JobController extends Controller
             $title = $request->input('jobtitle');
             $company = $request->input('jobcompany');
             
-            // returns to jobApplySucess page
+            // returns to jobApplySucess page with posted data
             return view(('jobApplySuccess'),compact(['title'], ['company']));
             
         }catch(Exception $e2){
@@ -542,9 +547,10 @@ class JobController extends Controller
             // call findEducationByUserId with user id in Education Business Service
             $education = $ebs->findEducationByUserId($user_id);
             
-            // if statement loops through found education
-            if($education){
-                
+            // if statement is true loops through found education
+            if($education)
+            {
+                // loops through found education and returns jobs object
                 for($i = 0; $i < count($education); $i++)
                 {
                     // find jobs with matched education

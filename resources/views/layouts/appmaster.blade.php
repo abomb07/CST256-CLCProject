@@ -1,8 +1,8 @@
 <?php 
-/* CLC Project version 6.0
- * appmaster version 6.0
+/* CLC Project version 2.0
+ * appmaster version 2.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * February 5th, 2020
  * appmaster layout class supports blade
  */?>
 <html lang="en">

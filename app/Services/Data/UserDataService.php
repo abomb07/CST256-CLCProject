@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * UserDataService version 6.0
+/* CLC Project version 7.0
+ * UserDataService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * UserDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -107,6 +107,7 @@ class UserDataService{
                 exit;
             }
             
+            //bindParam properties
             $statement->bindParam(':username', $username);
             $statement->execute();
             

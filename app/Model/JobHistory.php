@@ -2,7 +2,7 @@
 /* CLC Project version 4.0
  * JobHistory version 4.0
  * Adam Bender and Jim Nguyen
- * March 8, 2020
+ * April 17, 2020
  * Job History class acts as a Model
  */
 namespace App\Model;

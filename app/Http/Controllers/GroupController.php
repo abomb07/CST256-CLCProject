@@ -3,7 +3,7 @@
  * CLC Project version 6.0
  * GroupController version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * Group Controller handles group functionalities
  */
 namespace App\Http\Controllers;
@@ -42,17 +42,20 @@ class GroupController extends Controller
             $description = $request->input('description');
             $owner_id = $request->input('owner_id');            
             
+            // Save posted data ti Group Object Model
             $group = new Group(0, $name, $description, $owner_id);
             $gbs = new GroupBusinessService();
             $ubs = new UserBusinessService();
             
-            //check for duplicate names
+            //check for duplicate group names
             if($gbs->findByGroupName($name) == null)
             {
+                //if group name does not exist, call addGroup with group object
                 $result = $gbs->addGroup($group);
             }
             else
             {
+                //if finds group name already exists, display message
                 $error = "Group name already exists. Please choose a different name.";
                 return view(('errorPage'),compact(['error']));
             }
@@ -243,15 +246,17 @@ class GroupController extends Controller
             //calls updateGroup in the GroupBusinessService
             $result = $gbs->editGroup($updatedGroup);
             
-            // if success returns to adminJobs, else returns error message
+            // if success returns to groupPage, else returns error message
             if($result)
             {
+                // call method findAllGroups  and return to groupPage
                 $groups = $gbs->findAllGroups();
                 
                 return view(('groupPage'),compact(['groups']));
             }
             else
             {
+                // returns to errorPage with error messgae 
                 $error = "Update group information unsuccessfully. Please try again";
                 return view(('errorPage'),compact(['error']));
             }
@@ -280,6 +285,7 @@ class GroupController extends Controller
             // calls findById method in GroupBusinessService and passes Group Object
             $group = $gbs->findById($id);
             
+            //return to groupDeleteForm with group object
             return view('groupDeleteForm')->with(compact('group'));
         }catch(Exception $e2){
             $this->logger->error("Exception ". array("message" => $e2->getMessage()));

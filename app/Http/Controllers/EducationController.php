@@ -3,7 +3,7 @@
  * CLC Project version 6.0
  * EducationController version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * Education Controller handles education functionalities
  */
 namespace App\Http\Controllers;
@@ -47,6 +47,7 @@ class EducationController extends Controller
             $graduationyear = $request->input('graduationyear');
             $user_id = $request->input('user_id');
             
+            // Save posted data to Education object model
             $education = new Education(0, $school, $degree, $field, $graduationyear, $user_id);
             
             $jhbs = new JobHistoryBusinessService();
@@ -54,7 +55,9 @@ class EducationController extends Controller
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
            
-            
+            // if addEducation sucesses call findGroupsByUserId,
+            // findJobHistoryByUserId, findSkillByUserId and findEducationByUserId
+            // to return user portfolio with jobhistorys, skills, educations, groups objects
             if($result = $eds->addEducation($education))
             {
                 $groups = $gbs->findGroupsByUserId($user_id);
@@ -74,7 +77,7 @@ class EducationController extends Controller
                     $groupNames = array();
                 }
                 
-                // return to userPortfolio Form with jobhistorys, skills, educations objects
+                // return to userPortfolio Form with jobhistorys, skills, educations, groups objects
                 return view(('userPortfolio'),compact(['jobhistorys'],['skills'], ['educations'], ['groupNames']));
             }
         }catch(ValidationException $e1){
@@ -104,6 +107,7 @@ class EducationController extends Controller
             // calls findById method in UserBusinessService and passes User Object
             $education = $ebs->findById($id);
             
+            // return to userPortfolio Form with educations objects
             return view('userPortfolioDeleteEducation')->with(compact('education'));
         
         }catch(Exception $e2){
@@ -181,8 +185,7 @@ class EducationController extends Controller
             //Get posted Form data
             $id = $request->input('id');
             
-            //Save posted Form Data to User Object Model
-            
+            //Save posted Form Data to User Object Model            
             $ebs = new EducationBusinessService();
             
             // calls findById method in UserBusinessService and passes User Object
@@ -190,7 +193,8 @@ class EducationController extends Controller
                 
                 return view('userPortfolioEditEducation')->with(compact('education'));
             }else{
-                return "Education not found. Please try again";
+                $error = "Education not found. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         
         }catch(Exception $e2){
@@ -260,8 +264,10 @@ class EducationController extends Controller
                 $skills = $sbs->findSkillByUserId($user_id);
                 $educations = $eds->findEducationByUserId($user_id);
                 
+                //if groups exist
                 if($groups)
                 {
+                    // loop through groups and return array of groups 
                     for ($i = 0; $i < count($groups); $i++) {
                         $groupNames[$i] = $gbs->findById($groups[$i]->getId());
                     }

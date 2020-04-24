@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * EducationBusinessService version 6.0
+/* CLC Project version 7.0
+ * EducationBusinessService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * EducationBusinessService handles CRUD methods
  */
 namespace App\Services\Business;
@@ -58,6 +58,31 @@ class EducationBusinessService
         
         // return the finder result
         Log::info("Exit EducationBusinessService.deleteEducation() ");
+        return $flag;
+    }
+    
+    /**
+     * deleteEducation method calls and passes $education to call deleteEducationByUserID method in EducationDataService
+     * @param $education
+     * @return boolean
+     */
+    function deleteEducationByUserID($user_id){
+        
+        Log::info("Entering EducationBusinessService.deleteEducationByUserID()");
+        
+        //create connection to database
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Education Data Service with this connection and calls deleteEducation method/
+        $dbService = new EducationDataService($db);
+        $flag = $dbService->deleteEducationByUserID($user_id);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit EducationBusinessService.deleteEducationByUserID() ");
         return $flag;
     }
     

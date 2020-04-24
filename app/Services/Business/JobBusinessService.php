@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * JobBusinessService version 6.0
+/* CLC Project version 7.0
+ * JobBusinessService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * JobBusinessService handles CRUD methods
  */
 namespace App\Services\Business;
@@ -72,6 +72,7 @@ class JobBusinessService
         
         Log::info("Entering JobBusinessService.updateUser()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -95,6 +96,7 @@ class JobBusinessService
         
         Log::info("Entering JobBusinessService.findAllJobs()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -119,6 +121,7 @@ class JobBusinessService
         
         Log::info("Entering JobBusinessService.findById()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -143,6 +146,7 @@ class JobBusinessService
         
         Log::info("Entering JobBusinessService.findById()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -167,6 +171,7 @@ class JobBusinessService
         
         Log::info("Entering JobBusinessService.findByDescription()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -191,6 +196,7 @@ class JobBusinessService
         
         Log::info("Entering JobBusinessService.findByLocation()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -215,6 +221,7 @@ class JobBusinessService
 
         Log::info("Entering JobBusinessService.findBySkills()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -239,6 +246,7 @@ class JobBusinessService
         
         Log::info("Entering JobBusinessService.findByEducation()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -259,10 +267,10 @@ class JobBusinessService
      * @param $job
      * @return \App\Model\Job
      */
-    function findByJobHistory($jobhistory){
+    function findByJobHistory($jobhistory)
+    {
         
-        
-        
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         

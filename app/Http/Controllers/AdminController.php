@@ -3,7 +3,7 @@
  * CLC Project version 6.0
  * AdminController version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * Admin Controller handles admin functionalities
  */
 namespace App\Http\Controllers;
@@ -15,6 +15,9 @@ use App\Model\User;
 use App\Services\Business\UserBusinessService;
 use App\Services\Business\GroupBusinessService;
 use App\Services\Utility\ILoggerService;
+use App\Services\Business\JobHistoryBusinessService;
+use App\Services\Business\SkillBusinessService;
+use App\Services\Business\EducationBusinessService;
 class AdminController extends Controller
 {
     protected $logger;
@@ -34,6 +37,7 @@ class AdminController extends Controller
         try{
             $ubs = new UserBusinessService();
             $users = $ubs->findAllUsers();
+            
             // check user session for admin, if session is admin
             // calls showAllUser in Business Service
             //else return error message
@@ -41,7 +45,8 @@ class AdminController extends Controller
                 
                 return view(('adminUsers'),compact(['users']));
             }else{
-                return "User not found. Please try again";
+                $error =  "User not found. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(Exception $e2){
             $this->logger->error("Exception ". array("message" => $e2->getMessage()));
@@ -71,7 +76,8 @@ class AdminController extends Controller
                 
                 return view('adminEditUserForm')->with(compact('user'));
             }else{
-                return "User not found. Please try again";
+                $error =  "User not found. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(Exception $e2){
             $this->logger->error("Exception ". array("message" => $e2->getMessage()));
@@ -116,7 +122,8 @@ class AdminController extends Controller
             }
             else
             {
-                return "Update user unsuccessfully. Please try again";
+                $error=  "Update user unsuccessfully. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
     
         }catch(Exception $e2){
@@ -159,7 +166,7 @@ class AdminController extends Controller
      */
     public function deleteUser(Request $request)
     {
-        try{
+        /* try{ */
             //Get posted Form data
             $id = $request->input('id');
             
@@ -167,27 +174,37 @@ class AdminController extends Controller
             $theUser = new User($id, "", "", "", "", "", "", "", "", "");
             $ubs = new UserBusinessService();
             $gbs = new GroupBusinessService();
+            $jhbs = new JobHistoryBusinessService();
+            $sbs = new SkillBusinessService();
+            $ebs = new EducationBusinessService();
             
+            //delete user jobhistory in portfolio
+            $jhbs->deleteJobHistoryByUserID($id);
+            //delete user skill in portfolio
+            $sbs->deleteSkillByUserID($id);
+            //delete user education in portfolio
+            $ebs->deleteEducationByUserID($id);
             //delete user from all the groups they are in
-            $result1 = $gbs->leaveAllGroups($id);
+            $gbs->leaveAllGroups($id);
             // calls deleteUser method in UserBusinessService and passes User Object
             $result = $ubs->deleteUser($theUser);
             
             //if success, return to homePage, else return error message
-            if($result && $result1)
+            if($result)
             {
                 $users = $ubs->findAllUsers();
                 return view(('adminUsers'),compact(['users']));
             }
             else
             {
-                return "Unable to delete user. Please try again!";
+                $error = "Unable to delete user. Please try again!";
+                return view(('errorPage'),compact(['error']));
             }
-        }catch(Exception $e2){
+        /* }catch(Exception $e2){
             $this->logger->error("Exception ". array("message" => $e2->getMessage()));
             //Display Global Namespace Handler Page
             return view('SystemException');
-        }
+        } */
     }
     
     /**
@@ -214,7 +231,8 @@ class AdminController extends Controller
                 
             }else
             {
-                return "Unable to suspend user. Please try again!";
+                $error = "Unable to suspend user. Please try again!";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(Exception $e2){
             $this->logger->error("Exception ". array("message" => $e2->getMessage()));
@@ -246,7 +264,8 @@ class AdminController extends Controller
                 
             }else
             {
-                return "Unable to activate user. Please try again!";
+                $error = "Unable to activate user. Please try again!";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(Exception $e2){
             $this->logger->error("Exception ". array("message" => $e2->getMessage()));
@@ -281,7 +300,8 @@ class AdminController extends Controller
                 }
                 else
                 {
-                    return "User not found. Please try again";
+                    $error = "User not found. Please try again";
+                    return view(('errorPage'),compact(['error']));
                 }
             }
             else 
@@ -323,7 +343,8 @@ class AdminController extends Controller
                     
                     return view(('adminUsers'),compact(['users']));
                 }else{
-                    return "User not found. Please try again";
+                    $error = "User not found. Please try again";
+                    return view(('errorPage'),compact(['error']));
                 }
             }
             else

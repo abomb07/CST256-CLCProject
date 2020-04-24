@@ -2,7 +2,7 @@
 /* CLC Project version 6.0
  * SkillController version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * SkillController handles user profile action
  */
 namespace App\Http\Controllers;
@@ -90,7 +90,6 @@ class SkillController extends Controller
             //Get posted Form data
             $id = $request->input('id');
             
-            
             $sbs = new SkillBusinessService();
             
             // calls findById method in UserBusinessService and passes User Object
@@ -126,7 +125,8 @@ class SkillController extends Controller
                 
                 return view('userPortfolioEditSkill')->with(compact('skill'));
             }else{
-                return "Skill not found. Please try again";
+                $error = "Skill not found. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         
         }catch(Exception $e2){

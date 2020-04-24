@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * Admin Search page version 6.0
+/* CLC Project version 4.0
+ * Admin Search page version 4.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * March 8, 2020
  * Admin Search Page
  */
 ?>

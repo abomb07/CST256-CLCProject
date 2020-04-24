@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * MemberDataService version 6.0
+/* CLC Project version 7.0
+ * MemberDataService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * MemberDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -47,11 +47,11 @@ class MemberDataService
             $group_id = $member->getGroup_id();
             $user_id = $member->getUser_id();
             
-            
+            //bindParam properties
             $statement->bindParam(':group_id', $group_id, PDO::PARAM_STR);
             $statement->bindParam(':user_id', $user_id, PDO::PARAM_STR);           
             
-            
+            // execute statement
             $statement->execute();
             
             // if statement succeses return true, else return false
@@ -81,6 +81,7 @@ class MemberDataService
     function deleteMember(Member $member){
         Log::info("Entering MemberDataService::deleteMember()");
         try{
+            // Delete member with user_id and group_id
             $statement = $this->connection->prepare("DELETE FROM MEMBER WHERE USER_ID = :user_id AND AFFINITY_GROUP_ID = :group_id");
             
             if(!$statement){
@@ -91,10 +92,14 @@ class MemberDataService
             $user_id = $member->getUser_id();
             $group_id = $member->getGroup_id();
             
+            //bindParam properties
             $statement->bindParam(':user_id',  $user_id, PDO::PARAM_INT);
             $statement->bindParam(':group_id',  $group_id, PDO::PARAM_INT);
+            
+            //execute statement 
             $statement->execute();
             
+            //if statement execute successfully, return true, else return false
             if($statement->rowCount() > 0){
                 
                 Log::info("Exit MemberDataService.deleteMember() with true");
@@ -122,7 +127,7 @@ class MemberDataService
         Log::info("Entering MemberDataService::deleteByGroupId()");
         
         try{
-            
+            // delete member with match group_id
             $statement = $this->connection->prepare("DELETE FROM MEMBER WHERE AFFINITY_GROUP_ID = :group_id ");
             
             if(!$statement){
@@ -133,6 +138,7 @@ class MemberDataService
             $statement->bindParam(':group_id', $group_id);
             $statement->execute();
             
+            //if statement execute successfully, return true, else return false
             if($statement->rowCount() > 0){
                 
                 Log::info("Exit MemberDataService.deleteByGroupId() with true");
@@ -160,7 +166,7 @@ class MemberDataService
         Log::info("Entering MemberDataService::deleteByUserId()");
         
         try{
-            
+            // Delete member with user id
             $statement = $this->connection->prepare("DELETE FROM MEMBER WHERE USER_ID = :user_id ");
             
             if(!$statement){
@@ -171,6 +177,7 @@ class MemberDataService
             $statement->bindParam(':user_id', $user_id);
             $statement->execute();
             
+            //if statement execute successfully, return true, else return false
             if($statement->rowCount() > 0){
                 
                 Log::info("Exit MemberDataService.deleteByUserId() with true");
@@ -199,6 +206,7 @@ class MemberDataService
         
         try{
             
+            // Select member with mtached group id
             $statement = $this->connection->prepare("SELECT AFFINITY_GROUP_ID, USER_ID FROM MEMBER WHERE AFFINITY_GROUP_ID = :group_id ");
             
             if(!$statement){
@@ -209,6 +217,7 @@ class MemberDataService
             $statement->bindParam(':group_id', $group_id);
             $statement->execute();
             
+            //if finds result, fetch user inoformation and returns in users array
             if($statement->rowCount() > 0){
                 $index = 0;
                 $users = array();
@@ -220,6 +229,7 @@ class MemberDataService
                 }
                     return $users;
             }else{
+                //else returns empty array
                 return array();
             }
             
@@ -232,7 +242,7 @@ class MemberDataService
     }
     
     /**
-     * findByUserId method find member with matched user id in database
+     * findByUserId method finds member with matched user id in database
      * @param $user_id
      * @throws DatabaseException
      * @return array|\App\Model\Group|array
@@ -251,7 +261,8 @@ class MemberDataService
             //bindParam $id
             $statement->bindParam(':user_id', $user_id);
             $statement->execute();
-            
+       
+            //if finds result, fetch group information and returns in groups array            
             if($statement->rowCount() > 0){
                 $index = 0;
                 $group = array();
@@ -263,8 +274,10 @@ class MemberDataService
                 }
                 
                 return $groups;
-                
+            
+            // else return empty array
             }else{
+                
                 return array();
             }
             

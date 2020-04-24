@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * SkillBusinessService version 6.0
+/* CLC Project version 7.0
+ * SkillBusinessService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * SkillBusinessService handles CRUD methods
  */
 namespace App\Services\Business;
@@ -63,6 +63,31 @@ class SkillBusinessService
     }
     
     /**
+     * deleteSkill method calls and passes $skill to deleteSkillByUserID method in SkillDataService
+     * @param $user_id
+     * @return boolean
+     */
+    function deleteSkillByUserID($user_id){
+        
+        Log::info("Entering SkillBusinessService.deleteSkillByUserID()");
+        
+        //create connection to database
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a Skill Data Service with this connection and calls deleteSkillByUserID method/
+        $dbService = new SkillDataService($db);
+        $flag = $dbService->deleteSkillByUserID($user_id);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit SkillBusinessService.deleteSkillByUserID() ");
+        return $flag;
+    }
+    
+    /**
      * editSkill method calls and passes $skill to updateSkill method in SkillDataService
      * @param $skill
      * @return boolean
@@ -95,6 +120,7 @@ class SkillBusinessService
         
         Log::info("Entering SkillBusinessService.findByUserId()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -119,6 +145,7 @@ class SkillBusinessService
         
         Log::info("Entering SkillBusinessService.findSkillByUserId()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         

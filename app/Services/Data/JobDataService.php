@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * JobDataService version 6.0
+/* CLC Project version 7.0
+ * JobDataService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * JobDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -53,6 +53,7 @@ class JobDataService
             $location = $job->getLocation();
             $salary = $job->getSalary();
             
+            //bindParam properties
             $statement->bindParam(':jobtitle', $jobtitle, PDO::PARAM_STR);
             $statement->bindParam(':category', $category, PDO::PARAM_STR);
             $statement->bindParam(':description', $description, PDO::PARAM_STR);
@@ -89,6 +90,7 @@ class JobDataService
     function deleteJob(Job $job){
         Log::info("Entering JobDataService::deleteJob()");
         try{
+            // Delete job with passing id 
             $statement = $this->connection->prepare("DELETE FROM JOB WHERE ID = :id");
             
             // if the statement goes wrong return error message
@@ -98,6 +100,8 @@ class JobDataService
             }
             
             $id = $job->getId();
+            
+            //bindParam properties
             $statement->bindParam(':id',  $id, PDO::PARAM_INT) ;
             $statement->execute();
             
@@ -129,7 +133,7 @@ class JobDataService
         Log::info("Entering SecurityDAO::updateJob()");
         
         try{
-            //update user information in database
+            //update user information in database with passing id
             $statement = $this->connection->prepare("UPDATE JOB SET ID = :id, JOB_TITLE = :jobtitle, CATEGORY = :category, DESCRIPTION = :description, REQUIREMENTS = :requirements, COMPANY = :company, LOCATION = :location, SALARY = :salary WHERE ID = :id");
             
             // if the statement goes wrong return error message
@@ -147,6 +151,7 @@ class JobDataService
             $location = $job->getLocation();
             $salary = $job->getSalary();
             
+            //bindParam properties
             $statement->bindParam(':id', $id, PDO::PARAM_STR);
             $statement->bindParam(':jobtitle', $jobtitle, PDO::PARAM_STR);
             $statement->bindParam(':category', $category, PDO::PARAM_STR);
@@ -277,6 +282,8 @@ class JobDataService
         
         try{
             $jobtitle = $job->getJobtitle();
+            
+            // Select job that match passing job title
             $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE JOB_TITLE LIKE CONCAT('%', :jobtitle, '%') ");
             
             // if the statement goes wrong return error message
@@ -293,10 +300,15 @@ class JobDataService
             if($statement->rowCount() > 0){
                 Log::info("Exit SecurityDAO.findByTitle() ");
                 
-                //fetching users from database
-                $jobs = $statement->fetchAll();
+                $index = 0;
+                $jobs = array();
                 
-                //return users object
+                //loop thru sql results and create array of Job models
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    $job = new Job($row['ID'], $row['JOB_TITLE'], $row['CATEGORY'], $row['DESCRIPTION'], $row['REQUIREMENTS'], $row['COMPANY'], $row['LOCATION'], $row['SALARY']);
+                    $jobs[$index++] = $job;
+                }
                 return $jobs;
             }
             
@@ -319,6 +331,8 @@ class JobDataService
         
         try{
             $location = $job->getLocation();
+            
+            // Select job that match passing location 
             $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE LOCATION LIKE CONCAT('%', :location, '%') ");
             
             // if the statement goes wrong return error message
@@ -335,10 +349,15 @@ class JobDataService
             if($statement->rowCount() > 0){
                 Log::info("Exit SecurityDAO.findByLocation() ");
                 
-                //fetching users from database
-                $jobs = $statement->fetchAll();
+                $index = 0;
+                $jobs = array();
                 
-                //return jobs object
+                //loop thru sql results and create array of Job models
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    $job = new Job($row['ID'], $row['JOB_TITLE'], $row['CATEGORY'], $row['DESCRIPTION'], $row['REQUIREMENTS'], $row['COMPANY'], $row['LOCATION'], $row['SALARY']);
+                    $jobs[$index++] = $job;
+                }
                 return $jobs;
             }
             
@@ -361,6 +380,8 @@ class JobDataService
         
         try{
             $description = $job->getDescription();
+            
+            // Select job that match description 
             $statement = $this->connection->prepare("SELECT ID, JOB_TITLE, CATEGORY, DESCRIPTION, REQUIREMENTS, COMPANY, LOCATION, SALARY FROM JOB WHERE DESCRIPTION LIKE CONCAT('%', :description, '%') ");
             
             // if the statement goes wrong return error message
@@ -377,10 +398,15 @@ class JobDataService
             if($statement->rowCount() > 0){
                 Log::info("Exit SecurityDAO.findByDescription() ");
                 
-                //fetching jobs from database
-                $jobs = $statement->fetchAll();
+                $index = 0;
+                $jobs = array();
                 
-                //return jobs object
+                //loop thru sql results and create array of Job models
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    $job = new Job($row['ID'], $row['JOB_TITLE'], $row['CATEGORY'], $row['DESCRIPTION'], $row['REQUIREMENTS'], $row['COMPANY'], $row['LOCATION'], $row['SALARY']);
+                    $jobs[$index++] = $job;
+                }
                 return $jobs;
             }
             

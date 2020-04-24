@@ -2,7 +2,7 @@
 /* CLC Project version 4.0
  * Group version 4.0
  * Adam Bender and Jim Nguyen
- * March 8th, 2020
+ * April 17, 2020
  * Group class acts as a Model
  */
 namespace App\Model;

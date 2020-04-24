@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * Edit User Form version 6.0
+/* CLC Project version 5.0
+ * Edit User Form version 5.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * March 15, 2020
  * Edit User Form
  */
 ?>
@@ -15,63 +15,50 @@
 <h1>Admin User Edit</h1>
 
 <form action="adminSave" method ="POST">
-<div class="container">
+
 {{ csrf_field() }}
         <input type="hidden" class="form-control" id="id" value="{{ $user->getId() }} " name="id">
         
-        <div class="form-group">
-                <input type="hidden" class="form-control" id="username" value="{{ $user->getUsername() }} " name="username">
-        </div>
+        
+        <input type="hidden" class="form-control" id="username" value="{{ $user->getUsername() }} " name="username">
 
-        <div class="form-group">
-                
-                <input type="hidden" class="form-control" id="password" value="{{ $user->getPassword() }} " name="password">
-        </div>
         
-        <div class="form-group">
-               
-                <input type="hidden" class="form-control" id="firstname" value="{{ $user->getFirstname() }} "name="firstname">
-        </div>
+        <input type="hidden" class="form-control" id="password" value="{{ $user->getPassword() }} " name="password">
 
-        <div class="form-group">
-                
-                <input type="hidden" class="form-control" id="lastname" value="{{ $user->getLastname() }} " name="lastname">
-        </div>
-        
-        <div class="form-group">
-                
-                <input type="hidden" class="form-control" id="email" value="{{ $user->getEmail() }} " name="email">
-        </div>
-        
-        <div class="form-group">
-                
-                <input type="hidden" class="form-control" id="phonenumber" value="{{ $user->getPhonenumber() }} " name="phonenumber">
-        </div>
-        
-        <div class="form-group">
-               
-                <input type="hidden" class="form-control" id="city" value="{{ $user->getCity() }} " name="city">
-        </div>
+       
+        <input type="hidden" class="form-control" id="firstname" value="{{ $user->getFirstname() }} "name="firstname">
 
-        <div class="form-group">
+        
+        <input type="hidden" class="form-control" id="lastname" value="{{ $user->getLastname() }} " name="lastname">
+
+        
+        <input type="hidden" class="form-control" id="email" value="{{ $user->getEmail() }} " name="email">
+
+        
+        <input type="hidden" class="form-control" id="phonenumber" value="{{ $user->getPhonenumber() }} " name="phonenumber">
+
+       
+        <input type="hidden" class="form-control" id="city" value="{{ $user->getCity() }} " name="city">
+        
+        
                 <label for="role">Role</label>
-                <select class="form-control" id="role" name="role">
+                <select  id="role" name="role">
                         <option value="user">user</option>
                         <option value="admin">admin</option>      
                 </select>
-        </div>
+                <br>
         
-        <div class="form-group">
                 <label for="status">Status</label>
-                <select class="form-control" id="status" name="status">
+                <select id="status" name="status">
                         <option value="active">active</option>
                         <option value="suspended">suspended</option>
                     
                        
                 </select>
-        </div>
-        <button type="submit" value="submit" class="btn btn-default">SUBMIT</button>
-</div> 
+                 <br>
+        
+        <button type="submit" value="submit" >SUBMIT</button>
+
 </form>        
 </div>
 @else

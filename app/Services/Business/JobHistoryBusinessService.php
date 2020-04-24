@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * JobHistoryBusinessService version 6.0
+/* CLC Project version 7.0
+ * JobHistoryBusinessService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * JobHistoryBusinessService handles CRUD methods
  */
 namespace App\Services\Business;
@@ -63,6 +63,31 @@ class JobHistoryBusinessService
     }
     
     /**
+     * deleteJobHistory method calls and passes $jobhistory to deleteJobHistoryByUserID method in JobHistoryDataService
+     * @param $user_id
+     * @return boolean
+     */
+    function deleteJobHistoryByUserID($user_id){
+        
+        Log::info("Entering JobHistoryBusinessService.deleteJobHistoryByUserID()");
+        
+        //create connection to database
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        // Create a User Data Service with this connection and calls deleteJobHistoryByUserID method/
+        $dbService = new JobHistoryDataService($db);
+        $flag = $dbService->deleteJobHistoryByUserID($user_id);
+        
+        // close the connection
+        $db = null;
+        
+        // return the finder result
+        Log::info("Exit JobHistoryBusinessService.deleteJobHistoryByUserID() ");
+        return $flag;
+    }
+    
+    /**
      * editJobHistory method calls and passes $job to updateJobHistory method in JobHistoryDataService
      * @param $job
      * @return boolean
@@ -71,6 +96,7 @@ class JobHistoryBusinessService
         
         Log::info("Entering JobHistoryBusinessService.editJobHistory()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -96,6 +122,7 @@ class JobHistoryBusinessService
         
         Log::info("Entering JobHistoryBusinessService.findById()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -120,6 +147,7 @@ class JobHistoryBusinessService
         
         Log::info("Entering JobHistoryBusinessService.findJobHistoryByUserId()");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         

@@ -3,7 +3,7 @@
  * CLC Project version 6.0
  * Job History Controller version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * Job History Controller handles job history functionalities
  */
 namespace App\Http\Controllers;
@@ -45,15 +45,18 @@ class JobHistoryController extends Controller
             $enddate = $request->input('enddate');
             $user_id = $request->input('user_id');
             
-            
+            // save posted data to JobHistory object model
             $jobhistory = new JobHistory(0, $title, $company, $startdate, $enddate, $user_id);
             $jhbs = new JobHistoryBusinessService();
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
             
-            if($result = $jhbs->addJobHistory($jobhistory)){
-    
+            //call addJobHistory in Job Business Service
+            if($result = $jhbs->addJobHistory($jobhistory))
+            {
+                // calls findGroupsByUserId, findJobHistoryByUserId, 
+                // findSkillByUserId and findEducationByUserId to generate profolio
                 $groups = $gbs->findGroupsByUserId($user_id);
                 $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
                 $skills = $sbs->findSkillByUserId($user_id);
@@ -61,12 +64,14 @@ class JobHistoryController extends Controller
                 
                 if($groups)
                 {
+                    // loop through groups and return array of group names
                     for ($i = 0; $i < count($groups); $i++) {
                         $groupNames[$i] = $gbs->findById($groups[$i]->getId());
                     }
                 }
                 else
                 {
+                    // else return an empty array
                     $groupNames = array();
                 }
                 
@@ -135,6 +140,8 @@ class JobHistoryController extends Controller
             //if success, return to homePage, else return error message
             if($result)
             {
+                // calls findGroupsByUserId, findJobHistoryByUserId,
+                // findSkillByUserId and findEducationByUserId to generate profolio
                 $groups = $gbs->findGroupsByUserId($user_id);
                 $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
                 $skills = $sbs->findSkillByUserId($user_id);
@@ -142,6 +149,7 @@ class JobHistoryController extends Controller
                 
                 if($groups)
                 {
+                    // loop through groups and return array of group names
                     for ($i = 0; $i < count($groups); $i++) {
                         $groupNames[$i] = $gbs->findById($groups[$i]->getId());
                     }
@@ -156,7 +164,8 @@ class JobHistoryController extends Controller
             }
             else
             {
-                return "Unable to delete job history. Please try again!";
+                $error = "Unable to delete job history. Please try again!";
+                return view(('errorPage'),compact(['error']));
             }
         
         }catch(Exception $e2){
@@ -186,7 +195,8 @@ class JobHistoryController extends Controller
                 
                 return view('userPortfolioEditJobHistory')->with(compact('jobhistory'));
             }else{
-                return "Job history not found. Please try again";
+                $error = "Job history not found. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         
         }catch(Exception $e2){
@@ -245,6 +255,7 @@ class JobHistoryController extends Controller
             $eds = new EducationBusinessService();
             $gbs = new GroupBusinessService();
             
+            // call editJobHistory with posted data object
             $result = $jhbs->editJobHistory($updatedJobHistory);
             
             // if success returns to userPortfolio, else returns error message
@@ -257,6 +268,7 @@ class JobHistoryController extends Controller
                 
                 if($groups)
                 {
+                    // loop through groups and return array of group names
                     for ($i = 0; $i < count($groups); $i++) {
                         $groupNames[$i] = $gbs->findById($groups[$i]->getId());
                     }
@@ -271,7 +283,8 @@ class JobHistoryController extends Controller
             }
             else
             {
-                return "Update job history unsuccessfully. Please try again";
+                $error =  "Update job history unsuccessfully. Please try again";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(ValidationException $e1){
             throw ($e1);

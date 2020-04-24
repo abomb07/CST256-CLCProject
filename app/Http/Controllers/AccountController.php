@@ -3,7 +3,7 @@
  * CLC Project version 6.0
  * Account Controller version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * AccountController handles register, login and logout action
  */
 namespace App\Http\Controllers;
@@ -134,21 +134,27 @@ class AccountController extends Controller
     public function findPortfolio(Request $request)
     {      
         try{
+            //Get posted Form data
             $user_id = $request->input('user_id');
             
             $jhbs = new JobHistoryBusinessService();
             $sbs = new SkillBusinessService();
             $eds = new EducationBusinessService();
-            
-            
-            $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
-            $skills = $sbs->findSkillByUserId($user_id);
-            $educations = $eds->findEducationByUserId($user_id);
             $gbs = new GroupBusinessService();
+            
+            // call findJobHistoryByUserId in JobHistoryBusinessService that returns jobhistorys  with user id
+            $jobhistorys = $jhbs->findJobHistoryByUserId($user_id);
+            // call findSkillByUserId in SkillBusinessService returns skills with user id
+            $skills = $sbs->findSkillByUserId($user_id);
+            // call findEducationByUserId in EducationBusinessService returns educations with user id
+            $educations = $eds->findEducationByUserId($user_id);
+            // call findGroupsByUserId in GroupBusinessService returns groups with user id
             $groups = $gbs->findGroupsByUserId($user_id);
             
+            //if groups exists 
             if($groups)
             {
+                // loop through groups and return array of groups 
                 for ($i = 0; $i < count($groups); $i++) {
                     $groupNames[$i] = $gbs->findById($groups[$i]->getId());
                 }
@@ -174,6 +180,7 @@ class AccountController extends Controller
     public function logout()
     {
         try{
+            // flush all set sessions 
             Session::flush();
             
             // calls findAllJobs in Business Service

@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 6.0
- * Admin New Job Form version 6.0
+ * CLC Project version 5.0
+ * Admin New Job Form version 5.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * March 15, 2020
  * Admin New Job Form
  */
 ?>

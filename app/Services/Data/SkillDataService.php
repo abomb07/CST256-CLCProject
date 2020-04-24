@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * SkillDataService version 6.0
+/* CLC Project version 7.0
+ * SkillDataService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * SkillDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -47,6 +47,8 @@ class SkillDataService
             
             $user_id= $skill->getUser_id();
             $skills = $skill->getSkill();
+            
+            //bindParam properties
             $statement->bindParam(':skills', $skills);
             $statement->bindParam(':user_id', $user_id);
             $statement->execute();
@@ -79,7 +81,7 @@ class SkillDataService
         Log::info("Entering SkillDataService::findByUserId()");
         
         try{
- 
+            // Select skill with matched user id
             $statement = $this->connection->prepare("SELECT ID, SKILL FROM SKILL WHERE USER_ID = :user_id ");
             
             if(!$statement){
@@ -119,6 +121,7 @@ class SkillDataService
         
         try{
             
+            // Select skill with matched id
             $statement = $this->connection->prepare("SELECT ID, SKILL, USER_ID FROM SKILL WHERE ID = :id ");
             
             if(!$statement){
@@ -129,6 +132,7 @@ class SkillDataService
             $statement->bindParam(':id', $id);
             $statement->execute();
             
+            // if finds result fetch skill information and returns result
             if($statement->rowCount() == 1){
                 Log::info("Exit SkillDataService.findById");
                 
@@ -160,7 +164,7 @@ class SkillDataService
         try{
             $id = $skill->getId();
             $skill = $skill->getSkill();
-            //update user information in database
+            //update user information in database with matched id
             $statement = $this->connection->prepare("UPDATE SKILL SET SKILL = :skill WHERE ID = :id");
             
             if(!$statement){
@@ -226,6 +230,50 @@ class SkillDataService
                 
             }else{
                 Log::info("Exit SkillDataService.deleteSkill() with false");
+                return false;
+            }
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
+    
+    /**
+     * deleteSkillByUserID function connect database and deleteSkillByUserID using MySQL statement
+     * @param $user_id
+     * @throws DatabaseException
+     * @return boolean
+     */
+    function deleteSkillByUserID($user_id)
+    {
+        Log::info("Entering SkillDataService::deleteSkillByUserID()");
+        try{
+            // delete user in database with mtach id
+            $statement = $this->connection->prepare("DELETE FROM SKILL WHERE USER_ID = :user_id");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }
+            
+            
+            
+            //bindParam properties
+            
+            $statement->bindParam(':user_id',  $user_id, PDO::PARAM_INT) ;
+            //execute statement
+            $statement->execute();
+            
+            //if statement executes successfully returns true, else returns false
+            if($statement->rowCount() > 0){
+                
+                Log::info("Exit SkillDataService.deleteSkillByUserID() with true");
+                return true;
+                
+            }else{
+                Log::info("Exit SkillDataService.deleteSkillByUserID() with false");
                 return false;
             }
         }catch(PDOException $e)

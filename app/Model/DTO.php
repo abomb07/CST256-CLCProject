@@ -2,7 +2,7 @@
 /* CLC Project version 6.0
  * DTO version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * DTO class acts as a Model
  */
 namespace App\Model;

@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 6.0
- * MyLogger version 6.0
+ * CLC Project version 7.0
+ * MyLogger version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * MyLogger handles logging service provider
  */
 namespace App\Services\Utility;

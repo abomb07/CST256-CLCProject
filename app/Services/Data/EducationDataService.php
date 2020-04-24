@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * EducationDataService version 6.0
+/* CLC Project version 7.0
+ * EducationDataService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * EducationDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -60,7 +60,8 @@ class EducationDataService
             $statement->execute();
             
             // if statement succeses return true, else return false
-            if($statement->rowCount() > 0){
+            if($statement->rowCount() > 0)
+            {
                 
                 Log::info("Exit EducationDataService.createEducation with true");
                 return true;
@@ -86,8 +87,9 @@ class EducationDataService
     function findById($id){
         Log::info("Entering EducationDataService::findById()");
         
-        try{
-            
+        try
+        {
+            // Select education information from the database with id
             $statement = $this->connection->prepare("SELECT ID, SCHOOL, DEGREE, FIELD, GRADUATION_YEAR, USER_ID FROM EDUCATION WHERE ID = :id ");
             
             if(!$statement){
@@ -98,7 +100,8 @@ class EducationDataService
             $statement->bindParam(':id', $id);
             $statement->execute();
             
-            if($statement->rowCount() == 1){
+            if($statement->rowCount() == 1)
+            {
                 Log::info("Exit SkillDataService.findById");
                 
                 //fetches education from database and returns $education
@@ -126,10 +129,11 @@ class EducationDataService
         Log::info("Entering EducationDataService::findByUserId()");
         
         try{
- 
+            // Select education information from the database with user_id
             $statement = $this->connection->prepare("SELECT ID, SCHOOL, DEGREE, FIELD, GRADUATION_YEAR FROM EDUCATION WHERE USER_ID = :user_id ");
             
-            if(!$statement){
+            if(!$statement)
+            {
                 echo "Something wrong in the binding process.sql error?";
                 exit;
             }
@@ -174,7 +178,8 @@ class EducationDataService
             //update user information in database
             $statement = $this->connection->prepare("UPDATE EDUCATION SET SCHOOL = :school, DEGREE = :degree, FIELD = :field, GRADUATION_YEAR = :graduationyear WHERE ID = :id");
             
-            if(!$statement){
+            if(!$statement)
+            {
                 echo "Something wrong in the binding process.sql error?";
                 exit;
             }
@@ -234,13 +239,59 @@ class EducationDataService
             $statement->execute();
             
             //if statement executes successfully returns true, else returns false
-            if($statement->rowCount() > 0){
+            if($statement->rowCount() > 0)
+            {
                 
                 Log::info("Exit EducationDataService.deleteEducation() with true");
                 return true;
                 
             }else{
                 Log::info("Exit EducationDataService.deleteEducation() with false");
+                return false;
+            }
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
+    
+    /**
+     * deleteEducationByUserID function connect database and deleteEducationByUserID using MySQL statement
+     * @param $user_id
+     * @throws DatabaseException
+     * @return boolean
+     */
+    function deleteEducationByUserID($user_id)
+    {
+        Log::info("Entering EducationDataService::deleteEducationByUserID()");
+        try{
+            // delete education in database with matched id
+            $statement = $this->connection->prepare("DELETE FROM EDUCATION WHERE USER_ID = :user_id");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }
+            
+            
+            
+            //bindParams properties            
+            $statement->bindParam(':user_id',  $user_id, PDO::PARAM_INT) ;
+            
+            //execute statement
+            $statement->execute();
+            
+            //if statement executes successfully returns true, else returns false
+            if($statement->rowCount() > 0)
+            {
+                
+                Log::info("Exit EducationDataService.deleteEducationByUserID() with true");
+                return true;
+                
+            }else{
+                Log::info("Exit EducationDataService.deleteEducationByUserID() with false");
                 return false;
             }
         }catch(PDOException $e)

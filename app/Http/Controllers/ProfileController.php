@@ -2,7 +2,7 @@
 /* CLC Project version 6.0
  * ProfileController version 6.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * ProfileController handles user profile action
  */
 namespace App\Http\Controllers;
@@ -137,7 +137,8 @@ class ProfileController extends Controller
             }
             else
             {
-                return "Update profile unsuccessfully. Please try again.";
+                $error = "Update profile unsuccessfully. Please try again.";
+                return view(('errorPage'),compact(['error']));
             }
         }catch(ValidationException $e1){
             throw ($e1);

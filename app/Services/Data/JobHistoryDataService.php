@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * JobHistoryDataService version 6.0
+/* CLC Project version 7.0
+ * JobHistoryDataService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * JobHistoryDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -49,12 +49,14 @@ class JobHistoryDataService
             $enddate = $jobhistory->getEnddate();
             $user_id = $jobhistory->getUser_id();
             
+            //bindParam properties
             $statement->bindParam(':title', $title, PDO::PARAM_STR);
             $statement->bindParam(':company', $company, PDO::PARAM_STR);
             $statement->bindParam(':startdate', $startdate, PDO::PARAM_STR);
             $statement->bindParam(':enddate', $enddate, PDO::PARAM_STR);
             $statement->bindParam(':user_id',  $user_id, PDO::PARAM_STR);
       
+            //execute statement
             $statement->execute();
             
             // if statement succeses return true, else return false
@@ -84,6 +86,7 @@ class JobHistoryDataService
     function deleteJobHistory(JobHistory $jobhistory){
         Log::info("Entering JobHistoryDataService::deleteJob()");
         try{
+            // delte job with passing id
             $statement = $this->connection->prepare("DELETE FROM JOB_HISTORY WHERE ID = :id");
             
             if(!$statement){
@@ -92,9 +95,12 @@ class JobHistoryDataService
             }
             
             $id = $jobhistory->getId();
+            
+            //bindParam properties
             $statement->bindParam(':id',  $id, PDO::PARAM_INT);
             $statement->execute();
             
+            // if finds result, return true, else returns false
             if($statement->rowCount() > 0){
                 
                 Log::info("Exit JobHistoryDataService.deleteJobHistory with true");
@@ -102,6 +108,45 @@ class JobHistoryDataService
                 
             }else{
                 Log::info("Exit JobHistoryDataService.deleteJobHistory with false");
+                return false;
+            }
+        }catch(PDOException $e)
+        {
+            // catch exception and throw DatabaseException
+            Log::error("Exception: ", array("message " => $e->getMessage()));
+            throw new DatabaseException("Database Exception: ". $e->getMessage(), 0, $e);
+        }
+    }
+    
+    /**
+     * deleteJobHistory method connects database and delete job history by user_id using MySQL statement
+     * @param user_id
+     * @throws DatabaseException
+     * @return boolean
+     */
+    function deleteJobHistoryByUserID($user_id){
+        Log::info("Entering JobHistoryDataService::deleteJobByUserID()");
+        try{
+            // delte job with passing user_id
+            $statement = $this->connection->prepare("DELETE FROM JOB_HISTORY WHERE USER_ID = :user_id");
+            
+            if(!$statement){
+                echo "Something wrong in the binding process.sql error?";
+                exit;
+            }  
+            
+            //bindParam properties
+            $statement->bindParam(':user_id',  $user_id, PDO::PARAM_INT);
+            $statement->execute();
+            
+            // if finds result, return true, else returns false
+            if($statement->rowCount() > 0){
+                
+                Log::info("Exit JobHistoryDataService.deleteJobHistoryByUserID with true");
+                return true;
+                
+            }else{
+                Log::info("Exit JobHistoryDataService.deleteJobHistoryByUserID with false");
                 return false;
             }
         }catch(PDOException $e)
@@ -138,6 +183,7 @@ class JobHistoryDataService
             $enddate = $jobhistory->getEnddate();
             $user_id = $jobhistory->getUser_id();
             
+            //bindParam properties
             $statement->bindParam(':id', $id, PDO::PARAM_STR);
             $statement->bindParam(':title', $title, PDO::PARAM_STR);
             $statement->bindParam(':company', $company, PDO::PARAM_STR);
@@ -174,7 +220,7 @@ class JobHistoryDataService
         Log::info("Entering JobHistoryDataService::findByUserId()");
         
         try{
-            
+            // Select job history information that match user id
             $statement = $this->connection->prepare("SELECT ID, TITLE, COMPANY, START_DATE, END_DATE , USER_ID FROM JOB_HISTORY WHERE USER_ID = :user_id ");
             
             if(!$statement){
@@ -185,11 +231,11 @@ class JobHistoryDataService
             $statement->bindParam(':user_id', $user_id);
             $statement->execute();
             
+            // if finds any result, return all result information
             if($statement->rowCount() > 0){
                 Log::info("Exit SecurityDAO.findByUserId");
                 
-                //fetches user from database and returns $user
-                
+                //fetches user from database and returns $user               
                 $result = $statement->fetchAll();
                 
                 return $result;
@@ -214,6 +260,7 @@ class JobHistoryDataService
         
         try{
             
+            // Select job history information with match id
             $statement = $this->connection->prepare("SELECT ID, TITLE, COMPANY, START_DATE, END_DATE, USER_ID FROM JOB_HISTORY WHERE ID = :id ");
             
             
@@ -225,10 +272,11 @@ class JobHistoryDataService
             $statement->bindParam(':id', $id);
             $statement->execute();
             
+            // if finds result return job history information in result object 
             if($statement->rowCount() == 1){
                 Log::info("Exit SecurityDAO.findById");
                 
-                //fetches user from database and returns $user
+                //fetches user from database and returns result
                 $row = $statement->fetch(PDO::FETCH_ASSOC);
                 $result = new JobHistory($row['ID'], $row['TITLE'], $row['COMPANY'], $row['START_DATE'], $row['END_DATE'], $row['USER_ID']);
                 

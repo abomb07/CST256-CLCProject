@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 6.0
- * Edit Job History Form version 6.0
+ * CLC Project version 5.0
+ * Edit Job History Form version 5.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * March 15, 2020
  * Edit Job History Form
  */
 ?>
@@ -33,12 +33,12 @@
 
 			<tr>
 				<td>Start Date:</td>
-				<td><input type="text" name="startdate" value="{{ $jobhistory->getStartdate() }}" />{{$errors->first('startdate')}}</td>
+				<td><input type="date" name="startdate" value="{{ $jobhistory->getStartdate() }}" />{{$errors->first('startdate')}}</td>
 			</tr>
 
 			<tr>
 				<td>End Date:</td>
-				<td><input type="text" name="enddate" value="{{ $jobhistory->getEnddate() }}" />{{$errors->first('enddate')}}</td>
+				<td><input type="date" name="enddate" value="{{ $jobhistory->getEnddate() }}" />{{$errors->first('enddate')}}</td>
 			</tr>
 
 			<tr>

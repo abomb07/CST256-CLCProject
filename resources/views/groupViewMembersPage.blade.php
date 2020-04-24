@@ -1,9 +1,9 @@
 <?php
 /*
- * CLC Project version 6.0
- * View group page version 6.0
+ * CLC Project version 5.0
+ * View group page version 5.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * March 15, 2020
  * View group Page
  */
 ?>

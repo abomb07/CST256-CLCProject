@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * UserDataService version 6.0
+/* CLC Project version 7.0
+ * UserDataService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * GroupDataService handle methods through MySQL Statement
  */
 namespace App\Services\Data;
@@ -47,6 +47,7 @@ class GroupDataService
             $description = $group->getDescription();
             $owner_id = $group->getOwner_id();
             
+            //bindParam properties
             $statement->bindParam(':name', $name, PDO::PARAM_STR);
             $statement->bindParam(':description', $description, PDO::PARAM_STR);
             $statement->bindParam(':owner_id', $owner_id, PDO::PARAM_STR);
@@ -81,16 +82,18 @@ class GroupDataService
         Log::info("Entering GroupDataService::findAllGroups()");
         
         try{
-            
+            // Select group information from the database
             $statement = $this->connection->prepare("SELECT * FROM AFFINITY_GROUP");
             
+            //if error occurs in statement return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
             }
-           
+           //execute statement
             $statement->execute();
             
+            // if finds any properties, fetch inofmration and return result
             if($statement->rowCount() > 0){
                 Log::info("Exit GroupDataService.findAllGroups");
                 
@@ -121,13 +124,16 @@ class GroupDataService
     function deleteGroup(Group $group){
         Log::info("Entering GroupDataService::deleteGroup()");
         try{
+            // Delete group information from the database with id
             $statement = $this->connection->prepare("DELETE FROM AFFINITY_GROUP WHERE ID = :id");
             
+            //if error occurs in statement return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
             }
             
+            //bindParam properties
             $id = $group->getId();
             $statement->bindParam(':id',  $id, PDO::PARAM_INT);
             $statement->execute();
@@ -173,6 +179,7 @@ class GroupDataService
             $description = $group->getDescription();
             $owner_id = $group->getOwner_id();
             
+            //bindParam properties
             $statement->bindParam(':id', $id, PDO::PARAM_STR);
             $statement->bindParam(':name', $name, PDO::PARAM_STR);
             $statement->bindParam(':description', $description, PDO::PARAM_STR);
@@ -207,9 +214,10 @@ class GroupDataService
         Log::info("Entering GroupDataService::findByOwnerId()");
         
         try{
-            
+            // Select education information from the database with owner id
             $statement = $this->connection->prepare("SELECT ID, NAME, DESCRIPTION, OWNER_ID FROM AFFINITY_GROUP WHERE OWNER_ID = :owner_id ");
             
+            //if error occurs in statement return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -246,9 +254,11 @@ class GroupDataService
         Log::info("Entering GroupDataService::findById()");
         
         try{
+            // Select group information from the database with id
             
             $statement = $this->connection->prepare("SELECT ID, NAME, DESCRIPTION, OWNER_ID FROM AFFINITY_GROUP WHERE ID = :id ");
             
+            //if error occurs in statement return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -286,8 +296,10 @@ class GroupDataService
         Log::info("Entering GroupDataService::findByGroupName()");
         
         try{
+            // Select group information from the database with id
             $statement = $this->connection->prepare("SELECT ID, NAME, DESCRIPTION, OWNER_ID FROM AFFINITY_GROUP WHERE NAME = :name ");
             
+            //if error occurs in statement return error message
             if(!$statement){
                 echo "Something wrong in the binding process.sql error?";
                 exit;
@@ -296,10 +308,11 @@ class GroupDataService
             $statement->bindParam(':name', $name);
             $statement->execute();
             
+            //find result fetch group information from database
             if($statement->rowCount() == 1){
                 Log::info("Exit GroupDataService.findByGroupName");
                 
-                //fetches group from database and returns $result
+                //fetches group from database and returns $result 
                 $row = $statement->fetch(PDO::FETCH_ASSOC);
                 $result = new Group($row['ID'], $row['NAME'], $row['DESCRIPTION'], $row['OWNER_ID']);
                 

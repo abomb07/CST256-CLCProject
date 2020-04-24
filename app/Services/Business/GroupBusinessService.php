@@ -1,8 +1,8 @@
 <?php
-/* CLC Project version 6.0
- * GroupBusinessService version 6.0
+/* CLC Project version 7.0
+ * GroupBusinessService version 7.0
  * Adam Bender and Jim Nguyen
- * April 5, 2020
+ * April 17, 2020
  * GroupBusinessService handles CRUD methods
  */
 
@@ -270,6 +270,7 @@ class GroupBusinessService
         
         Log::info("Entering MemberBusinessService.findByGroupId() ");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
@@ -294,6 +295,7 @@ class GroupBusinessService
         
         Log::info("Entering MemberBusinessService.findByUserId() ");
         
+        // create connection to database
         $database = new Database();
         $db = $database->getConnection();
         
